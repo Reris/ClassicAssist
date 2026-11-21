@@ -27,12 +27,12 @@
                 <Image Source="{DynamicResource RefreshIcon}" Opacity="{Binding IsEnabled, Converter={StaticResource BooleanToOpacityValueConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip.Tip="{x:Static properties:Resources.Refresh}" />
             </Button>
         </StackPanel>
-        <DataGrid x:Name="listView" Grid.Row="1" SelectedItem="{Binding SelectedShard}" Margin="10,5,10,10" ItemsSource="{Binding ShardManager.VisibleShards}" AutoGenerateColumns="False" CanUserSortColumns="False" CanUserResizeColumns="False" GridLinesVisibility="Horizontal" HeadersVisibility="Column" RowBackground="Transparent">
+        <DataGrid x:Name="listView" Grid.Row="1" SelectedItem="{Binding SelectedShard}" Margin="10,5,10,10" ItemsSource="{Binding ShardManager.VisibleShards}" AutoGenerateColumns="False" CanUserSortColumns="True" CanUserResizeColumns="False" GridLinesVisibility="Horizontal" HeadersVisibility="Column" RowBackground="Transparent">
             <Interaction.Behaviors>
                 <behaviours:GridViewSort ComparerType="{x:Type launcher:ShardListViewComparer}" />
             </Interaction.Behaviors>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="{x:Static properties:Resources.Shard}" Width="206">
+                <DataGridTemplateColumn Header="{x:Static properties:Resources.Shard}" SortMemberPath="Name" Width="206">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate DataType="launcher:ShardEntry">
                             <Grid>
@@ -58,29 +58,29 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{x:Static properties:Resources.Address}" Width="186">
+                <DataGridTemplateColumn Header="{x:Static properties:Resources.Address}" SortMemberPath="Address" Width="186">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate DataType="launcher:ShardEntry">
                             <controls:EditTextBlock Text="{Binding Address, Mode=TwoWay}" CanEdit="{Binding IsPreset, Converter={StaticResource InverseBooleanConverter}}" Width="{Binding ActualWidth, ElementName=AddressColumn, Converter={StaticResource CellWidthValueConverter}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{x:Static properties:Resources.Port}" Width="56">
+                <DataGridTemplateColumn Header="{x:Static properties:Resources.Port}" SortMemberPath="Port" Width="56">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate DataType="launcher:ShardEntry">
                             <controls:EditTextBlock Text="{Binding Port, Mode=TwoWay}" CanEdit="{Binding IsPreset, Converter={StaticResource InverseBooleanConverter}}" Width="{Binding ActualWidth, ElementName=PortColumn, Converter={StaticResource CellWidthValueConverter}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{x:Static properties:Resources.Encryption}" Width="81">
+                <DataGridTemplateColumn Header="{x:Static properties:Resources.Encryption}" SortMemberPath="Encryption" Width="81">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate DataType="launcher:ShardEntry">
                             <CheckBox IsChecked="{Binding Encryption}" IsEnabled="{Binding IsPreset, Converter={StaticResource InverseBooleanConverter}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="{x:Static properties:Resources.Players}" Binding="{Binding Status}" Width="81" />
-                <DataGridTextColumn Header="{x:Static properties:Resources.Ping}" Binding="{Binding Ping}" Width="56" />
+                <DataGridTextColumn Header="{x:Static properties:Resources.Players}" Binding="{Binding Status}" SortMemberPath="Status" Width="81" />
+                <DataGridTextColumn Header="{x:Static properties:Resources.Ping}" Binding="{Binding Ping}" SortMemberPath="Ping" Width="56" />
             </DataGrid.Columns>
         </DataGrid>
         <Grid Grid.Row="2">

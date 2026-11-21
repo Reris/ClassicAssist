@@ -24,7 +24,7 @@ using Avalonia.Xaml.Interactivity;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
-    public class ListViewDoubleClickBehaviour : Behavior<ListBox>
+    public class ListViewDoubleClickBehaviour : Behavior<Control>
     {
         protected override void OnAttached()
         {
@@ -35,7 +35,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
 
         private static void OnMouseDoubleClick( object sender, TappedEventArgs e )
         {
-            ObjectInspectorViewModel i = (ObjectInspectorViewModel) ( (ListBox) sender ).DataContext;
+            ObjectInspectorViewModel i = (ObjectInspectorViewModel) ( (Control) sender ).DataContext;
 
             i.SelectedItem?.OnDoubleClick?.Invoke( i.SelectedItem );
         }

@@ -29,10 +29,8 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
-
 using ClassicAssist.Launcher.Properties;
 using ClassicAssist.Shared.Misc;
 using ClassicAssist.Shared.Resources;
@@ -517,7 +515,7 @@ namespace ClassicAssist.Launcher
 
             args.Append( $"-plugins \"{plugins}\" " );
             args.Append( $"-ip \"{ip}\" -port \"{SelectedShard.Port}\" " );
-            args.Append( $"-uopath \"{SelectedDataPath}\" " );
+            args.Append( $"-uopath \"{SelectedDataPath.Replace( @"\", @"\\" )}\" " );
             args.Append( $"-encryption {( SelectedShard.Encryption ? 1 : 0 )} " );
             args.Append( SelectedShard.ShardType > 0 ? $"-shard {SelectedShard.ShardType} " : "-shard 0 " );
 
@@ -534,12 +532,52 @@ namespace ClassicAssist.Launcher
             Process p = Process.Start( psi );
 
             SelectedShard.LastPlayed = DateTime.Now;
+            
+            UpdateJumpList( SelectedShard.Name );
 
             if ( p != null && !p.HasExited )
             {
                 Closing( null );
                 ( Application.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime )?.Shutdown();
             }
+        }
+
+        private void UpdateJumpList( string shardName )
+        {
+            if ( !OperatingSystem.IsWindows() )
+            {
+                return;
+            }
+
+            ProcessModule processModule = Process.GetCurrentProcess().MainModule;
+
+            if ( processModule == null )
+            {
+                return;
+            }
+
+            string fileName = processModule.FileName;
+            string directory = Path.GetDirectoryName( fileName );
+
+            JumpList jumpList = new JumpList { ShowRecentCategory = true };
+
+            IOrderedEnumerable<ShardEntry> playedShards = ShardManager.VisibleShards.Where( e => e.LastPlayed != default ).OrderBy( e => e.LastPlayed );
+
+            foreach ( ShardEntry shard in playedShards )
+            {
+                jumpList.JumpItems.Add( new JumpTask
+                {
+                    Title = shard.Name,
+                    Arguments = $"--shard \"{shard.Name}\"",
+                    ApplicationPath = fileName,
+                    IconResourcePath = fileName,
+                    WorkingDirectory = directory,
+                    CustomCategory = "Shards"
+                } );
+            }
+
+            JumpList.SetJumpList( Application.Current, jumpList );
+            jumpList.Apply();
         }
 
         private void BuildClassicOptions( StringBuilder args )

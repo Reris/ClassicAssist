@@ -20,7 +20,6 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
-using ClassicAssist.Launcher.Properties;
 
 namespace ClassicAssist.Launcher
 {
@@ -46,19 +45,19 @@ namespace ClassicAssist.Launcher
 
             switch ( _propertyName )
             {
-                case nameof( Resources.Shard ):
+                case nameof( ShardEntry.Name ):
                     result = string.Compare( first.Name, second.Name, StringComparison.Ordinal );
                     break;
-                case nameof( Resources.Address ):
+                case nameof( ShardEntry.Address ):
                     result = string.Compare( first.Address, second.Address, StringComparison.Ordinal );
                     break;
-                case nameof( Resources.Port ):
+                case nameof( ShardEntry.Port ):
                     result = first.Port.CompareTo( second.Port );
                     break;
-                case nameof( Resources.Encryption ):
+                case nameof( ShardEntry.Encryption ):
                     result = first.Encryption.CompareTo( second.Encryption );
                     break;
-                case nameof( Resources.Players ):
+                case nameof( ShardEntry.Status ):
 
                     int firstPlayers = string.IsNullOrEmpty( first.Status ) || first.Status.Equals( "-" )
                         ? 0
@@ -71,7 +70,7 @@ namespace ClassicAssist.Launcher
                     result = firstPlayers.CompareTo( secondPlayers );
 
                     break;
-                case nameof( Resources.Ping ):
+                case nameof( ShardEntry.Ping ):
                     int firstPing = string.IsNullOrEmpty( first.Ping ) || first.Ping.Equals( "-" )
                         ? 0
                         : int.Parse( first.Ping );

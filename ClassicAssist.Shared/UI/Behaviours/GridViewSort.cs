@@ -18,22 +18,24 @@
 #endregion
 
 using System;
+using System.Collections;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Avalonia;
-using Avalonia.Collections;
+using System.Reflection;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using Avalonia.Interactivity;
 using Avalonia.Xaml.Interactivity;
 using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.Shared.UI.Behaviours
 {
     /// <summary>
-    ///     Sorts a list when a header/button is clicked. Avalonia port of the WPF GridView
-    ///     column-sort behaviour - works against DataGridCollectionView.SortDescriptions.
+    ///     Sorts a DataGrid when a column header is clicked, using the <see cref="IComparer" /> type
+    ///     supplied in <see cref="ComparerType" /> (constructed with ( ListSortDirection, string )).
+    ///     The comparer property name is taken from the column's SortMemberPath. The bound collection
+    ///     is sorted in place using Move so bindings and selection survive.
+    ///     Avalonia port of the WPF GridView column-sort behaviour.
     /// </summary>
-    public class GridViewSort : Behavior<ListBox>
+    public class GridViewSort : Behavior<DataGrid>
     {
         public static readonly Avalonia.StyledProperty<Type> ComparerTypeProperty =
         AvaloniaCompat.RegisterAttachedCompat<GridViewSort, Type>(nameof( ComparerType ), null);
@@ -52,26 +54,19 @@ namespace ClassicAssist.Shared.UI.Behaviours
         {
             base.OnAttached();
 
-            AssociatedObject.AddHandler( Button.ClickEvent, ColumnHeader_Click );
+            AssociatedObject.Sorting += OnSorting;
         }
 
-        private void ColumnHeader_Click( object sender, RoutedEventArgs e )
+        private void OnSorting( object sender, DataGridColumnEventArgs e )
         {
-            if ( !( e.Source is Control clicked ) )
+            if ( ComparerType == null )
             {
                 return;
             }
 
-            string propertyName = clicked.Tag as string ?? clicked.Name;
+            string propertyName = e.Column.SortMemberPath ?? e.Column.Header?.ToString();
 
             if ( string.IsNullOrEmpty( propertyName ) )
-            {
-                return;
-            }
-
-            DataGridCollectionView view = CollectionViewSource.GetDefaultView( AssociatedObject.ItemsSource );
-
-            if ( view == null )
             {
                 return;
             }
@@ -89,19 +84,51 @@ namespace ClassicAssist.Shared.UI.Behaviours
                     : ListSortDirection.Ascending;
             }
 
-            using ( view.DeferRefresh() )
+            if ( !( Activator.CreateInstance( ComparerType, direction, propertyName ) is IComparer comparer ) )
             {
-                view.SortDescriptions.Clear();
-                view.SortDescriptions.Add( DataGridSortDescription.FromPath( propertyName, direction ) );
+                return;
             }
+
+            e.Handled = true;
+
+            SortInPlace( AssociatedObject.ItemsSource as IList, comparer );
 
             _lastProperty = propertyName;
             _lastDirection = direction;
         }
 
+        private static void SortInPlace( IList list, IComparer comparer )
+        {
+            if ( list == null )
+            {
+                return;
+            }
+
+            // Prefer ObservableCollection.Move - raises a Move change action, preserving selection
+            MethodInfo moveMethod = list.GetType().GetMethod( nameof( ObservableCollection<object>.Move ),
+                new[] { typeof( int ), typeof( int ) } );
+
+            for ( int i = 1; i < list.Count; i++ )
+            {
+                for ( int j = i; j > 0 && comparer.Compare( list[j - 1], list[j] ) > 0; j-- )
+                {
+                    if ( moveMethod != null )
+                    {
+                        moveMethod.Invoke( list, new object[] { j, j - 1 } );
+                    }
+                    else
+                    {
+                        object item = list[j];
+                        list.RemoveAt( j );
+                        list.Insert( j - 1, item );
+                    }
+                }
+            }
+        }
+
         protected override void OnDetaching()
         {
-            AssociatedObject.RemoveHandler( Button.ClickEvent, ColumnHeader_Click );
+            AssociatedObject.Sorting -= OnSorting;
             base.OnDetaching();
         }
     }

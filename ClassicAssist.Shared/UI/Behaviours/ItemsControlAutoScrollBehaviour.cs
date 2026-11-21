@@ -17,18 +17,15 @@
 
 #endregion
 
+using System.Collections;
 using System.Collections.Specialized;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
-using Avalonia.Media;
-using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
 using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.Shared.UI.Behaviours
 {
-    public class ItemsControlAutoScrollBehaviour : Behavior<ItemsControl>
+    public class ItemsControlAutoScrollBehaviour : Behavior<Control>
     {
         public static readonly Avalonia.StyledProperty<ScrollViewer> ScrollViewerProperty =
         AvaloniaCompat.RegisterCompat<ItemsControlAutoScrollBehaviour, ScrollViewer>("ScrollViewer", default( ScrollViewer ));
@@ -45,7 +42,14 @@ namespace ClassicAssist.Shared.UI.Behaviours
         {
             base.OnAttached();
 
-            if ( AssociatedObject.Items is INotifyCollectionChanged incc )
+            IEnumerable itemsSource = AssociatedObject switch
+            {
+                ItemsControl itemsControl => itemsControl.Items,
+                DataGrid dataGrid => dataGrid.ItemsSource,
+                _ => null
+            };
+
+            if ( itemsSource is INotifyCollectionChanged incc )
             {
                 _incc = incc;
                 _incc.CollectionChanged += OnCollectionChanged;
