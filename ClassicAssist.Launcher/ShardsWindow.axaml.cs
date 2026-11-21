@@ -1,10 +1,4 @@
-using System.Diagnostics;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
-using Avalonia.Media;
-using Avalonia.Input;
-
 
 namespace ClassicAssist.Launcher
 {
@@ -16,11 +10,6 @@ namespace ClassicAssist.Launcher
         public ShardsWindow()
         {
             InitializeComponent();
-        }
-
-        private void GitHubIssueLink_OnClick( object sender, RoutedEventArgs e )
-        {
-            Process.Start( new ProcessStartInfo { FileName = "https://github.com/Reetus/ClassicAssist-Shards/issues", UseShellExecute = true } );
         }
     }
 }

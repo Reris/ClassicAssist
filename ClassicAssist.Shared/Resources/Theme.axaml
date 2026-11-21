@@ -1,5 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui" xmlns:avalonedit="using:AvaloniaEdit">
     <FluentTheme />
+    <!--  DataGrid ships its own ControlThemes, not part of FluentTheme - without this it renders empty  -->
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
     <StyleInclude Source="avares://ClassicAssist.Shared/Resources/Colours.axaml" />
     <Style Selector="TreeView">
         <Setter Property="Background" Value="{DynamicResource ThemeInnerControlBackgroundBrush}" />
@@ -114,6 +116,67 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}" />
         <Setter Property="CornerRadius" Value="0" />
+    </Style>
+    <Style Selector="DataGrid">
+        <Setter Property="Background" Value="{DynamicResource ThemeInnerControlBackgroundBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="RowBackground" Value="Transparent" />
+    </Style>
+    <Style Selector="DataGridColumnHeader">
+        <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}" />
+        <Setter Property="BorderThickness" Value="0,1,0,1" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="2,0,2,0" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="MinHeight" Value="20" />
+        <Style Selector="^:pointerover /template/ Grid#PART_ColumnHeaderRoot">
+            <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+        </Style>
+        <Style Selector="^:pressed /template/ Grid#PART_ColumnHeaderRoot">
+            <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+        </Style>
+    </Style>
+    <Style Selector="DataGridCell">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="MinHeight" Value="20" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+    <Style Selector="DataGridRow">
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Style Selector="^ /template/ Rectangle#BackgroundRectangle">
+            <Setter Property="Fill" Value="Transparent" />
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Rectangle#BackgroundRectangle">
+            <Setter Property="Fill" Value="{DynamicResource SelectionColor1Brush}" />
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:pointerover">
+            <Setter Property="BorderBrush" Value="{DynamicResource SelectionColor2Brush}" />
+        </Style>
+        <Style Selector="^:selected /template/ Rectangle#BackgroundRectangle">
+            <Setter Property="Fill" Value="{DynamicResource ListBoxSelectedInactiveBackgroundBrush}" />
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:selected">
+            <Setter Property="BorderBrush" Value="{DynamicResource ListBoxForegroundBrush}" />
+        </Style>
+    </Style>
+    <!--  Rows never get :focus themselves - the DataGrid carries keyboard focus (cells are not tab stops), so key the active-selection look off the grid  -->
+    <Style Selector="DataGrid:focus-within DataGridRow:selected">
+        <Setter Property="BorderBrush" Value="{DynamicResource SelectionColor2EmphasizedBrush}" />
+        <Style Selector="^ /template/ Rectangle#BackgroundRectangle">
+            <Setter Property="Fill" Value="{DynamicResource SelectionColor1EmphasizedBrush}" />
+            <Setter Property="Opacity" Value="1" />
+        </Style>
     </Style>
     <Style Selector="GroupBox">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
