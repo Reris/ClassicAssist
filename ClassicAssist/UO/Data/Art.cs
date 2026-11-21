@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
+
+
 using System.IO;
 using System.Runtime.InteropServices;
 using ClassicAssist.Misc;
@@ -114,9 +114,9 @@ namespace ClassicAssist.UO.Data
             return indexes;
         }
 
-        public static Bitmap GetStatic( int itemID, int hue )
+        public static UOBitmap GetStatic( int itemID, int hue )
         {
-            Bitmap bmp = GetStatic( itemID );
+            UOBitmap bmp = GetStatic( itemID );
 
             if ( hue == 0 || bmp == null )
             {
@@ -130,7 +130,7 @@ namespace ClassicAssist.UO.Data
             return bmp;
         }
 
-        public static unsafe Bitmap GetStatic( int itemId )
+        public static unsafe UOBitmap GetStatic( int itemId )
         {
             itemId += 0x4000;
 
@@ -182,27 +182,23 @@ namespace ClassicAssist.UO.Data
                     lookups[i] = start + reader.ReadUInt16() * 2;
                 }
 
-                Bitmap bmp = new Bitmap( width, height, PixelFormat.Format16bppArgb1555 );
+                UOBitmap bmp = new UOBitmap( width, height );
 
-                BitmapData bd = bmp.LockBits( new Rectangle( 0, 0, width, height ), ImageLockMode.WriteOnly,
-                    PixelFormat.Format16bppArgb1555 );
-
-                ushort* line = (ushort*) bd.Scan0;
-                int delta = bd.Stride >> 1;
+                ushort[] pixels = bmp.Pixels;
 
                 int largestX = 0;
                 int smallestX = width;
                 int largestY = 0;
                 int smallestY = height;
 
-                for ( int y = 0; y < height; y++, line += delta )
+                for ( int y = 0; y < height; y++ )
                 {
                     reader.BaseStream.Seek( lookups[y], SeekOrigin.Begin );
 
-                    ushort* cur = line;
+                    int rowStart = y * width;
+                    int cur = 0;
 
                     int xOffset, xRun;
-                    int x = 0;
 
                     if ( y > largestY )
                     {
@@ -217,28 +213,24 @@ namespace ClassicAssist.UO.Data
                     while ( ( xOffset = reader.ReadUInt16() ) + ( xRun = reader.ReadUInt16() ) != 0 )
                     {
                         cur += xOffset;
-                        ushort* end = cur + xRun;
-                        x += xOffset;
+                        int end = cur + xRun;
 
-                        if ( x < smallestX )
+                        if ( cur < smallestX )
                         {
-                            smallestX = x;
+                            smallestX = cur;
                         }
 
                         while ( cur < end )
                         {
-                            *cur++ = (ushort) ( reader.ReadUInt16() ^ 0x8000 );
-                            x++;
+                            pixels[rowStart + cur++] = (ushort) ( reader.ReadUInt16() ^ 0x8000 );
                         }
 
-                        if ( x > largestX )
+                        if ( cur > largestX )
                         {
-                            largestX = x;
+                            largestX = cur;
                         }
                     }
                 }
-
-                bmp.UnlockBits( bd );
 
                 return bmp;
             }

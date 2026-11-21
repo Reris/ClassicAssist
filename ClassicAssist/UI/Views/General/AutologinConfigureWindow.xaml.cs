@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 Reetus
+// Copyright (C) 2022 Reetus
 //  
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,20 +14,20 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
-using System.Windows.Controls;
-using System.Windows.Input;
+using Avalonia.Controls;
+using Avalonia.Input;
 using ClassicAssist.Annotations;
 using ClassicAssist.Data;
 using ClassicAssist.Shared.UI;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views.General
 {
     /// <summary>
     ///     Interaction logic for AutologinConfigureWindow.xaml
     /// </summary>
-    public partial class AutologinConfigureWindow : INotifyPropertyChanged
-    {
-        private string _account;
+    public partial class AutologinConfigureWindow : Window, INotifyPropertyChanged
+    {        private string _account;
         private int _characterIndex;
         private TimeSpan _connectDelay;
         private ICommand _okCommand;
@@ -139,14 +139,6 @@ namespace ClassicAssist.UI.Views.General
         protected virtual void OnPropertyChanged( [CallerMemberName] string propertyName = null )
         {
             PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
-        }
-    }
-
-    public class ComboValidationRule : ValidationRule
-    {
-        public override ValidationResult Validate( object value, CultureInfo cultureInfo )
-        {
-            return new ValidationResult( value != null, null );
         }
     }
 }

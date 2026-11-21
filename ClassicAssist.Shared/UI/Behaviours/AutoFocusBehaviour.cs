@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -17,9 +17,12 @@
 
 #endregion
 
-using System.Windows;
-using System.Windows.Controls;
-using Microsoft.Xaml.Behaviors;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Xaml.Interactivity;
 
 namespace ClassicAssist.Shared.UI.Behaviours
 {
@@ -30,12 +33,12 @@ namespace ClassicAssist.Shared.UI.Behaviours
             base.OnAttached();
 
             AssociatedObject.Loaded += AssociatedObjectOnLoaded;
-            AssociatedObject.IsVisibleChanged += AssociatedObjectOnIsVisibleChanged;
+            AssociatedObject.PropertyChanged += AssociatedObjectOnPropertyChanged;
         }
 
-        private void AssociatedObjectOnIsVisibleChanged( object sender, DependencyPropertyChangedEventArgs e )
+        private void AssociatedObjectOnPropertyChanged( object sender, AvaloniaPropertyChangedEventArgs e )
         {
-            if ( e.NewValue is bool boolVal && boolVal )
+            if ( e.Property == Visual.IsVisibleProperty && e.NewValue is bool boolVal && boolVal )
             {
                 AssociatedObject.Focus();
             }
@@ -49,7 +52,7 @@ namespace ClassicAssist.Shared.UI.Behaviours
         protected override void OnDetaching()
         {
             AssociatedObject.Loaded -= AssociatedObjectOnLoaded;
-            AssociatedObject.IsVisibleChanged -= AssociatedObjectOnIsVisibleChanged;
+            AssociatedObject.PropertyChanged -= AssociatedObjectOnPropertyChanged;
 
             base.OnDetaching();
         }

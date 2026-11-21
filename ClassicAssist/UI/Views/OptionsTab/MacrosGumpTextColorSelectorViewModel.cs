@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2023 Reetus
 // 
@@ -12,9 +12,11 @@
 
 #endregion
 
-using System.Windows.Input;
-using System.Windows.Media;
+using Avalonia.Input;
+using Avalonia;
+using Avalonia.Media;
 using ClassicAssist.Shared.UI;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views.OptionsTab
 {

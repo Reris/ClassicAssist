@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -22,10 +22,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Windows.Forms;
-using System.Windows.Input;
+
+using Avalonia.Input;
 using ClassicAssist.Shared.UI;
+using ClassicAssist.Shared.UI.Compat;
 using ClassicAssist.Updater.Annotations;
+using System.Windows.Input;
 
 namespace ClassicAssist.Updater
 {

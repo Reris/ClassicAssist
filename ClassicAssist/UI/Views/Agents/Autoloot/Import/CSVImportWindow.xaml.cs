@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2024 Reetus
+// Copyright (C) 2024 Reetus
 //  
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -9,8 +9,12 @@
 // but WITHOUT ANY WARRANTY
 
 using System.Diagnostics;
-using System.Windows;
-using System.Windows.Navigation;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+
 
 namespace ClassicAssist.UI.Views.Agents.Autoloot.Import
 {
@@ -19,14 +23,16 @@ namespace ClassicAssist.UI.Views.Agents.Autoloot.Import
     /// </summary>
     public partial class CSVImportWindow : Window
     {
+        private const string CSV_IMPORT_WIKI_URL = "https://github.com/Reetus/ClassicAssist/wiki/Importing-Autoloot-Items";
+
         public CSVImportWindow()
         {
             InitializeComponent();
         }
 
-        private void Hyperlink_OnRequestNavigate( object sender, RequestNavigateEventArgs e )
+        private void Hyperlink_OnClick( object sender, RoutedEventArgs e )
         {
-            Process.Start( new ProcessStartInfo( e.Uri.AbsoluteUri ) );
+            Process.Start( new ProcessStartInfo( CSV_IMPORT_WIKI_URL ) { UseShellExecute = true } );
         }
     }
 }

@@ -8,10 +8,16 @@
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY
 
-using System.Collections;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
-using System.Resources;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 using SyncPOEditor;
 
 const int PROJECT_ID = 671847;
@@ -33,15 +39,7 @@ ArgumentException.ThrowIfNullOrEmpty( apiToken );
 
 HttpClient client = new();
 
-Dictionary<string, string> resxNeutralTerms = new();
-
-using ( ResXResourceReader reader = new( @"..\..\ClassicAssist.Shared\Resources\Strings.resx" ) )
-{
-    foreach ( DictionaryEntry entry in from DictionaryEntry entry in reader where !string.IsNullOrEmpty( entry.Key.ToString() ) && entry.Value != null select entry )
-    {
-        resxNeutralTerms[entry.Key.ToString()!] = entry.Value!.ToString()!;
-    }
-}
+Dictionary<string, string> resxNeutralTerms = ReadResx( @"..\..\ClassicAssist.Shared\Resources\Strings.resx" );
 
 POEditorResponse<POEditorTerms>? neutralTerms = await GetNeutralTerms();
 
@@ -65,15 +63,7 @@ foreach ( ( string? lang, string? fileName ) in _langCodeFileName )
         throw new FileNotFoundException( $"File not found: {fileName}" );
     }
 
-    Dictionary<string, string> resxTerms = new();
-
-    using ( ResXResourceReader reader = new( fileName ) )
-    {
-        foreach ( DictionaryEntry entry in from DictionaryEntry entry in reader where !string.IsNullOrEmpty( entry.Key.ToString() ) && entry.Value != null select entry )
-        {
-            resxTerms[entry.Key.ToString()!] = entry.Value!.ToString()!;
-        }
-    }
+    Dictionary<string, string> resxTerms = ReadResx( fileName );
 
     POEditorResponse<POEditorTerms>? terms = await GetLanguageTerms( lang );
 
@@ -119,12 +109,7 @@ foreach ( ( string? lang, string? fileName ) in _langCodeFileName )
             Console.WriteLine( $"Updated: {key} - {oldvalue} -> {newvalue}" );
         }
 
-        using ResXResourceWriter writer = new( fileName );
-
-        foreach ( ( string? key, string value ) in resxTerms )
-        {
-            writer.AddResource( key, value );
-        }
+        WriteResx( fileName, resxTerms );
     }
 
     Dictionary<string, string> missingTranslations = new();
@@ -186,4 +171,51 @@ async Task AddTranslations( string lang, POEditorTerm[] translations )
     ] ) );
     response.EnsureSuccessStatusCode();
     await response.Content.ReadAsStringAsync();
+}
+
+static Dictionary<string, string> ReadResx( string fileName )
+{
+    Dictionary<string, string> result = new();
+
+    if ( !File.Exists( fileName ) )
+    {
+        return result;
+    }
+
+    XDocument document = XDocument.Load( fileName );
+
+    foreach ( XElement data in document.Root?.Elements( "data" ) ?? Enumerable.Empty<XElement>() )
+    {
+        string? key = data.Attribute( "name" )?.Value;
+        string? value = data.Element( "value" )?.Value;
+
+        if ( !string.IsNullOrEmpty( key ) && value != null )
+        {
+            result[key] = value;
+        }
+    }
+
+    return result;
+}
+
+static void WriteResx( string fileName, Dictionary<string, string> values )
+{
+    XDocument document = File.Exists( fileName ) ? XDocument.Load( fileName ) : new XDocument( new XElement( "root" ) );
+
+    XElement? root = document.Root;
+
+    if ( root == null )
+    {
+        return;
+    }
+
+    root.Elements( "data" ).Remove();
+
+    foreach ( ( string key, string value ) in values )
+    {
+        root.Add( new XElement( "data", new XAttribute( "name", key ),
+            new XAttribute( XNamespace.Xml + "space", "preserve" ), new XElement( "value", value ) ) );
+    }
+
+    document.Save( fileName );
 }

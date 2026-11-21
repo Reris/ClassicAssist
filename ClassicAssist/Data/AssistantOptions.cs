@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows.Threading;
+using Avalonia.Threading;
 using Assistant;
 using ClassicAssist.Data.Backup;
 using ClassicAssist.UI.Misc;
@@ -14,6 +14,7 @@ using ClassicAssist.UI.Views;
 using ClassicAssist.UO.Objects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ClassicAssist.Shared.UI;
 
 namespace ClassicAssist.Data
 {
@@ -259,7 +260,7 @@ namespace ClassicAssist.Data
             // This can be called from the UO client thread (e.g. on profile save), so marshal when needed.
             Dispatcher dispatcher = Engine.Dispatcher;
 
-            if ( dispatcher == null || dispatcher.HasShutdownStarted || dispatcher.HasShutdownFinished )
+            if ( dispatcher == null )
             {
                 return;
             }
@@ -278,7 +279,7 @@ namespace ClassicAssist.Data
             BackupWindowViewModel vm = new BackupWindowViewModel( BackupOptions );
             BackupWindow backupWindow = new BackupWindow { DataContext = vm };
             vm.CloseWindow = () => backupWindow.Close();
-            backupWindow.ShowDialog();
+            backupWindow.ShowDialogCompat();
         }
 
         public static event dProfileChanged ProfileChangingEvent;

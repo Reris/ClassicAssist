@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -19,14 +19,18 @@
 
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UO;
 using ClassicAssist.UO.Data;
 using ClassicAssist.UO.Objects;
+using ClassicAssist.Shared.UI.Compat;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views
 {
@@ -35,8 +39,8 @@ namespace ClassicAssist.UI.Views
     /// </summary>
     public partial class MultiItemIDSelector : UserControl
     {
-        public static readonly DependencyProperty ValuesProperty = DependencyProperty.Register( nameof( Values ), typeof( ObservableCollection<int> ),
-            typeof( MultiItemIDSelector ), new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<ObservableCollection<int>> ValuesProperty =
+        AvaloniaCompat.RegisterCompat<MultiItemIDSelector, ObservableCollection<int>>(nameof( Values ), null, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
         private ICommand _targetCommand;
 

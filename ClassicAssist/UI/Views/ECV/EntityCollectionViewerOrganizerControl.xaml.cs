@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2024 Reetus
+// Copyright (C) 2024 Reetus
 //  
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,26 +8,30 @@
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY
 
-using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Shared.UI;
 using System.Collections.ObjectModel;
 using ClassicAssist.UI.ViewModels;
 using ClassicAssist.UO.Objects;
+using ClassicAssist.Shared.UI.Compat;
+using ItemCollection = ClassicAssist.UO.Objects.ItemCollection;
 
 namespace ClassicAssist.UI.Views.ECV
 {
     /// <summary>
     ///     Interaction logic for EntityCollectionViewerOrganizerControl.xaml
     /// </summary>
-    public partial class EntityCollectionViewerOrganizerControl
+    public partial class EntityCollectionViewerOrganizerControl : UserControl
     {
-        public static readonly DependencyProperty CollectionProperty = DependencyProperty.Register( nameof( Collection ), typeof( ItemCollection ),
-            typeof( EntityCollectionViewerOrganizerControl ),
-            new FrameworkPropertyMetadata( default, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, PropertyChangedCallback ) );
+        public static readonly Avalonia.StyledProperty<ItemCollection> CollectionProperty =
+        AvaloniaCompat.RegisterCompat<EntityCollectionViewerOrganizerControl, ItemCollection>(nameof( Collection ), default, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: PropertyChangedCallback);
 
-        public static readonly DependencyProperty QueueActionsProperty = DependencyProperty.Register( nameof( QueueActions ), typeof( ObservableCollection<QueueAction> ),
-            typeof( EntityCollectionViewerOrganizerControl ),
-            new FrameworkPropertyMetadata( default, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, PropertyChangedCallback ) );
+        public static readonly Avalonia.StyledProperty<ObservableCollection<QueueAction>> QueueActionsProperty =
+        AvaloniaCompat.RegisterCompat<EntityCollectionViewerOrganizerControl, ObservableCollection<QueueAction>>(nameof( QueueActions ), default, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: PropertyChangedCallback);
 
         public EntityCollectionViewerOrganizerControl()
         {
@@ -46,7 +50,7 @@ namespace ClassicAssist.UI.Views.ECV
             set => SetValue( QueueActionsProperty, value );
         }
 
-        private static void PropertyChangedCallback( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void PropertyChangedCallback( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
             if ( !( d is EntityCollectionViewerOrganizerControl control ) )
             {

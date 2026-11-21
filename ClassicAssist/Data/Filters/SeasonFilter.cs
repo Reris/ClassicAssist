@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using Assistant;
 using ClassicAssist.UI.Views.Filters;
 using ClassicAssist.UO.Network.PacketFilter;
 using Newtonsoft.Json.Linq;
+using ClassicAssist.Shared.UI;
 
 namespace ClassicAssist.Data.Filters
 {
@@ -12,10 +13,10 @@ namespace ClassicAssist.Data.Filters
         public static bool IsEnabled { get; set; }
         public Season SelectedSeason { get; set; } = Season.Spring;
 
-        public void Configure()
+        public async void Configure()
         {
             SeasonFilterConfigureWindow window = new SeasonFilterConfigureWindow( SelectedSeason );
-            window.ShowDialog();
+            await window.ShowDialogAsync();
             SelectedSeason = window.SelectedSeason;
 
             SendSeason();

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -18,7 +18,7 @@
 #endregion
 
 using System.Threading.Tasks;
-using System.Windows.Controls;
+using Avalonia.Controls;
 using ClassicAssist.Misc;
 
 namespace ClassicAssist.Data.Backup

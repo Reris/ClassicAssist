@@ -1,11 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Data.Macros;
 using ClassicAssist.Data.Macros.Commands;
 using ClassicAssist.Misc;
@@ -13,6 +16,7 @@ using ClassicAssist.Shared.Misc;
 using ClassicAssist.Shared.Resources;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UO;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels
 {
@@ -51,7 +55,7 @@ namespace ClassicAssist.UI.ViewModels
 
         public ActiveObjectsViewModel()
         {
-            if ( DesignerProperties.GetIsInDesignMode( new DependencyObject() ) )
+            if ( Design.IsDesignMode )
             {
                 return;
             }

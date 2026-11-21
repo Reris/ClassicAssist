@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2020 Reetus
 // 
@@ -21,9 +21,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows.Forms;
+
+using Avalonia.Input;
+using ClassicAssist.Shared.UI;
+using ClassicAssist.Shared.UI.Compat;
 using System.Windows.Input;
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace ClassicAssist.Launcher
 {
@@ -80,22 +82,19 @@ namespace ClassicAssist.Launcher
             DialogResult = DialogResult.OK;
         }
 
-        private void AddPlugin( object obj )
+        private async void AddPlugin( object obj )
         {
-            OpenFileDialog ofd = new OpenFileDialog
-            {
-                Multiselect = false,
-                InitialDirectory = Environment.CurrentDirectory,
-                CheckFileExists = true,
-                Filter = "Executable / DLL Files (*.exe, *.dll)|*.dll;*.exe"
-            };
+            string[] files = await DialogHelper.ShowOpenFileDialogAsync( filter:
+                "Executable / DLL Files (*.exe, *.dll)|*.dll;*.exe", multiselect: false );
 
-            bool? result = ofd.ShowDialog();
-
-            if ( result.HasValue && result.Value )
+            if ( files == null || files.Length == 0 )
             {
-                Plugins.Add( new PluginEntry { Name = Path.GetFileName( ofd.FileName ), FullPath = ofd.FileName } );
+                return;
             }
+
+            string fileName = files[0];
+
+            Plugins.Add( new PluginEntry { Name = Path.GetFileName( fileName ), FullPath = fileName } );
         }
 
         private void RemovePlugin( object obj )

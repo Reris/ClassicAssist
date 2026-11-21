@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2020 Reetus
 // 
@@ -18,8 +18,12 @@
 #endregion
 
 using System;
-using System.Windows;
-using Microsoft.Xaml.Behaviors;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Xaml.Interactivity;
 using ClassicAssist.Data;
 
 namespace ClassicAssist.UI.Misc.Behaviours

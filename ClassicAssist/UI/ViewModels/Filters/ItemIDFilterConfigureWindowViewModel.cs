@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2023 Reetus
 // 
@@ -14,7 +14,7 @@
 
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data.Filters;
 using ClassicAssist.Shared.UI;
@@ -22,6 +22,7 @@ using ClassicAssist.UI.Views;
 using ClassicAssist.UI.Views.Filters.ItemIDFilter;
 using ClassicAssist.UO;
 using ClassicAssist.UO.Data;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels.Filters
 {
@@ -92,7 +93,7 @@ namespace ClassicAssist.UI.ViewModels.Filters
             entry.DestinationID = itemID;
         }
 
-        private static void SelectDestinationID( object obj )
+        private static async void SelectDestinationID( object obj )
         {
             if ( !( obj is ItemIDFilterEntry entry ) )
             {
@@ -101,7 +102,7 @@ namespace ClassicAssist.UI.ViewModels.Filters
 
             ItemIDSelectionWindow window = new ItemIDSelectionWindow();
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( window.Result )
             {
@@ -125,20 +126,22 @@ namespace ClassicAssist.UI.ViewModels.Filters
         public ICommand SelectHueCommand =>
             _selectHueCommand ?? ( _selectHueCommand = new RelayCommand( SelectHue, o => o != null ) );
 
-        private static void SelectHue( object obj )
+        private static async void SelectHue( object obj )
         {
             if ( !( obj is ItemIDFilterEntry entry ) )
             {
                 return;
             }
 
-            if ( HuePickerWindow.GetHue( out int hue ) )
+            int hue = await HuePickerWindow.GetHueAsync();
+
+            if ( hue != -1 )
             {
                 entry.Hue = hue;
             }
         }
 
-        private static void SelectSourceID( object obj )
+        private static async void SelectSourceID( object obj )
         {
             if ( !( obj is ItemIDFilterEntry entry ) )
             {
@@ -147,7 +150,7 @@ namespace ClassicAssist.UI.ViewModels.Filters
 
             ItemIDSelectionWindow window = new ItemIDSelectionWindow();
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( window.Result )
             {

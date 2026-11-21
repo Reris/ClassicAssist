@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -19,11 +19,13 @@
 
 using System;
 using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using ICSharpCode.AvalonEdit.Editing;
-using ICSharpCode.AvalonEdit.Rendering;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using AvaloniaEdit.Editing;
+using AvaloniaEdit.Rendering;
 
 namespace ClassicAssist.UI.Misc
 {
@@ -36,7 +38,7 @@ namespace ClassicAssist.UI.Misc
         {
             ClipToBounds = true;
             IsHitTestVisible = true;
-            Cursor = Cursors.Hand;
+            Cursor = new Cursor( StandardCursorType.Hand );
         }
 
         public ObservableCollection<int> Breakpoints { get; set; }
@@ -48,14 +50,9 @@ namespace ClassicAssist.UI.Misc
             return new Size( 20, 0 );
         }
 
-        protected override HitTestResult HitTestCore( PointHitTestParameters hitTestParameters )
+        protected override void OnPointerPressed( PointerPressedEventArgs e )
         {
-            return new PointHitTestResult( this, hitTestParameters.HitPoint );
-        }
-
-        protected override void OnMouseDown( MouseButtonEventArgs e )
-        {
-            base.OnMouseDown( e );
+            base.OnPointerPressed( e );
 
             TextView textView = TextView;
 
@@ -82,9 +79,9 @@ namespace ClassicAssist.UI.Misc
             e.Handled = true;
         }
 
-        protected override void OnMouseMove( MouseEventArgs e )
+        protected override void OnPointerMoved( PointerEventArgs e )
         {
-            base.OnMouseMove( e );
+            base.OnPointerMoved( e );
 
             TextView textView = TextView;
 
@@ -131,16 +128,16 @@ namespace ClassicAssist.UI.Misc
             InvalidateVisual(); // redraw when scrolling
         }
 
-        protected override void OnMouseLeave( MouseEventArgs e )
+        protected override void OnPointerExited( PointerEventArgs e )
         {
-            base.OnMouseLeave( e );
+            base.OnPointerExited( e );
             _hoveredLine = null;
             InvalidateVisual();
         }
 
-        protected override void OnRender( DrawingContext dc )
+        public override void Render( DrawingContext context )
         {
-            base.OnRender( dc );
+            base.Render( context );
 
             TextView textView = TextView;
 
@@ -166,7 +163,7 @@ namespace ClassicAssist.UI.Misc
                 double y = ( lineNumber - 1 ) * textView.DefaultLineHeight - textView.ScrollOffset.Y + textView.Margin.Top;
 
                 Point center = new Point( 10, y + 7 );
-                dc.DrawEllipse( Brushes.Red, null, center, _radius, _radius );
+                context.DrawEllipse( Brushes.Red, null, center, _radius, _radius );
             }
         }
     }

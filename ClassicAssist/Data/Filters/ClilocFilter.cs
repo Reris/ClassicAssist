@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Assistant;
 using ClassicAssist.Shared.Resources;
@@ -7,6 +7,7 @@ using ClassicAssist.UI.Views.Filters;
 using ClassicAssist.UO.Data;
 using ClassicAssist.UO.Network.Packets;
 using Newtonsoft.Json.Linq;
+using ClassicAssist.Shared.UI;
 
 namespace ClassicAssist.Data.Filters
 {
@@ -21,7 +22,7 @@ namespace ClassicAssist.Data.Filters
         {
             ClilocFilterConfigureWindow window = new ClilocFilterConfigureWindow { Topmost = Options.CurrentOptions.AlwaysOnTop };
 
-            window.ShowDialog();
+            window.ShowDialogCompat();
         }
 
         public void Deserialize( JToken token )

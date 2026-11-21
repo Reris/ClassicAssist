@@ -1,9 +1,10 @@
-﻿using System;
-using System.Windows.Media;
+using System;
+using Avalonia;
+using Avalonia.Media;
 using ClassicAssist.Resources;
-using ICSharpCode.AvalonEdit.CodeCompletion;
-using ICSharpCode.AvalonEdit.Document;
-using ICSharpCode.AvalonEdit.Editing;
+using AvaloniaEdit.CodeCompletion;
+using AvaloniaEdit.Document;
+using AvaloniaEdit.Editing;
 
 namespace ClassicAssist.Data.Macros
 {
@@ -51,7 +52,7 @@ namespace ClassicAssist.Data.Macros
             textArea.Document.Replace( segment, Text );
         }
 
-        public ImageSource Image => null;
+        public IImage Image => null;
 
         public string Text { get; }
 

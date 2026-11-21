@@ -1,38 +1,42 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #endregion
 
-using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Xaml.Interactivity;
+using ClassicAssist.Shared.UI.Compat;
 using System.Windows.Input;
-using Microsoft.Xaml.Behaviors;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
-    public class ClipboardBehaviour : Behavior<UIElement>
+    public class ClipboardBehaviour : Behavior<Control>
     {
-        public static readonly DependencyProperty CopyCommandProperty = DependencyProperty.Register( nameof( CopyCommand ), typeof( ICommand ), typeof( ClipboardBehaviour ),
-            new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.None ) );
+        public static readonly Avalonia.StyledProperty<ICommand> CopyCommandProperty =
+        AvaloniaCompat.RegisterCompat<ClipboardBehaviour, ICommand>(nameof( CopyCommand ), null);
 
-        public static readonly DependencyProperty PasteCommandProperty = DependencyProperty.Register( nameof( PasteCommand ), typeof( ICommand ), typeof( ClipboardBehaviour ),
-            new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.None ) );
+        public static readonly Avalonia.StyledProperty<ICommand> PasteCommandProperty =
+        AvaloniaCompat.RegisterCompat<ClipboardBehaviour, ICommand>(nameof( PasteCommand ), null);
 
-        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register( nameof( CommandParameter ), typeof( object ),
-            typeof( ClipboardBehaviour ), new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.None ) );
+        public static readonly Avalonia.StyledProperty<object> CommandParameterProperty =
+        AvaloniaCompat.RegisterCompat<ClipboardBehaviour, object>(nameof( CommandParameter ), null);
 
         public object CommandParameter
         {
@@ -56,44 +60,31 @@ namespace ClassicAssist.UI.Misc.Behaviours
         {
             base.OnAttached();
 
-            CommandBinding CopyCommandBinding = new CommandBinding( ApplicationCommands.Copy, CopyCommandExecuted, CopyCommandCanExecute );
-            AssociatedObject.CommandBindings.Add( CopyCommandBinding );
-
-            CommandBinding CutCommandBinding = new CommandBinding( ApplicationCommands.Cut, CutCommandExecuted, CutCommandCanExecute );
-            AssociatedObject.CommandBindings.Add( CutCommandBinding );
-
-            CommandBinding PasteCommandBinding = new CommandBinding( ApplicationCommands.Paste, PasteCommandExecuted, PasteCommandCanExecute );
-            AssociatedObject.CommandBindings.Add( PasteCommandBinding );
+            AssociatedObject.AddHandler( InputElement.KeyDownEvent, OnKeyDown, RoutingStrategies.Tunnel );
         }
 
-        private void CopyCommandExecuted( object target, ExecutedRoutedEventArgs e )
+        protected override void OnDetaching()
         {
-            CopyCommand?.Execute( CommandParameter );
+            AssociatedObject.RemoveHandler( InputElement.KeyDownEvent, OnKeyDown );
+
+            base.OnDetaching();
         }
 
-        private void CopyCommandCanExecute( object target, CanExecuteRoutedEventArgs e )
+        private void OnKeyDown( object sender, KeyEventArgs e )
         {
-            e.CanExecute = true;
-            e.Handled = true;
-        }
-
-        private void CutCommandExecuted( object target, ExecutedRoutedEventArgs e )
-        {
-        }
-
-        private void CutCommandCanExecute( object target, CanExecuteRoutedEventArgs e )
-        {
-        }
-
-        private void PasteCommandExecuted( object target, ExecutedRoutedEventArgs e )
-        {
-            PasteCommand?.Execute( CommandParameter );
-        }
-
-        private void PasteCommandCanExecute( object target, CanExecuteRoutedEventArgs e )
-        {
-            e.CanExecute = true;
-            e.Handled = true;
+            if ( e.KeyModifiers.HasFlag( KeyModifiers.Control ) )
+            {
+                if ( e.Key == Key.C && CopyCommand?.CanExecute( CommandParameter ) == true )
+                {
+                    CopyCommand.Execute( CommandParameter );
+                    e.Handled = true;
+                }
+                else if ( e.Key == Key.V && PasteCommand?.CanExecute( CommandParameter ) == true )
+                {
+                    PasteCommand.Execute( CommandParameter );
+                    e.Handled = true;
+                }
+            }
         }
     }
 }

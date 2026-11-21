@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -19,6 +19,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Avalonia.Input;
 using System.Windows.Input;
 
 namespace ClassicAssist.Shared.UI

@@ -1,6 +1,10 @@
-﻿using System.Diagnostics;
-using System.Windows;
-using System.Windows.Navigation;
+using System.Diagnostics;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+
 
 namespace ClassicAssist.Launcher
 {
@@ -14,9 +18,9 @@ namespace ClassicAssist.Launcher
             InitializeComponent();
         }
 
-        private void Hyperlink_RequestNavigate( object sender, RequestNavigateEventArgs e )
+        private void GitHubIssueLink_OnClick( object sender, RoutedEventArgs e )
         {
-            Process.Start( e.Uri.ToString() );
+            Process.Start( new ProcessStartInfo { FileName = "https://github.com/Reetus/ClassicAssist-Shards/issues", UseShellExecute = true } );
         }
     }
 }

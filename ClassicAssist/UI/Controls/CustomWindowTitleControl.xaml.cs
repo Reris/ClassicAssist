@@ -1,41 +1,39 @@
-﻿using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Shared.UI;
+using ClassicAssist.Shared.UI.Compat;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Controls
 {
     /// <summary>
     ///     Interaction logic for CustomWindowTitleControl.xaml
     /// </summary>
-    public partial class CustomWindowTitleControl
+    public partial class CustomWindowTitleControl : UserControl
     {
-        public static readonly DependencyProperty AdditionalContentProperty =
-            DependencyProperty.Register( nameof( AdditionalContent ), typeof( object ), typeof( CustomWindowTitleControl ),
-                new PropertyMetadata( null ) );
+        public static readonly Avalonia.StyledProperty<object> AdditionalContentProperty =
+        AvaloniaCompat.RegisterCompat<CustomWindowTitleControl, object>(nameof( AdditionalContent ), null);
 
-        public static readonly DependencyProperty AdditionalButtonsProperty =
-            DependencyProperty.Register( nameof( AdditionalButtons ), typeof( object ), typeof( CustomWindowTitleControl ),
-                new PropertyMetadata( null ) );
+        public static readonly Avalonia.StyledProperty<object> AdditionalButtonsProperty =
+        AvaloniaCompat.RegisterCompat<CustomWindowTitleControl, object>(nameof( AdditionalButtons ), null);
 
-        public static readonly DependencyProperty CustomTitleProperty = DependencyProperty.Register( nameof( CustomTitle ),
-            typeof( string ), typeof( CustomWindowTitleControl ),
-            new FrameworkPropertyMetadata( default( string ), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<string> CustomTitleProperty =
+        AvaloniaCompat.RegisterCompat<CustomWindowTitleControl, string>(nameof( CustomTitle ), default( string ), defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
-        public static readonly DependencyProperty CanCloseProperty = DependencyProperty.Register( nameof( CanClose ),
-            typeof( bool ), typeof( CustomWindowTitleControl ),
-            new FrameworkPropertyMetadata( true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<bool> CanCloseProperty =
+        AvaloniaCompat.RegisterCompat<CustomWindowTitleControl, bool>(nameof( CanClose ), true, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
-        public static readonly DependencyProperty CanMinimizeProperty = DependencyProperty.Register( nameof( CanMinimize ),
-            typeof( bool ), typeof( CustomWindowTitleControl ),
-            new FrameworkPropertyMetadata( true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<bool> CanMinimizeProperty =
+        AvaloniaCompat.RegisterCompat<CustomWindowTitleControl, bool>(nameof( CanMinimize ), true, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
-        public static readonly DependencyProperty CanMaxmizeProperty = DependencyProperty.Register( nameof( CanMaximize ),
-            typeof( bool ), typeof( CustomWindowTitleControl ),
-            new FrameworkPropertyMetadata( true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<bool> CanMaxmizeProperty =
+        AvaloniaCompat.RegisterCompat<CustomWindowTitleControl, bool>(nameof( CanMaximize ), true, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
-        public static readonly DependencyProperty MinimizeCommandProperty =
-            DependencyProperty.Register( nameof( MinimizeCommand ), typeof( ICommand ),
-                typeof( CustomWindowTitleControl ), new FrameworkPropertyMetadata( default ) );
+        public static readonly Avalonia.StyledProperty<ICommand> MinimizeCommandProperty =
+        AvaloniaCompat.RegisterCompat<CustomWindowTitleControl, ICommand>(nameof( MinimizeCommand ), default);
 
         private ICommand _maximizeCommand;
 
@@ -91,12 +89,12 @@ namespace ClassicAssist.UI.Controls
 
         private static void Maximize( object obj )
         {
-            if ( !( obj is UIElement element ) )
+            if ( !( obj is Visual visual ) )
             {
                 return;
             }
 
-            Window window = Window.GetWindow( element );
+            Window window = TopLevel.GetTopLevel( visual ) as Window;
 
             if ( window == null )
             {

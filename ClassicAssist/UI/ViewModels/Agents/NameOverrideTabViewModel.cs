@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2022 Reetus
 // 
@@ -17,8 +17,11 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Data.NameOverride;
@@ -30,6 +33,7 @@ using ClassicAssist.UO.Objects;
 using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using Sentry;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels.Agents
 {
@@ -174,28 +178,20 @@ namespace ClassicAssist.UI.ViewModels.Agents
             }
         }
 
-        private void Import( object obj )
+        private async void Import( object obj )
         {
             string profileDirectory = AssistantOptions.GetProfilePath();
 
-            OpenFileDialog ofd = new OpenFileDialog
-            {
-                InitialDirectory = profileDirectory,
-                Filter = "Json Files|*.json",
-                CheckFileExists = true,
-                Multiselect = false
-            };
+            string[] files = await DialogHelper.ShowOpenFileDialogAsync( "Import", "Json Files|*.json", profileDirectory );
 
-            bool? result = ofd.ShowDialog();
-
-            if ( !result.HasValue || result == false )
+            if ( files.Length == 0 )
             {
                 return;
             }
 
             try
             {
-                string json = File.ReadAllText( ofd.FileName );
+                string json = File.ReadAllText( files[0] );
 
                 JObject jObject = JObject.Parse( json );
 
@@ -229,7 +225,7 @@ namespace ClassicAssist.UI.ViewModels.Agents
             }
             catch ( Exception ex )
             {
-                MessageBox.Show( ex.Message );
+                MessageBoxHelper.Show( ex.Message );
                 SentrySdk.CaptureException( ex );
             }
         }

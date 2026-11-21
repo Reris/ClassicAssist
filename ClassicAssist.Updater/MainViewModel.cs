@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -8,15 +8,18 @@ using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Threading;
+
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Input;
+using Avalonia.Threading;
 using ClassicAssist.Shared;
 using ClassicAssist.Shared.UI;
+using ClassicAssist.Shared.UI.Compat;
 using ClassicAssist.Updater.Properties;
 using Exceptionless;
 using Exceptionless.Models;
-using Application = System.Windows.Application;
+using Application = Avalonia.Application;
+using System.Windows.Input;
 
 [assembly: InternalsVisibleTo( "ClassicAssist.Tests" )]
 
@@ -40,7 +43,7 @@ namespace ClassicAssist.Updater
 
         public MainViewModel( bool testing )
         {
-            _dispatcher = Dispatcher.CurrentDispatcher;
+            _dispatcher = Avalonia.Threading.Dispatcher.UIThread;
 
             UpdaterSettings = App.UpdaterSettings;
             Force = App.CurrentOptions?.Force ?? false;
@@ -329,14 +332,29 @@ namespace ClassicAssist.Updater
                         {
                             DialogResult result = DialogResult.Cancel;
 
-                            _dispatcher.Invoke( () =>
-                            {
-                                ProcessesViewModel vm = new ProcessesViewModel( clients );
-                                ProcessesView window = new ProcessesView { DataContext = vm };
+                            ProcessesViewModel vm = new ProcessesViewModel( clients );
+                            ProcessesView window = new ProcessesView { DataContext = vm };
 
-                                window.ShowDialog();
-                                result = vm.DialogResult;
+                            Task? dialogTask = _dispatcher.Invoke( () =>
+                            {
+                                IClassicDesktopStyleApplicationLifetime lifetime =
+                                    Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
+
+                                if ( lifetime?.MainWindow != null )
+                                {
+                                    return window.ShowDialog( lifetime.MainWindow );
+                                }
+
+                                window.Show();
+                                return null;
                             } );
+
+                            if ( dialogTask != null )
+                            {
+                                await dialogTask;
+                            }
+
+                            result = vm.DialogResult;
 
                             if ( result != DialogResult.OK )
                             {
@@ -378,7 +396,9 @@ namespace ClassicAssist.Updater
                         $"--stage Install --updatepath \"{updatePath}\" --path \"{App.CurrentOptions.Path}\"" );
                     Process.Start( psi );
 
-                    _dispatcher.Invoke( () => Application.Current.Shutdown() );
+                    _dispatcher.Invoke( () =>
+                        ( Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime )
+                        ?.Shutdown() );
 
                     return null;
                 }
@@ -482,10 +502,22 @@ namespace ClassicAssist.Updater
             return result;
         }
 
-        public void ShowSettings( object arg )
+        public async void ShowSettings( object arg )
         {
             SettingsWindow window = new SettingsWindow();
-            window.ShowDialog();
+
+            IClassicDesktopStyleApplicationLifetime lifetime =
+                Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
+
+            if ( lifetime?.MainWindow != null )
+            {
+                await window.ShowDialog( lifetime.MainWindow );
+            }
+            else
+            {
+                window.Show();
+            }
+
             OnPropertyChanged( nameof( UpdaterSettings ) );
         }
     }

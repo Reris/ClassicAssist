@@ -1,9 +1,10 @@
-﻿namespace ClassicAssist.UI.Views.Agents.Screenshot
+﻿using Avalonia.Controls;
+namespace ClassicAssist.UI.Views.Agents.Screenshot
 {
     /// <summary>
     ///     Interaction logic for ScreenshotMobileIDWindow.xaml
     /// </summary>
-    public partial class ScreenshotMobileFilterWindow
+    public partial class ScreenshotMobileFilterWindow : Window
     {
         public ScreenshotMobileFilterWindow()
         {

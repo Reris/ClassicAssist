@@ -1,14 +1,9 @@
-﻿<Application x:Class="ClassicAssist.Updater.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared"
-             StartupUri="MainWindow.xaml" Startup="Application_Startup">
-    <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <shared:SharedResourceDictionary Source="pack://application:,,,/ClassicAssist.Shared;component/Resources/DarkTheme.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/ClassicAssist.Shared;component/Resources/Icons.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Application.Resources>
+             x:Class="ClassicAssist.Updater.App"
+             xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+    <Application.Styles>
+        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DarkTheme.xaml" />
+        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/Icons.xaml" />
+    </Application.Styles>
 </Application>

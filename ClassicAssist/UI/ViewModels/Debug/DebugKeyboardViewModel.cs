@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -21,9 +21,12 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Forms;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+
 using Assistant;
 using ClassicAssist.Data.Hotkeys;
 using ClassicAssist.Data.Hotkeys.Commands;
@@ -32,7 +35,10 @@ using ClassicAssist.Shared.UI;
 using ClassicAssist.UI.Views.Debug;
 using ClassicAssist.UO;
 using Newtonsoft.Json;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using KeyEventArgs = Avalonia.Input.KeyEventArgs;
+using System.Windows.Input;
+using ClassicAssist.Shared.UI.Compat;
+using System.Globalization;
 
 namespace ClassicAssist.UI.ViewModels.Debug
 {
@@ -54,14 +60,14 @@ namespace ClassicAssist.UI.ViewModels.Debug
 
         public DebugKeyboardViewModel()
         {
-            KeyboardName = InputLanguageManager.Current.CurrentInputLanguage.DisplayName;
-            KeyboardLayoutId = InputLanguageManager.Current.CurrentInputLanguage.KeyboardLayoutId;
+            KeyboardName = CultureInfo.CurrentCulture.DisplayName;
+            KeyboardLayoutId = CultureInfo.CurrentCulture.KeyboardLayoutId;
         }
 
         public DebugKeyboardViewModel( DebugKeyboardControl control )
         {
-            KeyboardName = InputLanguageManager.Current.CurrentInputLanguage.DisplayName;
-            KeyboardLayoutId = InputLanguageManager.Current.CurrentInputLanguage.KeyboardLayoutId;
+            KeyboardName = CultureInfo.CurrentCulture.DisplayName;
+            KeyboardLayoutId = CultureInfo.CurrentCulture.KeyboardLayoutId;
             _control = control;
         }
 
@@ -185,24 +191,12 @@ namespace ClassicAssist.UI.ViewModels.Debug
 
                 Key key = args.Key;
 
-                switch ( key )
-                {
-                    case Key.DeadCharProcessed:
-                        key = args.DeadCharProcessedKey;
-                        break;
-                    case Key.ImeProcessed:
-                        key = args.ImeProcessedKey;
-                        break;
-                    case Key.System:
-                        key = args.SystemKey;
-                        break;
-                }
 
                 WPFKey = key;
                 are.Set();
             }
 
-            Window window = Window.GetWindow( _control );
+            Window window = TopLevel.GetTopLevel( _control ) as Window;
             window?.Activate();
             _control.Focus();
 
@@ -225,8 +219,8 @@ namespace ClassicAssist.UI.ViewModels.Debug
                 Status = "Key didn't match";
                 FailKeys.Add( new FailKey
                 {
-                    KeyboardLayoutId = InputLanguageManager.Current.CurrentInputLanguage.KeyboardLayoutId,
-                    KeyboardName = InputLanguageManager.Current.CurrentInputLanguage.Name,
+                    KeyboardLayoutId = CultureInfo.CurrentCulture.KeyboardLayoutId,
+                    KeyboardName = CultureInfo.CurrentCulture.Name,
                     WPFKey = WPFKey,
                     UOKey = UOKey,
                     SDLKey = SDLKey,
@@ -241,15 +235,13 @@ namespace ClassicAssist.UI.ViewModels.Debug
 
         private async Task Save( object arg )
         {
-            SaveFileDialog fsd = new SaveFileDialog { OverwritePrompt = true, FileName = "keys.json" };
+            string fileName = await DialogHelper.ShowSaveFileDialogAsync( fileName: "keys.json" );
 
-            DialogResult result = fsd.ShowDialog();
-
-            if ( result == DialogResult.OK )
+            if ( !string.IsNullOrEmpty( fileName ) )
             {
                 string json = JsonConvert.SerializeObject( FailKeys );
 
-                File.WriteAllText( fsd.FileName, json );
+                File.WriteAllText( fileName, json );
             }
 
             await Task.CompletedTask;

@@ -18,10 +18,6 @@ namespace ClassicAssist.Tests
         [TestMethod]
         public void WontDuplicateSkillsCategory()
         {
-            AppDomain appDomain = AppDomain.CreateDomain( "WontThrowExceptionOnDeserializeNullConfig",
-                AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation );
-
-            appDomain.DoCallBack( () =>
             {
                 const string localPath = @"C:\Users\johns\Desktop\KvG Client 2.0";
 
@@ -63,7 +59,7 @@ namespace ClassicAssist.Tests
                 int count = hotkeys.Items.Count( hk => hk.IsCategory && hk.Name == Strings.Skills );
 
                 Assert.AreEqual( 1, count );
-            } );
+                        }
         }
     }
 }

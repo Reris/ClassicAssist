@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2024 Reetus
 // 
@@ -16,7 +16,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Data.TrapPouch;
@@ -30,6 +30,7 @@ using ClassicAssist.UO.Network;
 using ClassicAssist.UO.Network.Packets;
 using ClassicAssist.UO.Objects;
 using Newtonsoft.Json.Linq;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels.Agents
 {
@@ -333,11 +334,11 @@ namespace ClassicAssist.UI.ViewModels.Agents
                 return;
             }
 
-            _dispatcher.BeginInvoke( (Action) ( () =>
+            _dispatcher.Post( () =>
             {
                 Items.Remove( item );
                 CheckWarn();
-            } ) );
+            } );
 
             if ( !RehueItems )
             {
@@ -417,7 +418,7 @@ namespace ClassicAssist.UI.ViewModels.Agents
 
             if ( item.IsDescendantOf( Engine.Player.Backpack.Serial ) && Items.All( e => e.Serial != serial ) )
             {
-                _dispatcher.BeginInvoke( (Action) ( () =>
+                _dispatcher.Post( () =>
                 {
                     Items.Add( new TrapPouchEntry { Serial = serial, Name = item.Name } );
 
@@ -425,7 +426,7 @@ namespace ClassicAssist.UI.ViewModels.Agents
                     {
                         Rehue( item, RehueItemsHue );
                     }
-                } ) );
+                } );
             }
         }
 
@@ -449,9 +450,11 @@ namespace ClassicAssist.UI.ViewModels.Agents
             Rehue( item, hue );
         }
 
-        private void SelectHue( object obj )
+        private async void SelectHue( object obj )
         {
-            if ( !HuePickerWindow.GetHue( out int hue ) )
+            int hue = await HuePickerWindow.GetHueAsync();
+
+            if ( hue == -1 )
             {
                 return;
             }

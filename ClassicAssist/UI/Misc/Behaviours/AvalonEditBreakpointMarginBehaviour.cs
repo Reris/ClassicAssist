@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -22,22 +22,27 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Windows;
-using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.Document;
-using Microsoft.Xaml.Behaviors;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using AvaloniaEdit;
+using AvaloniaEdit.Document;
+using Avalonia.Xaml.Interactivity;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
     public class AvalonEditBreakpointMarginBehaviour : Behavior<TextEditor>
     {
-        public static readonly DependencyProperty BreakpointsProperty = DependencyProperty.RegisterAttached( "Breakpoints", typeof( ObservableCollection<int> ),
-            typeof( AvalonEditBreakpointMarginBehaviour ), new PropertyMetadata( null, OnBreakpointsChanged ) );
+        public static readonly Avalonia.StyledProperty<ObservableCollection<int>> BreakpointsProperty =
+        AvaloniaCompat.RegisterAttachedCompat<AvalonEditBreakpointMarginBehaviour, ObservableCollection<int>>("Breakpoints", null, onChanged: OnBreakpointsChanged);
 
         private BreakpointMargin _breakPointMargin;
         private TextEditor _textEditor;
 
-        public static void SetBreakpoints( DependencyObject element, ObservableCollection<int> value )
+        public static void SetBreakpoints( AvaloniaObject element, ObservableCollection<int> value )
         {
             element?.SetValue( BreakpointsProperty, value );
         }
@@ -163,7 +168,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
             }
         }
 
-        private static void OnBreakpointsChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void OnBreakpointsChanged( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
             if ( !( d is AvalonEditBreakpointMarginBehaviour editor ) )
             {
@@ -192,9 +197,12 @@ namespace ClassicAssist.UI.Misc.Behaviours
 
                 editor._breakPointMargin.InvalidateVisual();
 
-                editor._textEditor?.Dispatcher.BeginInvoke(
-                    (Action) ( () => editor.SubscribeToDocument( editor._textEditor?.Document ) ),
-                    System.Windows.Threading.DispatcherPriority.Loaded );
+                if ( editor._textEditor != null )
+                {
+                    Avalonia.Threading.Dispatcher.UIThread.Post(
+                        () => editor.SubscribeToDocument( editor._textEditor?.Document ),
+                        Avalonia.Threading.DispatcherPriority.Loaded );
+                }
 
                 return;
             }

@@ -3,7 +3,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Threading;
+using Avalonia.Threading;
+using ClassicAssist.Shared.UI;
 
 namespace ClassicAssist.Launcher
 {
@@ -13,7 +14,7 @@ namespace ClassicAssist.Launcher
 
         public BaseViewModel()
         {
-            _dispatcher = Dispatcher.CurrentDispatcher;
+            _dispatcher = Dispatcher.UIThread;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

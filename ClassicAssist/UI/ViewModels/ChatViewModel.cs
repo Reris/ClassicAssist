@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2020 Reetus
 // 
@@ -21,9 +21,11 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data.Chat;
 using ClassicAssist.Data.Macros.Commands;
@@ -31,6 +33,7 @@ using ClassicAssist.Shared.Misc;
 using ClassicAssist.Shared.Resources;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UO;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels
 {

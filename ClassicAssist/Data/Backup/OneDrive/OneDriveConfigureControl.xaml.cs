@@ -1,9 +1,10 @@
-﻿namespace ClassicAssist.Data.Backup.OneDrive
+﻿using Avalonia.Controls;
+namespace ClassicAssist.Data.Backup.OneDrive
 {
     /// <summary>
     ///     Interaction logic for OneDriveConfigureControl.xaml
     /// </summary>
-    public partial class OneDriveConfigureControl
+    public partial class OneDriveConfigureControl : UserControl
     {
         public OneDriveConfigureControl()
         {

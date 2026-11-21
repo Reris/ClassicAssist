@@ -1,5 +1,5 @@
-﻿using System;
-using System.Windows.Markup;
+using System;
+using Avalonia.Markup.Xaml;
 
 namespace ClassicAssist.UI.Misc
 {

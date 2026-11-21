@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2022 Reetus
 // 
@@ -14,8 +14,9 @@
 
 using System.Collections.ObjectModel;
 using System.Threading;
-using System.Windows.Input;
+using Avalonia.Input;
 using ClassicAssist.Shared.UI;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels
 {

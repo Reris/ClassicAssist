@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -17,25 +17,25 @@
 
 #endregion
 
-using System.Windows.Controls;
-using System.Windows.Input;
+using Avalonia.Controls;
+using Avalonia.Input;
 using ClassicAssist.UI.ViewModels;
-using Microsoft.Xaml.Behaviors;
+using Avalonia.Xaml.Interactivity;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
-    public class ListViewDoubleClickBehaviour : Behavior<ListView>
+    public class ListViewDoubleClickBehaviour : Behavior<ListBox>
     {
         protected override void OnAttached()
         {
             base.OnAttached();
 
-            AssociatedObject.MouseDoubleClick += OnMouseDoubleClick;
+            AssociatedObject.DoubleTapped += OnMouseDoubleClick;
         }
 
-        private static void OnMouseDoubleClick( object sender, MouseButtonEventArgs e )
+        private static void OnMouseDoubleClick( object sender, TappedEventArgs e )
         {
-            ObjectInspectorViewModel i = (ObjectInspectorViewModel) ( (ListView) sender ).DataContext;
+            ObjectInspectorViewModel i = (ObjectInspectorViewModel) ( (ListBox) sender ).DataContext;
 
             i.SelectedItem?.OnDoubleClick?.Invoke( i.SelectedItem );
         }
@@ -44,7 +44,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
         {
             base.OnDetaching();
 
-            AssociatedObject.MouseDoubleClick -= OnMouseDoubleClick;
+            AssociatedObject.DoubleTapped -= OnMouseDoubleClick;
         }
     }
 }

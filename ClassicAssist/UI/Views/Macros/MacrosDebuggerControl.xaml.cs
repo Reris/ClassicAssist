@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -23,26 +23,30 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Assistant;
-using System.Windows;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Controls.Primitives;
 using ClassicAssist.Data.Macros;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UI.ViewModels;
 using ClassicAssist.UO.Objects;
+using ClassicAssist.Shared.UI.Compat;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views.Macros
 {
     /// <summary>
     ///     Interaction logic for MacrosDebuggerControl.xaml
     /// </summary>
-    public partial class MacrosDebuggerControl : INotifyPropertyChanged
-    {
-        public static readonly DependencyProperty MacroEntryProperty = DependencyProperty.Register( nameof( MacroEntry ), typeof( MacroEntry ), typeof( MacrosDebuggerControl ),
-            new PropertyMetadata( default( MacroEntry ) ) );
+    public partial class MacrosDebuggerControl : UserControl, INotifyPropertyChanged
+    {        public static readonly Avalonia.StyledProperty<MacroEntry> MacroEntryProperty =
+        AvaloniaCompat.RegisterCompat<MacrosDebuggerControl, MacroEntry>(nameof( MacroEntry ), default( MacroEntry ));
 
-        public static readonly DependencyProperty OverlayWidthProperty =
-            DependencyProperty.Register( nameof( OverlayWidth ), typeof( double ), typeof( MacrosDebuggerControl ), new PropertyMetadata( 250.0 ) );
+        public static readonly Avalonia.StyledProperty<double> OverlayWidthProperty =
+        AvaloniaCompat.RegisterCompat<MacrosDebuggerControl, double>(nameof( OverlayWidth ), 250.0);
 
         private ICommand _clipboardCopyCommand;
 
@@ -95,13 +99,13 @@ namespace ClassicAssist.UI.Views.Macros
                 return Task.CompletedTask;
             }
 
-            _ = Engine.Dispatcher.BeginInvoke( (Action) ( () =>
+            Engine.Dispatcher.Post( () =>
             {
                 ObjectInspectorWindow window =
                     new ObjectInspectorWindow { DataContext = new ObjectInspectorViewModel( entity ) };
 
                 window.Show();
-            } ) );
+            } );
 
             return Task.CompletedTask;
         }
@@ -110,7 +114,7 @@ namespace ClassicAssist.UI.Views.Macros
 
         private void ClipboardCopy( object obj )
         {
-            Clipboard.SetText( MacroInvoker.GetDisplayValue( SelectedItem.Value, true ) );
+            ClipboardHelper.SetText( MacroInvoker.GetDisplayValue( SelectedItem.Value, true ) );
         }
 
         private void Resume( object obj )
@@ -128,15 +132,15 @@ namespace ClassicAssist.UI.Views.Macros
             MacroEntry?.Step();
         }
 
-        private void ResizeThumb_DragStarted( object sender, DragStartedEventArgs e )
+        private void ResizeThumb_DragStarted( object sender, VectorEventArgs e )
         {
             _startWidth = OverlayWidth;
         }
 
-        private void ResizeThumb_DragDelta( object sender, DragDeltaEventArgs e )
+        private void ResizeThumb_DragDelta( object sender, VectorEventArgs e )
         {
             // Move left increases width, move right decreases
-            double delta = -e.HorizontalChange;
+            double delta = -e.Vector.X;
             double newWidth = _startWidth + delta;
 
             OverlayWidth = newWidth;

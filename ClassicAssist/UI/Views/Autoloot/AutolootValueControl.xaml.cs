@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -19,10 +19,14 @@
 
 using System.Collections;
 using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Controls.Primitives;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using ClassicAssist.Controls;
 using ClassicAssist.Data.Autoloot;
 using ClassicAssist.Shared.Resources;
@@ -42,7 +46,7 @@ namespace ClassicAssist.UI.Views.Autoloot
             InitializeComponent();
         }
 
-        private void OnDataContextChanged( object sender, DependencyPropertyChangedEventArgs e )
+        private void OnDataContextChanged( object sender, AvaloniaPropertyChangedEventArgs e )
         {
             // TODO: Convert to XAML
             if ( !( e.NewValue is AutolootConstraintEntry autolootConstraintEntry ) )
@@ -52,7 +56,7 @@ namespace ClassicAssist.UI.Views.Autoloot
 
             Grid.Children.Clear();
 
-            Binding widthBinding = new Binding( "ActualWidth" ) { RelativeSource = new RelativeSource( RelativeSourceMode.FindAncestor, typeof( AutolootValueControl ), 1 ) };
+            Binding widthBinding = new Binding( "Bounds.Width" ) { RelativeSource = new RelativeSource( RelativeSourceMode.FindAncestor ) { AncestorType = typeof( AutolootValueControl ) } };
             Binding valuesBinding = new Binding( nameof( autolootConstraintEntry.Values ) ) { Source = autolootConstraintEntry, Mode = BindingMode.TwoWay };
 
             if ( autolootConstraintEntry.Property.AllowedValuesEnum != null && autolootConstraintEntry.Property.AllowedValuesEnum == typeof( Layer ) )
@@ -68,8 +72,8 @@ namespace ClassicAssist.UI.Views.Autoloot
 
                 ComboBox comboBox = new ComboBox { ItemsSource = itemSource.ProvideValue( null ) as IEnumerable };
 
-                BindingOperations.SetBinding( comboBox, Selector.SelectedItemProperty, selectedItemBinding );
-                BindingOperations.SetBinding( comboBox, WidthProperty, widthBinding );
+                comboBox.Bind( SelectingItemsControl.SelectedItemProperty, selectedItemBinding );
+                comboBox.Bind( WidthProperty, widthBinding );
 
                 Grid.Children.Add( comboBox );
 
@@ -79,8 +83,8 @@ namespace ClassicAssist.UI.Views.Autoloot
             if ( autolootConstraintEntry.Property.UseMultipleValues && autolootConstraintEntry.Property.Name != Strings.Cliloc__Multiple_ )
             {
                 MultiItemIDSelector control = new MultiItemIDSelector { MinWidth = 40 };
-                BindingOperations.SetBinding( control, MultiItemIDSelector.ValuesProperty, valuesBinding );
-                BindingOperations.SetBinding( control, WidthProperty, widthBinding );
+                control.Bind( MultiItemIDSelector.ValuesProperty, valuesBinding );
+                control.Bind( WidthProperty, widthBinding );
 
                 Grid.Children.Add( control );
 
@@ -90,8 +94,8 @@ namespace ClassicAssist.UI.Views.Autoloot
             if ( autolootConstraintEntry.Property.Name == Strings.Cliloc__Multiple_ )
             {
                 MultiClilocSelector control = new MultiClilocSelector { MinWidth = 40 };
-                BindingOperations.SetBinding( control, MultiClilocSelector.ValuesProperty, valuesBinding );
-                BindingOperations.SetBinding( control, WidthProperty, widthBinding );
+                control.Bind( MultiClilocSelector.ValuesProperty, valuesBinding );
+                control.Bind( WidthProperty, widthBinding );
 
                 Grid.Children.Add( control );
 
@@ -106,8 +110,8 @@ namespace ClassicAssist.UI.Views.Autoloot
 
                 ComboBox comboBox = new ComboBox { ItemsSource = manager.GetEntries().Select( ale => ale.Name ) };
 
-                BindingOperations.SetBinding( comboBox, Selector.SelectedItemProperty, selectedItemBinding );
-                BindingOperations.SetBinding( comboBox, WidthProperty, widthBinding );
+                comboBox.Bind( SelectingItemsControl.SelectedItemProperty, selectedItemBinding );
+                comboBox.Bind( WidthProperty, widthBinding );
 
                 Grid.Children.Add( comboBox );
 
@@ -118,8 +122,8 @@ namespace ClassicAssist.UI.Views.Autoloot
 
             EditTextBlock editTextBlock = new EditTextBlock { ShowIcon = true };
 
-            BindingOperations.SetBinding( editTextBlock, EditTextBlock.TextProperty, binding );
-            BindingOperations.SetBinding( editTextBlock, WidthProperty, widthBinding );
+            editTextBlock.Bind( EditTextBlock.TextProperty, binding );
+            editTextBlock.Bind( WidthProperty, widthBinding );
 
             Grid.Children.Add( editTextBlock );
         }

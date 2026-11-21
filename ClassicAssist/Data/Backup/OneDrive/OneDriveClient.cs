@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -17,12 +17,14 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
+using Microsoft.Kiota.Abstractions.Authentication;
 using Prompt = Microsoft.Identity.Client.Prompt;
 
 namespace ClassicAssist.Data.Backup.OneDrive
@@ -77,13 +79,9 @@ namespace ClassicAssist.Data.Backup.OneDrive
         {
             AuthenticationResult authentication = await GetAccessTokenAsync( true );
 
-            GraphServiceClient graphClient = new GraphServiceClient( new DelegateAuthenticationProvider(
-                async requestMessage =>
-                {
-                    requestMessage.Headers.Authorization =
-                        new AuthenticationHeaderValue( "Bearer", authentication.AccessToken );
-                    await Task.CompletedTask;
-                } ) );
+            GraphServiceClient graphClient = new GraphServiceClient(
+                new BaseBearerTokenAuthenticationProvider( new StaticAccessTokenProvider( authentication.AccessToken ) ),
+                "https://graph.microsoft.com/v1.0" );
 
             return graphClient;
         }
@@ -98,6 +96,26 @@ namespace ClassicAssist.Data.Backup.OneDrive
             {
                 await client.RemoveAsync( account );
             }
+        }
+
+        private class StaticAccessTokenProvider : IAccessTokenProvider
+        {
+            private readonly string _accessToken;
+
+            public StaticAccessTokenProvider( string accessToken )
+            {
+                _accessToken = accessToken;
+            }
+
+            public Task<string> GetAuthorizationTokenAsync( Uri uri,
+                Dictionary<string, object> additionalAuthenticationContext = default,
+                CancellationToken cancellationToken = default )
+            {
+                return Task.FromResult( _accessToken );
+            }
+
+            public AllowedHostsValidator AllowedHostsValidator { get; } =
+                new AllowedHostsValidator( new[] { "graph.microsoft.com" } );
         }
     }
 }

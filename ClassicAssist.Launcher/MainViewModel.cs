@@ -29,17 +29,20 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Shell;
+
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Input;
+
 using ClassicAssist.Launcher.Properties;
 using ClassicAssist.Shared.Misc;
 using ClassicAssist.Shared.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Trinet.Core.IO.Ntfs;
-using Application = System.Windows.Application;
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using Application = Avalonia.Application;
+using ClassicAssist.Shared.UI;
+using ClassicAssist.Shared.UI.Compat;
+using System.Windows.Input;
 
 namespace ClassicAssist.Launcher
 {
@@ -211,7 +214,7 @@ namespace ClassicAssist.Launcher
 
                     if ( shard == null )
                     {
-                        MessageBox.Show( Resources.Shard_not_found, Strings.Error );
+                        MessageBoxHelper.Show( Resources.Shard_not_found, Strings.Error );
                         return;
                     }
 
@@ -417,12 +420,12 @@ namespace ClassicAssist.Launcher
             }
         }
 
-        private void ShowOptionsWindow( object arg )
+        private async void ShowOptionsWindow( object arg )
         {
             OptionsViewModel vm = new OptionsViewModel( Plugins, ClassicOptions );
 
             OptionsWindow window = new OptionsWindow { DataContext = vm };
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( vm.DialogResult != DialogResult.OK )
             {
@@ -449,41 +452,41 @@ namespace ClassicAssist.Launcher
             }
         }
 
-        private void SelectClientPath( object obj )
+        private async void SelectClientPath( object obj )
         {
-            OpenFileDialog ofd = new OpenFileDialog { CheckFileExists = true, Multiselect = false, Filter = "ClassicUO.exe|ClassicUO.exe", Title = Resources.Select_a_client };
+            string[] files = await DialogHelper.ShowOpenFileDialogAsync( Resources.Select_a_client,
+                "ClassicUO.exe|ClassicUO.exe" );
 
-            bool? result = ofd.ShowDialog();
-
-            if ( !result.HasValue || !result.Value )
+            if ( files == null || files.Length == 0 )
             {
                 return;
             }
 
-            if ( !ClientPaths.Contains( ofd.FileName ) )
+            string fileName = files[0];
+
+            if ( !ClientPaths.Contains( fileName ) )
             {
-                ClientPaths.Add( ofd.FileName );
+                ClientPaths.Add( fileName );
             }
 
-            SelectedClientPath = ofd.FileName;
+            SelectedClientPath = fileName;
         }
 
-        private void SelectDataPath( object obj )
+        private async void SelectDataPath( object obj )
         {
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog { Description = Resources.Select_your_Ultima_Online_directory, ShowNewFolderButton = false };
-            DialogResult result = folderBrowserDialog.ShowDialog();
+            string selectedPath = await DialogHelper.ShowFolderBrowserDialogAsync( Resources.Select_your_Ultima_Online_directory );
 
-            if ( result != DialogResult.OK )
+            if ( string.IsNullOrEmpty( selectedPath ) )
             {
                 return;
             }
 
-            if ( !DataPaths.Contains( folderBrowserDialog.SelectedPath ) )
+            if ( !DataPaths.Contains( selectedPath ) )
             {
-                DataPaths.Add( folderBrowserDialog.SelectedPath );
+                DataPaths.Add( selectedPath );
             }
 
-            SelectedDataPath = folderBrowserDialog.SelectedPath;
+            SelectedDataPath = selectedPath;
         }
 
         /*
@@ -497,7 +500,7 @@ namespace ClassicAssist.Launcher
 
             if ( ip == null )
             {
-                MessageBox.Show( Resources.Unable_to_resolve_shard_hostname_ );
+                MessageBoxHelper.Show( Resources.Unable_to_resolve_shard_hostname_ );
                 return;
             }
 
@@ -532,46 +535,11 @@ namespace ClassicAssist.Launcher
 
             SelectedShard.LastPlayed = DateTime.Now;
 
-            UpdateJumpList( SelectedShard.Name );
-
             if ( p != null && !p.HasExited )
             {
                 Closing( null );
-                Application.Current.Shutdown( 0 );
+                ( Application.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime )?.Shutdown();
             }
-        }
-
-        private void UpdateJumpList( string shardName )
-        {
-            ProcessModule processModule = Process.GetCurrentProcess().MainModule;
-
-            if ( processModule == null )
-            {
-                return;
-            }
-
-            string fileName = processModule.FileName;
-            string directory = Path.GetDirectoryName( fileName );
-
-            JumpList jumpList = new JumpList { ShowRecentCategory = true };
-
-            IOrderedEnumerable<ShardEntry> playedShards = ShardManager.VisibleShards.Where( e => e.LastPlayed != default ).OrderBy( e => e.LastPlayed );
-
-            foreach ( ShardEntry shard in playedShards )
-            {
-                jumpList.JumpItems.Add( new JumpTask
-                {
-                    Title = shard.Name,
-                    Arguments = $"--shard \"{shard.Name}\"",
-                    ApplicationPath = fileName,
-                    IconResourcePath = fileName,
-                    WorkingDirectory = directory,
-                    CustomCategory = "Shards"
-                } );
-            }
-
-            JumpList.SetJumpList( Application.Current, jumpList );
-            jumpList.Apply();
         }
 
         private void BuildClassicOptions( StringBuilder args )
@@ -608,10 +576,10 @@ namespace ClassicAssist.Launcher
             }
         }
 
-        private void ShowShardsWindow( object obj )
+        private async void ShowShardsWindow( object obj )
         {
             ShardsWindow window = new ShardsWindow();
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( !( window.DataContext is ShardsViewModel vm ) || vm.DialogResult != DialogResult.OK || vm.SelectedShard == null )
             {

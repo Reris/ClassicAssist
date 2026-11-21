@@ -1,12 +1,17 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Annotations;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UO.Data;
+using System.Windows.Input;
+using System.Threading.Tasks;
 
 namespace ClassicAssist.UI.Views
 {
@@ -78,15 +83,13 @@ namespace ClassicAssist.UI.Views
                 string.IsNullOrEmpty( value ) || i.Index.ToString().StartsWith( value ) ) );
         }
 
-        public static bool GetHue( out int hue )
+        public static async Task<int> GetHueAsync()
         {
             HuePickerWindow window = new HuePickerWindow();
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
-            hue = window.SelectedHue;
-
-            return hue != -1;
+            return window.SelectedHue;
         }
 
         private void OK( object obj )

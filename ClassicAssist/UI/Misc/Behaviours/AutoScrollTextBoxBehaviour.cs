@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -17,8 +17,8 @@
 
 #endregion
 
-using System.Windows.Controls;
-using Microsoft.Xaml.Behaviors;
+using Avalonia.Controls;
+using Avalonia.Xaml.Interactivity;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
@@ -33,7 +33,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
 
         private void OnTextChanged( object sender, TextChangedEventArgs e )
         {
-            AssociatedObject.ScrollToEnd();
+            AssociatedObject.CaretIndex = AssociatedObject.Text?.Length ?? 0;
         }
 
         protected override void OnDetaching()

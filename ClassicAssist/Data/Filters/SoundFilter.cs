@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -23,7 +23,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Shared.Resources;
 using ClassicAssist.UI.Views.Filters;
@@ -31,6 +35,7 @@ using ClassicAssist.UO.Network.PacketFilter;
 using Microsoft.Scripting.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ClassicAssist.Shared.UI;
 
 namespace ClassicAssist.Data.Filters
 {
@@ -39,7 +44,7 @@ namespace ClassicAssist.Data.Filters
     {
         public SoundFilter()
         {
-            if ( DesignerProperties.GetIsInDesignMode( new DependencyObject() ) )
+            if ( Design.IsDesignMode )
             {
                 return;
             }
@@ -55,7 +60,7 @@ namespace ClassicAssist.Data.Filters
         public void Configure()
         {
             SoundFilterConfigureWindow window = new SoundFilterConfigureWindow( Items );
-            window.ShowDialog();
+            window.ShowDialogCompat();
         }
 
         public void Deserialize( JToken token )
@@ -135,7 +140,7 @@ namespace ClassicAssist.Data.Filters
             }
             catch ( Exception ex )
             {
-                MessageBox.Show( ex.ToString(), Strings.Error );
+                MessageBoxHelper.Show( ex.ToString(), Strings.Error );
             }
         }
 

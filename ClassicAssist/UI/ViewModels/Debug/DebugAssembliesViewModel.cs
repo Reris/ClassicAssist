@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2020 Reetus
 // 
@@ -23,14 +23,18 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Data.Macros;
 using ClassicAssist.Shared.Resources;
 using ClassicAssist.Shared.UI;
 using Microsoft.Win32;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels.Debug
 {
@@ -76,18 +80,13 @@ namespace ClassicAssist.UI.ViewModels.Debug
 
         private async Task Load( object arg )
         {
-            OpenFileDialog ofd = new OpenFileDialog
-            {
-                InitialDirectory = Engine.StartupPath, Filter = "DLL Files|*.dll", CheckFileExists = true
-            };
+            string[] files = await DialogHelper.ShowOpenFileDialogAsync( filter: "DLL Files|*.dll", initialDirectory: Engine.StartupPath );
 
-            bool? result = ofd.ShowDialog();
-
-            if ( result.HasValue && result.Value )
+            if ( files.Length > 0 )
             {
                 try
                 {
-                    Assembly assembly = LoadAssembly( ofd.FileName );
+                    Assembly assembly = LoadAssembly( files[0] );
 
                     if ( assembly != null )
                     {
@@ -96,7 +95,7 @@ namespace ClassicAssist.UI.ViewModels.Debug
                 }
                 catch ( Exception e )
                 {
-                    MessageBox.Show( string.Format( Strings.Error_loading_assembly___0_, e.Message ) );
+                    MessageBoxHelper.Show( string.Format( Strings.Error_loading_assembly___0_, e.Message ) );
                 }
             }
         }

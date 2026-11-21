@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2020 Reetus
 // 
@@ -19,7 +19,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -31,6 +31,7 @@ using ClassicAssist.UO.Network;
 using ClassicAssist.UO.Network.PacketFilter;
 using ClassicAssist.UO.Objects.Gumps;
 using Newtonsoft.Json;
+using Avalonia;
 
 namespace ClassicAssist.Extensions
 {
@@ -128,7 +129,7 @@ namespace ClassicAssist.Extensions
                 foreach ( VendorItem item in items )
                 {
                     SendProperties( item );
-                    Bitmap art = Art.GetStatic( item.ItemID );
+                    UOBitmap art = Art.GetStatic( item.ItemID );
 
                     AddImageTiledButton( 140, startY, 2328, 2328, 0, GumpButtonType.Page, i, item.ItemID, item.Hue,
                         40 - art.Width / 2, 30 - art.Height / 2 );
@@ -253,7 +254,7 @@ namespace ClassicAssist.Extensions
 
         public static void SendMap( int serial, int x, int y, int map )
         {
-            Rectangle rect = new Rectangle( x - 150, y - 150, 300, 300 );
+            Rect rect = new Rect( x - 150, y - 150, 300, 300 );
 
             PacketWriter writer = new PacketWriter( 21 );
             writer.Write( (byte) 0xF5 );

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -19,9 +19,13 @@
 
 using System.Collections;
 using System.Collections.Specialized;
-using System.Windows;
-using System.Windows.Controls;
-using Microsoft.Xaml.Behaviors;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Xaml.Interactivity;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
@@ -29,10 +33,10 @@ namespace ClassicAssist.UI.Misc.Behaviours
      * https://stackoverflow.com/questions/8088595/synchronizing-multi-select-listbox-with-mvvm
      */
 
-    public class ListViewMultiSelectionBehaviour : Behavior<ListView>
+    public class ListViewMultiSelectionBehaviour : Behavior<ListBox>
     {
-        public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register( nameof( SelectedItems ), typeof( IList ),
-            typeof( ListViewMultiSelectionBehaviour ), new UIPropertyMetadata( null, SelectedItemsChanged ) );
+        public static readonly Avalonia.StyledProperty<IList> SelectedItemsProperty =
+        AvaloniaCompat.RegisterCompat<ListViewMultiSelectionBehaviour, IList>(nameof( SelectedItems ), null, onChanged: SelectedItemsChanged);
 
         private bool _isUpdatingSource;
 
@@ -63,7 +67,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
             AssociatedObject.SelectionChanged += ListViewSelectionChanged;
         }
 
-        private static void SelectedItemsChanged( DependencyObject o, DependencyPropertyChangedEventArgs e )
+        private static void SelectedItemsChanged( AvaloniaObject o, AvaloniaPropertyChangedEventArgs e )
         {
             if ( o == null || !( o is ListViewMultiSelectionBehaviour behavior ) )
             {
@@ -138,7 +142,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
 
         private void ListViewSelectionChanged( object sender, SelectionChangedEventArgs e )
         {
-            if ( e.OriginalSource.GetType() != typeof( ListView ) )
+            if ( e.Source.GetType() != typeof( ListBox ) )
             {
                 return;
             }

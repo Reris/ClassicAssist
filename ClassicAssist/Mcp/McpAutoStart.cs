@@ -170,7 +170,7 @@ namespace ClassicAssist.Mcp
                 return;
             }
 
-            Engine.Dispatcher.BeginInvoke( (Action) Apply );
+            Engine.Dispatcher.Post( Apply );
         }
 
         private static void Apply()

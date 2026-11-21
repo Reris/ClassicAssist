@@ -1,7 +1,9 @@
-﻿using System;
+using System;
 using System.Globalization;
-using System.Windows.Data;
-using System.Windows.Media;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
+using Avalonia;
+using Avalonia.Media;
 using ClassicAssist.Misc;
 using ClassicAssist.UO.Data;
 
@@ -9,14 +11,14 @@ namespace ClassicAssist.UI.Misc.ValueConverters
 {
     public class LockStatusValueConverter : IValueConverter
     {
-        private static readonly Lazy<ImageSource> _upImage =
-            new Lazy<ImageSource>( () => Properties.Resources.arrow_up.ToImageSource() );
+        private static readonly Lazy<IImage> _upImage =
+            new Lazy<IImage>( () => Properties.Resources.arrow_up.ToImageSource() );
 
-        private static readonly Lazy<ImageSource> _downImage =
-            new Lazy<ImageSource>( () => Properties.Resources.arrow_down.ToImageSource() );
+        private static readonly Lazy<IImage> _downImage =
+            new Lazy<IImage>( () => Properties.Resources.arrow_down.ToImageSource() );
 
-        private static readonly Lazy<ImageSource> _lockedImage =
-            new Lazy<ImageSource>( () => Properties.Resources.padlock.ToImageSource() );
+        private static readonly Lazy<IImage> _lockedImage =
+            new Lazy<IImage>( () => Properties.Resources.padlock.ToImageSource() );
 
         public object Convert( object value, Type targetType, object parameter, CultureInfo culture )
         {

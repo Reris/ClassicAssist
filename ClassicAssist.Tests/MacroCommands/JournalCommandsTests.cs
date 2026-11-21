@@ -1,4 +1,4 @@
-﻿using Assistant;
+using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Data.Macros.Commands;
 using ClassicAssist.Misc;
@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Web.UI.WebControls;
+
 
 namespace ClassicAssist.Tests.MacroCommands
 {

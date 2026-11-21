@@ -103,6 +103,24 @@ namespace ClassicAssist.Misc
         [DllImport( "user32.dll" )]
         public static extern bool GetClientRect( IntPtr hWnd, out RECT lpRect );
 
+        [DllImport( "user32.dll" )]
+        public static extern bool ClientToScreen( IntPtr hWnd, ref POINT lpPoint );
+
+        [DllImport( "user32.dll" )]
+        public static extern int GetSystemMetrics( int nIndex );
+
+        public const int SM_XVIRTUALSCREEN = 76;
+        public const int SM_YVIRTUALSCREEN = 77;
+        public const int SM_CXVIRTUALSCREEN = 78;
+        public const int SM_CYVIRTUALSCREEN = 79;
+
+        [StructLayout( LayoutKind.Sequential )]
+        public struct POINT
+        {
+            public int X;
+            public int Y;
+        }
+
         [StructLayout( LayoutKind.Sequential )]
         public struct RECT
         {

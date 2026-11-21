@@ -1,7 +1,10 @@
-﻿using System;
+using System;
 using System.ComponentModel;
-using System.Windows;
-using System.Windows.Controls;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Data;
 using ClassicAssist.Misc;
 using ClassicAssist.UI.ViewModels.Debug;
@@ -22,7 +25,7 @@ namespace ClassicAssist.UI.Views
 
             foreach ( object t in TabControl.Items )
             {
-                if ( !( t is TabItem tabItem ) || !( tabItem.Content is FrameworkElement frameworkElement ) || !( frameworkElement.DataContext is ISettingProvider provider ) )
+                if ( !( t is TabItem tabItem ) || !( tabItem.Content is Control frameworkElement ) || !( frameworkElement.DataContext is ISettingProvider provider ) )
                 {
                     continue;
                 }
@@ -35,7 +38,7 @@ namespace ClassicAssist.UI.Views
         {
             foreach ( object t in TabControl.Items )
             {
-                if ( !( t is TabItem tabItem ) || !( tabItem.Content is FrameworkElement frameworkElement ) || frameworkElement.DataContext?.GetType() != viewModelType )
+                if ( !( t is TabItem tabItem ) || !( tabItem.Content is Control frameworkElement ) || frameworkElement.DataContext?.GetType() != viewModelType )
                 {
                     continue;
                 }
@@ -59,7 +62,7 @@ namespace ClassicAssist.UI.Views
 
             foreach ( object t in TabControl.Items )
             {
-                if ( !( t is TabItem tabItem ) || !( tabItem.Content is FrameworkElement frameworkElement ) || !( frameworkElement.DataContext is ISettingProvider provider ) )
+                if ( !( t is TabItem tabItem ) || !( tabItem.Content is Control frameworkElement ) || !( frameworkElement.DataContext is ISettingProvider provider ) )
                 {
                     continue;
                 }

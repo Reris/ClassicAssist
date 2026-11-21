@@ -18,14 +18,13 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Resources;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using ClassicAssist.Data.Hotkeys.Commands;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -97,11 +96,16 @@ namespace ClassicAssist.Tests
                 return dictionary;
             }
 
-            using ( ResXResourceReader resxReader = new ResXResourceReader( path ) )
+            XDocument document = XDocument.Load( path );
+
+            foreach ( XElement data in document.Descendants( "data" ) )
             {
-                foreach ( DictionaryEntry entry in resxReader )
+                string key = data.Attribute( "name" )?.Value;
+                XElement value = data.Element( "value" );
+
+                if ( key != null && value != null )
                 {
-                    dictionary.Add( entry.Key.ToString(), entry.Value.ToString() );
+                    dictionary.Add( key, value.Value );
                 }
             }
 

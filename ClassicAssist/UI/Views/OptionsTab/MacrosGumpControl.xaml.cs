@@ -1,4 +1,5 @@
-﻿// Copyright (C) 2023 Reetus
+﻿using Avalonia.Controls;
+// Copyright (C) 2023 Reetus
 //  
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,7 +14,7 @@ namespace ClassicAssist.UI.Views.OptionsTab
     /// <summary>
     ///     Interaction logic for MacrosGumpControl.xaml
     /// </summary>
-    public partial class MacrosGumpControl
+    public partial class MacrosGumpControl : UserControl
     {
         public MacrosGumpControl()
         {

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -19,40 +19,45 @@
 
 using System;
 using System.IO;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using System.Xml;
 using Assistant;
 using ClassicAssist.Data.Macros;
-using ICSharpCode.AvalonEdit.Document;
-using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-using ICSharpCode.AvalonEdit.Search;
+using AvaloniaEdit.Document;
+using AvaloniaEdit.Highlighting;
+using AvaloniaEdit.Highlighting.Xshd;
+using AvaloniaEdit.Search;
+using ClassicAssist.Shared.UI.Compat;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views.Macros
 {
     /// <summary>
     ///     Interaction logic for MacrosCodeTextEditor.xaml
     /// </summary>
-    public partial class MacrosCodeTextEditor
+    public partial class MacrosCodeTextEditor : UserControl
     {
-        public static readonly DependencyProperty FormatErrorProperty =
-            DependencyProperty.Register( nameof( FormatError ), typeof( string ), typeof( MacrosCodeTextEditor ), new PropertyMetadata( default( string ) ) );
+        public static readonly Avalonia.StyledProperty<string> FormatErrorProperty =
+        AvaloniaCompat.RegisterCompat<MacrosCodeTextEditor, string>(nameof( FormatError ), default( string ));
 
-        public static readonly DependencyProperty IsPerformingActionProperty =
-            DependencyProperty.Register( nameof( IsPerformingAction ), typeof( bool ), typeof( MacrosCodeTextEditor ), new PropertyMetadata( false ) );
+        public static readonly Avalonia.StyledProperty<bool> IsPerformingActionProperty =
+        AvaloniaCompat.RegisterCompat<MacrosCodeTextEditor, bool>(nameof( IsPerformingAction ), false);
 
-        public static readonly DependencyProperty ClearExceptionCommandProperty = DependencyProperty.Register( nameof( ClearExceptionCommand ), typeof( ICommand ),
-            typeof( MacrosCodeTextEditor ), new PropertyMetadata( default( ICommand ) ) );
+        public static readonly Avalonia.StyledProperty<ICommand> ClearExceptionCommandProperty =
+        AvaloniaCompat.RegisterCompat<MacrosCodeTextEditor, ICommand>(nameof( ClearExceptionCommand ), default( ICommand ));
 
-        public static readonly DependencyProperty CaretPositionProperty =
-            DependencyProperty.Register( nameof( CaretPosition ), typeof( int ), typeof( MacrosCodeTextEditor ), new PropertyMetadata( 0 ) );
+        public static readonly Avalonia.StyledProperty<int> CaretPositionProperty =
+        AvaloniaCompat.RegisterCompat<MacrosCodeTextEditor, int>(nameof( CaretPosition ), 0);
 
-        public static readonly DependencyProperty DocumentProperty = DependencyProperty.Register( nameof( Document ), typeof( TextDocument ), typeof( MacrosCodeTextEditor ),
-            new PropertyMetadata( default( TextDocument ) ) );
+        public static readonly Avalonia.StyledProperty<TextDocument> DocumentProperty =
+        AvaloniaCompat.RegisterCompat<MacrosCodeTextEditor, TextDocument>(nameof( Document ), default( TextDocument ));
 
-        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register( nameof( SelectedItem ), typeof( MacroEntry ), typeof( MacrosCodeTextEditor ),
-            new PropertyMetadata( null ) );
+        public static readonly Avalonia.StyledProperty<MacroEntry> SelectedItemProperty =
+        AvaloniaCompat.RegisterCompat<MacrosCodeTextEditor, MacroEntry>(nameof( SelectedItem ), null);
 
         public MacrosCodeTextEditor()
         {

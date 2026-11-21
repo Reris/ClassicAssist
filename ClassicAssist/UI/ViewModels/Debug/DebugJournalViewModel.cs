@@ -1,12 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Text;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UO.Network;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels.Debug
 {
@@ -81,7 +85,7 @@ namespace ClassicAssist.UI.ViewModels.Debug
 
             try
             {
-                Clipboard.SetText( text );
+                ClipboardHelper.SetText( text );
             }
             catch ( Exception )
             {

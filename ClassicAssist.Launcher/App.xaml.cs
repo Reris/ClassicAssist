@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2026 Reetus
 // 
@@ -18,27 +18,42 @@
 #endregion
 
 using System.Threading;
-using System.Windows;
+using Avalonia.Markup.Xaml;
+
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+
 using CommandLine;
 using Exceptionless;
 
 namespace ClassicAssist.Launcher
 {
-    /// <summary>
-    ///     Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
-        public static CommandLineOptions CurrentOptions { get; set; } = new CommandLineOptions();
+	/// <summary>
+	///     Interaction logic for App.xaml
+	/// </summary>
+	public partial class App : Application
+	{
+		public static CommandLineOptions CurrentOptions { get; set; } = new CommandLineOptions();
 
-        protected override void OnStartup( StartupEventArgs e )
-        {
-            ExceptionlessClient.Default.Configuration.DefaultData.Add( "Locale", Thread.CurrentThread.CurrentUICulture.Name );
-            ExceptionlessClient.Default.Startup( "T8v0i7nL90cVRc4sr2pgo5hviThMPRF3OtQ0bK60" );
+		public override void Initialize()
+		{
+			AvaloniaXamlLoader.Load( this );
+		}
 
-            Parser.Default.ParseArguments<CommandLineOptions>( e.Args ).WithParsed( o => CurrentOptions = o );
+		public override void OnFrameworkInitializationCompleted()
+		{
+			ExceptionlessClient.Default.Configuration.DefaultData.Add( "Locale",
+				Thread.CurrentThread.CurrentUICulture.Name );
+			ExceptionlessClient.Default.Startup( "T8v0i7nL90cVRc4sr2pgo5hviThMPRF3OtQ0bK60" );
 
-            base.OnStartup( e );
-        }
-    }
+			if ( ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop )
+			{
+				Parser.Default.ParseArguments<CommandLineOptions>( desktop.Args ).WithParsed( o => CurrentOptions = o );
+
+				desktop.MainWindow = new MainWindow();
+			}
+
+			base.OnFrameworkInitializationCompleted();
+		}
+	}
 }

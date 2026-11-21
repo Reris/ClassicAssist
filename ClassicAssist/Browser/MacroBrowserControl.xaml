@@ -1,34 +1,15 @@
-﻿<UserControl x:Class="ClassicAssist.Browser.MacroBrowserControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared"
-             xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:misc="clr-namespace:ClassicAssist.UI.Misc"
-             xmlns:data="clr-namespace:ClassicAssist.Browser.Data"
-             xmlns:browser="clr-namespace:ClassicAssist.Browser"
-             xmlns:controls2="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls"
-             xmlns:headered="clr-namespace:ClassicAssist.Controls.Headered;assembly=ClassicAssist.Controls"
-             xmlns:behaviours="clr-namespace:ClassicAssist.UI.Misc.Behaviours"
-             xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared"
-             mc:Ignorable="d"
-             d:DesignHeight="550" d:DesignWidth="900">
+﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:avalonedit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit" xmlns:behaviours="clr-namespace:ClassicAssist.UI.Misc.Behaviours" xmlns:browser="clr-namespace:ClassicAssist.Browser" xmlns:controls2="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:headered="clr-namespace:ClassicAssist.Controls.Headered;assembly=ClassicAssist.Controls" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.Browser.MacroBrowserControl" mc:Ignorable="d" d:DesignHeight="550" d:DesignWidth="900" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:misc="clr-namespace:ClassicAssist.UI.Misc" xmlns:data="clr-namespace:ClassicAssist.Browser.Data" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+    <UserControl.Resources>
+        <ResourceDictionary />
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
+        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DebugToolBarStyle.xaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/LeftRightIconToggleButton.xaml" />
+    </UserControl.Styles>
     <UserControl.DataContext>
         <browser:MacroBrowserViewModel />
     </UserControl.DataContext>
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <shared:SharedResourceDictionary Source="../Resources/DarkTheme.xaml" />
-                <ResourceDictionary
-                    Source="pack://application:,,,/ClassicAssist.Shared;component/Resources/DebugToolBarStyle.xaml" />
-                <ResourceDictionary Source="../Resources/LeftRightIconToggleButton.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        </ResourceDictionary>
-    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -40,55 +21,33 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Margin="10,5,10,5">
+                <Grid.Styles>
+                    <Style Selector="headered|HorizontalHeaderedContentControl">
+                        <Setter Property="Margin" Value="0,0,10,0" />
+                    </Style>
+                </Grid.Styles>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Grid.Resources>
-                    <Style TargetType="{x:Type headered:HorizontalHeaderedContentControl}"
-                           BasedOn="{StaticResource {x:Type headered:HorizontalHeaderedContentControl}}">
-                        <Setter Property="Margin" Value="0,0,10,0" />
-                    </Style>
-                </Grid.Resources>
                 <headered:HorizontalHeaderedContentControl Header="{x:Static resources:Strings.Shard}" Grid.Column="0">
-                    <controls2:ClearableComboBox ItemsSource="{Binding Shards}" ClearCommand="{Binding ClearCommand}"
-                                                 ClearCommandParameter="{x:Static data:FilterType.Shard}"
-                                                 SelectedItem="{Binding ShardFilter}" />
+                    <controls2:ClearableComboBox ClearCommand="{Binding ClearCommand}" ClearCommandParameter="{x:Static data:FilterType.Shard}" SelectedItem="{Binding ShardFilter}" ItemsSource="{Binding Shards}" />
                 </headered:HorizontalHeaderedContentControl>
                 <headered:HorizontalHeaderedContentControl Header="{x:Static resources:Strings.Era}" Grid.Column="1">
-                    <controls2:ClearableComboBox ItemsSource="{Binding Eras}" ClearCommand="{Binding ClearCommand}"
-                                                 ClearCommandParameter="{x:Static data:FilterType.Era}"
-                                                 SelectedItem="{Binding EraFilter}" />
+                    <controls2:ClearableComboBox ClearCommand="{Binding ClearCommand}" ClearCommandParameter="{x:Static data:FilterType.Era}" SelectedItem="{Binding EraFilter}" ItemsSource="{Binding Eras}" />
                 </headered:HorizontalHeaderedContentControl>
                 <headered:HorizontalHeaderedContentControl Header="{x:Static resources:Strings.Author}" Grid.Column="2">
-                    <controls2:ClearableComboBox ItemsSource="{Binding Authors}" ClearCommand="{Binding ClearCommand}"
-                                                 ClearCommandParameter="{x:Static data:FilterType.Author}"
-                                                 SelectedItem="{Binding AuthorFilter}" />
+                    <controls2:ClearableComboBox ClearCommand="{Binding ClearCommand}" ClearCommandParameter="{x:Static data:FilterType.Author}" SelectedItem="{Binding AuthorFilter}" ItemsSource="{Binding Authors}" />
                 </headered:HorizontalHeaderedContentControl>
-                <headered:HorizontalHeaderedContentControl Header="{x:Static resources:Strings.Category}" Margin="0"
-                                                           Grid.Column="3">
-                    <controls2:ClearableComboBox ItemsSource="{Binding Categories}"
-                                                 ClearCommand="{Binding ClearCommand}"
-                                                 ClearCommandParameter="{x:Static data:FilterType.Category}"
-                                                 SelectedItem="{Binding CategoryFilter}" />
+                <headered:HorizontalHeaderedContentControl Header="{x:Static resources:Strings.Category}" Margin="0" Grid.Column="3">
+                    <controls2:ClearableComboBox ClearCommand="{Binding ClearCommand}" ClearCommandParameter="{x:Static data:FilterType.Category}" SelectedItem="{Binding CategoryFilter}" ItemsSource="{Binding Categories}" />
                 </headered:HorizontalHeaderedContentControl>
             </Grid>
-            <Grid Row="1" Margin="10,0,10,0">
+            <Grid Grid.Row="1" Margin="10,0,10,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition>
-                        <ColumnDefinition.Style>
-                            <Style TargetType="{x:Type ColumnDefinition}">
-                                <Setter Property="Width" Value="200" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsChecked, ElementName=ToggleButton}" Value="True">
-                                        <Setter Property="Width" Value="0" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ColumnDefinition.Style>
-                    </ColumnDefinition>
+                    <ColumnDefinition Width="200" /><!-- MIGRATION: collapse trigger on ColumnDefinition removed -->
                     <ColumnDefinition Width="5" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -97,20 +56,15 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <ListBox x:Name="listBox" ItemsSource="{Binding Macros}" Grid.Column="0" Grid.Row="0"
-                             SelectedItem="{Binding SelectedItem}"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox x:Name="listBox" Grid.Column="0" Grid.Row="0" SelectedItem="{Binding SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Macros}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Name}" ToolTip="{Binding}" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                     <TextBlock Grid.Row="1" TextWrapping="Wrap">
-                        <Hyperlink NavigateUri="https://github.com/Reetus/ClassicAssist-Macros/blob/master/README.md"
-                                   RequestNavigate="Hyperlink_RequestNavigate">
-                            <Run Text="{x:Static resources:Strings.Learn_how_to_contribute_your_own_macros___}" />
-                        </Hyperlink>
+                        <Button Content="{x:Static resources:Strings.Learn_how_to_contribute_your_own_macros___}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Cursor="Hand" Click="Hyperlink_Click" />
                     </TextBlock>
                 </Grid>
                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
@@ -119,36 +73,27 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <avalonedit:TextEditor ShowLineNumbers="True" x:Name="CodeTextEditor" Grid.Row="0"
-                                           HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                                           FontFamily="Consolas" Margin="10,0,0,0" IsReadOnly="True">
-                        <i:Interaction.Behaviors>
-                            <behaviours:AvalonEditBehaviour
-                                TextBinding="{Binding SelectedItem.Macro}" />
-                        </i:Interaction.Behaviors>
+                    <avalonedit:TextEditor ShowLineNumbers="True" x:Name="CodeTextEditor" Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Margin="10,0,0,0" IsReadOnly="True">
+                        <Interaction.Behaviors>
+                            <behaviours:AvalonEditBehaviour TextBinding="{Binding SelectedItem.Macro}" />
+                        </Interaction.Behaviors>
                     </avalonedit:TextEditor>
                     <WrapPanel Grid.Row="1" Orientation="Horizontal" Margin="10,10,0,0">
-                        <WrapPanel.Resources>
-                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                        <WrapPanel.Styles>
+                            <Style Selector="Button">
                                 <Setter Property="Margin" Value="0,0,10,0" />
                                 <Setter Property="Padding" Value="10,5" />
                                 <Setter Property="FontSize" Value="11" />
                             </Style>
-                        </WrapPanel.Resources>
-                        <ToggleButton x:Name="ToggleButton" Height="15" Margin="0"
-                                      Style="{DynamicResource LeftRightIconToggleButton}" VerticalAlignment="Center" />
-                        <Button Content="{x:Static resources:Strings.Copy_to_clipboard}"
-                                Command="{Binding CopyToClipboardCommand}" CommandParameter="{Binding SelectedItem}" />
-                        <Button Content="{x:Static resources:Strings.Create_Macro}"
-                                Command="{Binding CreateMacroCommand}" CommandParameter="{Binding SelectedItem}" />
-                        <Button Content="{x:Static resources:Strings.Open_in_Github}"
-                                Command="{Binding OpenGithubCommand}"
-                                CommandParameter="{Binding SelectedItem, ElementName=listBox}" />
+                        </WrapPanel.Styles>
+                        <ToggleButton x:Name="ToggleButton" Height="15" Margin="0" VerticalAlignment="Center" Classes="LeftRightIconToggleButton" />
+                        <Button Content="{x:Static resources:Strings.Copy_to_clipboard}" Command="{Binding CopyToClipboardCommand}" CommandParameter="{Binding SelectedItem}" />
+                        <Button Content="{x:Static resources:Strings.Create_Macro}" Command="{Binding CreateMacroCommand}" CommandParameter="{Binding SelectedItem}" />
+                        <Button Content="{x:Static resources:Strings.Open_in_Github}" Command="{Binding OpenGithubCommand}" CommandParameter="{Binding SelectedItem, ElementName=listBox}" />
                     </WrapPanel>
                 </Grid>
             </Grid>
         </Grid>
-        <ProgressBar Grid.Row="1" IsIndeterminate="True"
-                     Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <ProgressBar Grid.Row="1" IsIndeterminate="True" IsVisible="{Binding Loading}" />
     </Grid>
 </UserControl>

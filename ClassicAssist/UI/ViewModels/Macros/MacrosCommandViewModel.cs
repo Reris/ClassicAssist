@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.Windows.Input;
+using Avalonia.Input;
 using ClassicAssist.Data.Macros;
 using ClassicAssist.Shared.UI;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels.Macros
 {

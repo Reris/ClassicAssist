@@ -1,29 +1,33 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Threading;
+using System;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Threading;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.Controls
 {
     /// <summary>
     ///     Interaction logic for EditTextBlock.xaml
     /// </summary>
-    public partial class EditTextBlock
+    public partial class EditTextBlock : UserControl
     {
-        public static readonly DependencyProperty TextProperty = DependencyProperty.Register( nameof( Text ), typeof( string ), typeof( EditTextBlock ),
-            new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<string> TextProperty =
+        AvaloniaCompat.RegisterCompat<EditTextBlock, string>(nameof( Text ), null, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
-        public static readonly DependencyProperty LabelProperty = DependencyProperty.Register( nameof( Label ), typeof( string ), typeof( EditTextBlock ),
-            new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.None ) );
+        public static readonly Avalonia.StyledProperty<string> LabelProperty =
+        AvaloniaCompat.RegisterCompat<EditTextBlock, string>(nameof( Label ), null);
 
-        public static readonly DependencyProperty ShowIconProperty = DependencyProperty.Register( nameof( ShowIcon ),
-            typeof( bool ), typeof( EditTextBlock ), new UIPropertyMetadata() );
+        public static readonly Avalonia.StyledProperty<bool> ShowIconProperty =
+        AvaloniaCompat.RegisterCompat<EditTextBlock, bool>(nameof( ShowIcon ), default);
 
-        public static readonly DependencyProperty CanEditProperty = DependencyProperty.Register( nameof( CanEdit ),
-            typeof( bool ), typeof( EditTextBlock ), new UIPropertyMetadata( true ) );
+        public static readonly Avalonia.StyledProperty<bool> CanEditProperty =
+        AvaloniaCompat.RegisterCompat<EditTextBlock, bool>(nameof( CanEdit ), true);
 
-        public static readonly DependencyProperty ButtonsProperty = DependencyProperty.Register( nameof( Buttons ), typeof( object ), typeof( EditTextBlock ) );
+        public static readonly Avalonia.StyledProperty<object> ButtonsProperty =
+        AvaloniaCompat.RegisterCompat<EditTextBlock, object>(nameof( Buttons ), default);
 
         public EditTextBlock()
         {
@@ -60,7 +64,7 @@ namespace ClassicAssist.Controls
             set => SetValue( TextProperty, value );
         }
 
-        private void TextBlock_OnMouseDown( object sender, MouseButtonEventArgs e )
+        private void TextBlock_OnMouseDown( object sender, PointerPressedEventArgs e )
         {
             if ( e.ClickCount <= 1 )
             {
@@ -77,14 +81,14 @@ namespace ClassicAssist.Controls
 
         private void ShowTextBox()
         {
-            textBlock.Visibility = Visibility.Collapsed;
-            pencilButton.Visibility = Visibility.Collapsed;
-            buttonsPanel.Visibility = Visibility.Collapsed;
-            textBox.Visibility = Visibility.Visible;
+            textBlock.IsVisible = false;
+            pencilButton.IsVisible = false;
+            buttonsPanel.IsVisible = false;
+            textBox.IsVisible = true;
             textBox.CaretIndex = textBox.Text.Length;
             textBox.SelectAll();
 
-            Dispatcher?.BeginInvoke( (Action) ( () => Keyboard.Focus( textBox ) ), DispatcherPriority.Render );
+            Dispatcher.UIThread.Post( () => textBox.Focus(), DispatcherPriority.Render );
         }
 
         private void TextBox_OnKeyDown( object sender, KeyEventArgs e )
@@ -97,10 +101,10 @@ namespace ClassicAssist.Controls
 
         private void TextBox_LostFocus( object sender, RoutedEventArgs e )
         {
-            textBlock.Visibility = Visibility.Visible;
-            pencilButton.Visibility = ShowIcon ? Visibility.Visible : Visibility.Hidden;
-            buttonsPanel.Visibility = Visibility.Visible;
-            ( (TextBox) sender ).Visibility = Visibility.Collapsed;
+            textBlock.IsVisible = true;
+            pencilButton.IsVisible = ShowIcon;
+            buttonsPanel.IsVisible = true;
+            ( (TextBox) sender ).IsVisible = false;
         }
 
         private void Button_OnClick( object sender, RoutedEventArgs e )

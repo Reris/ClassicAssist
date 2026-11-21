@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2022 Reetus
 // 
@@ -17,15 +17,16 @@ using ClassicAssist.Shared.UI;
 using ClassicAssist.UO.Data;
 using ClassicAssist.UO.Objects;
 using System.Collections.Generic;
-using System.Drawing;
+
 using System.Linq;
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Media;
 
 namespace ClassicAssist.UI.ViewModels
 {
     public class EntityCollectionData : SetPropertyNotifyChanged
     {
-        private static readonly Dictionary<int, ImageSource> _cache = new Dictionary<int, ImageSource>();
+        private static readonly Dictionary<int, IImage> _cache = new Dictionary<int, IImage>();
         private bool _isLocked;
 
         public bool IsCoin => Entity?.ID == 0x0EEA || Entity?.ID == 0x0EED || Entity?.ID == 0x0EF0;
@@ -36,7 +37,7 @@ namespace ClassicAssist.UI.ViewModels
             set => SetProperty( ref _isLocked, value );
         }
 
-        public ImageSource Bitmap
+        public IImage Bitmap
         {
             get
             {
@@ -56,12 +57,12 @@ namespace ClassicAssist.UI.ViewModels
 
                 int key = ( id << 16 ) | Entity.Hue;
 
-                if ( _cache.TryGetValue( key, out ImageSource bitmap ) )
+                if ( _cache.TryGetValue( key, out IImage bitmap ) )
                 {
                     return bitmap;
                 }
 
-                ImageSource result = Art.GetStatic( id, Entity.Hue ).ToImageSource();
+                IImage result = Art.GetStatic( id, Entity.Hue ).ToImageSource();
 
                 if ( !( Entity is Item item ) || item.Layer != Layer.Mount )
                 {

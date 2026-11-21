@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2020 Reetus
 // 
@@ -17,20 +17,23 @@
 
 #endregion
 
-using System.Windows;
-using System.Windows.Controls;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
+using Avalonia.Input;
+using ClassicAssist.Shared.UI.Compat;
 using System.Windows.Input;
 
 namespace ClassicAssist.Controls
 {
     public class ClearableComboBox : ComboBox
     {
-        public static readonly DependencyProperty ClearCommandProperty =
-            DependencyProperty.Register( nameof( ClearCommand ), typeof( ICommand ), typeof( ClearableComboBox ) );
+        public static readonly Avalonia.StyledProperty<ICommand> ClearCommandProperty =
+        AvaloniaCompat.RegisterCompat<ClearableComboBox, ICommand>(nameof( ClearCommand ), default);
 
-        public static readonly DependencyProperty ClearCommandParameterProperty =
-            DependencyProperty.Register( nameof( ClearCommandParameter ), typeof( object ), typeof( ClearableComboBox ),
-                new UIPropertyMetadata( null ) );
+        public static readonly Avalonia.StyledProperty<object> ClearCommandParameterProperty =
+        AvaloniaCompat.RegisterCompat<ClearableComboBox, object>(nameof( ClearCommandParameter ), null);
 
         public ICommand ClearCommand
         {
@@ -44,11 +47,11 @@ namespace ClassicAssist.Controls
             set => SetValue( ClearCommandParameterProperty, value );
         }
 
-        public override void OnApplyTemplate()
+        protected override void OnApplyTemplate( TemplateAppliedEventArgs e )
         {
-            base.OnApplyTemplate();
+            base.OnApplyTemplate( e );
 
-            Button button = (Button) GetTemplateChild( "ClearButton" );
+            Button button = e.NameScope.Find<Button>( "ClearButton" );
 
             if ( button != null )
             {

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2022 Reetus
 // 
@@ -14,7 +14,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+
 using System.Linq;
 using System.Threading;
 using Assistant;
@@ -24,6 +24,7 @@ using ClassicAssist.UO.Network.PacketFilter;
 using ClassicAssist.UO.Objects;
 using ClassicAssist.UO.Objects.Gumps;
 using Force.Crc32;
+using Avalonia.Media.Imaging;
 
 // ReSharper disable PossibleLossOfFraction
 
@@ -79,7 +80,7 @@ namespace ClassicAssist.UO.Gumps
                         int itemid = rowItems[i].ID;
                         Bitmap b = Art.GetStatic( itemid );
                         AddImageTiledButton( x, y, 0x918, 0x918, rowItems[i].Serial, GumpButtonType.Reply, 0, itemid,
-                            rowItems[i].Hue, 40 - b.Width / 2, 30 - b.Height / 2 );
+                            rowItems[i].Hue, 40 - (int) b.PixelSize.Width / 2, 30 - (int) b.PixelSize.Height / 2 );
 
                         if ( Engine.CharacterListFlags.HasFlag( CharacterListFlags.PaladinNecromancerClassTooltips ) )
                         {

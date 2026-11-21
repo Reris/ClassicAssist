@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -19,22 +19,26 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
-using System.Windows.Media;
-using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.Document;
-using ICSharpCode.AvalonEdit.Rendering;
-using Microsoft.Xaml.Behaviors;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using AvaloniaEdit;
+using AvaloniaEdit.Document;
+using AvaloniaEdit.Rendering;
+using Avalonia.Xaml.Interactivity;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
     public class AvalonEditPausedLineBehaviour : Behavior<TextEditor>
     {
-        public static readonly DependencyProperty IsPausedProperty = DependencyProperty.Register( nameof( IsPaused ), typeof( bool ), typeof( AvalonEditPausedLineBehaviour ),
-            new PropertyMetadata( false, OnPausedStateChanged ) );
+        public static readonly Avalonia.StyledProperty<bool> IsPausedProperty =
+        AvaloniaCompat.RegisterCompat<AvalonEditPausedLineBehaviour, bool>(nameof( IsPaused ), false, onChanged: OnPausedStateChanged);
 
-        public static readonly DependencyProperty PausedLineNumberProperty = DependencyProperty.Register( nameof( PausedLineNumber ), typeof( int ),
-            typeof( AvalonEditPausedLineBehaviour ), new PropertyMetadata( 0, OnPausedStateChanged ) );
+        public static readonly Avalonia.StyledProperty<int> PausedLineNumberProperty =
+        AvaloniaCompat.RegisterCompat<AvalonEditPausedLineBehaviour, int>(nameof( PausedLineNumber ), 0, onChanged: OnPausedStateChanged);
 
         private TextEditor _textEditor;
 
@@ -50,7 +54,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
             set => SetValue( PausedLineNumberProperty, value );
         }
 
-        private static void OnPausedStateChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void OnPausedStateChanged( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
             if ( !( d is AvalonEditPausedLineBehaviour behaviour ) )
             {
@@ -165,7 +169,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
             foreach ( Rect r in rects )
             {
                 drawingContext.DrawRectangle( new SolidColorBrush( Color.FromArgb( 80, 255, 255, 0 ) ), // translucent yellow
-                    null, new Rect( r.Location, new Size( textView.ActualWidth, r.Height ) ) );
+                    null, new Rect( r.Position, new Size( textView.Bounds.Width, r.Height ) ) );
             }
         }
 

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2023 Reetus
 // 
@@ -12,38 +12,31 @@
 
 #endregion
 
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Layout;
+using Avalonia.Media;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.Controls
 {
     public class ImageButton : Button
     {
-        public static readonly DependencyProperty ImageSourceProperty =
-            DependencyProperty.Register( nameof( ImageSource ), typeof( ImageSource ), typeof( ImageButton ),
-                new PropertyMetadata( null ) );
+        public static readonly Avalonia.StyledProperty<IImage> ImageSourceProperty =
+        AvaloniaCompat.RegisterCompat<ImageButton, IImage>(nameof( ImageSource ), null);
 
-        public static readonly DependencyProperty ImageHeightProperty =
-            DependencyProperty.Register( nameof( ImageHeight ), typeof( double ), typeof( ImageButton ),
-                new PropertyMetadata( (double) 16 ) );
+        public static readonly Avalonia.StyledProperty<double> ImageHeightProperty =
+        AvaloniaCompat.RegisterCompat<ImageButton, double>(nameof( ImageHeight ), (double) 16);
 
         public ImageButton()
         {
             Image imageSource = new Image
             {
                 Stretch = Stretch.Uniform,
-                Source = ImageSource,
             };
 
-            Binding imageBinding = new Binding { Source = this, Path = new PropertyPath( ImageSourceProperty ) };
-
-            imageSource.SetBinding( Image.SourceProperty, imageBinding );
-
-            Binding imageHeightBinding = new Binding { Source = this, Path = new PropertyPath( ImageHeightProperty ) };
-
-            imageSource.SetBinding( HeightProperty, imageHeightBinding );
+            imageSource[!Image.SourceProperty] = this[!ImageSourceProperty];
+            imageSource[!Layoutable.HeightProperty] = this[!ImageHeightProperty];
 
             Content = imageSource;
         }
@@ -54,9 +47,9 @@ namespace ClassicAssist.Controls
             set => SetValue( ImageHeightProperty, value );
         }
 
-        public ImageSource ImageSource
+        public IImage ImageSource
         {
-            get => (ImageSource) GetValue( ImageSourceProperty );
+            get => (IImage) GetValue( ImageSourceProperty );
             set => SetValue( ImageSourceProperty, value );
         }
     }

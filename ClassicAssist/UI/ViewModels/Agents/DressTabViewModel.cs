@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Data.Dress;
@@ -14,6 +14,7 @@ using ClassicAssist.UO;
 using ClassicAssist.UO.Data;
 using ClassicAssist.UO.Objects;
 using Newtonsoft.Json.Linq;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels.Agents
 {

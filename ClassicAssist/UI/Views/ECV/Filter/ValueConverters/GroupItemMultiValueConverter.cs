@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2024 Reetus
 // 
@@ -13,16 +13,18 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Windows.Data;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using ClassicAssist.UI.Views.ECV.Filter.Models;
 
 namespace ClassicAssist.UI.Views.ECV.Filter.ValueConverters
 {
     public class GroupItemMultiValueConverter : IMultiValueConverter
     {
-        public object Convert( object[] values, Type targetType, object parameter, CultureInfo culture )
+        public object Convert( IList<object> values, Type targetType, object parameter, CultureInfo culture )
         {
             if ( !( values[0] is ObservableCollection<EntityCollectionFilterItem> group ) )
             {
@@ -34,11 +36,6 @@ namespace ClassicAssist.UI.Views.ECV.Filter.ValueConverters
                 Group = group,
                 Item = values[1] as EntityCollectionFilterItem
             };
-        }
-
-        public object[] ConvertBack( object value, Type[] targetTypes, object parameter, CultureInfo culture )
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -23,11 +23,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using Avalonia.Input;
 using ClassicAssist.Data;
 using ClassicAssist.Data.Backup;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UI.Views;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels
 {
@@ -83,7 +84,7 @@ namespace ClassicAssist.UI.ViewModels
             BackupWindowViewModel vm = new BackupWindowViewModel( BackupOptions );
             BackupWindow backupWindow = new BackupWindow { DataContext = vm, Topmost = true };
             vm.CloseWindow = () => backupWindow.Close();
-            backupWindow.ShowDialog();
+            backupWindow.ShowDialogCompat();
         }
     }
 }

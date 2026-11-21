@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -19,19 +19,23 @@
 
 using System;
 using System.Collections.Specialized;
-using System.Windows;
-using System.Windows.Controls;
-using Microsoft.Xaml.Behaviors;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Xaml.Interactivity;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
     public class ItemsControlSelectNewEntryBehaviour : Behavior<ItemsControl>
     {
-        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register( nameof( SelectedItem ), typeof( object ),
-            typeof( ItemsControlSelectNewEntryBehaviour ), new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<object> SelectedItemProperty =
+        AvaloniaCompat.RegisterCompat<ItemsControlSelectNewEntryBehaviour, object>(nameof( SelectedItem ), null, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
-        public static readonly DependencyProperty TypeProperty = DependencyProperty.Register( nameof( Type ), typeof( Type ), typeof( ItemsControlSelectNewEntryBehaviour ),
-            new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<Type> TypeProperty =
+        AvaloniaCompat.RegisterCompat<ItemsControlSelectNewEntryBehaviour, Type>(nameof( Type ), null, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
         public object SelectedItem
         {

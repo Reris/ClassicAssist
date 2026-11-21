@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -18,21 +18,26 @@
 #endregion
 
 using System;
-using System.Windows;
-using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.Document;
-using ICSharpCode.AvalonEdit.Editing;
-using Microsoft.Xaml.Behaviors;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using AvaloniaEdit;
+using AvaloniaEdit.Document;
+using AvaloniaEdit.Editing;
+using Avalonia.Xaml.Interactivity;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
     public class AvalonBindingBehaviour : Behavior<TextEditor>
     {
-        public static readonly DependencyProperty DocumentBindingProperty = DependencyProperty.Register( nameof( DocumentBinding ), typeof( TextDocument ),
-            typeof( AvalonBindingBehaviour ), new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, PropertyChangedCallback ) );
+        public static readonly Avalonia.StyledProperty<TextDocument> DocumentBindingProperty =
+        AvaloniaCompat.RegisterCompat<AvalonBindingBehaviour, TextDocument>(nameof( DocumentBinding ), null, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: PropertyChangedCallback);
 
-        public static readonly DependencyProperty CaretBindingProperty = DependencyProperty.Register( nameof( CaretBinding ), typeof( int ), typeof( AvalonBindingBehaviour ),
-            new FrameworkPropertyMetadata( 0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, PropertyChangedCallback ) );
+        public static readonly Avalonia.StyledProperty<int> CaretBindingProperty =
+        AvaloniaCompat.RegisterCompat<AvalonBindingBehaviour, int>(nameof( CaretBinding ), 0, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: PropertyChangedCallback);
 
         public int CaretBinding
         {
@@ -46,7 +51,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
             set => SetValue( DocumentBindingProperty, value );
         }
 
-        private static void PropertyChangedCallback( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void PropertyChangedCallback( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
         }
 

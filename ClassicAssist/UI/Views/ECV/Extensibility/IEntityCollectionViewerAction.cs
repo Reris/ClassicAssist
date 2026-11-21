@@ -17,7 +17,8 @@
 
 #endregion
 
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Media;
 
 namespace ClassicAssist.UI.Views.ECV.Extensibility
 {
@@ -35,11 +36,11 @@ namespace ClassicAssist.UI.Views.ECV.Extensibility
         string Name { get; }
 
         /// <summary>
-        ///     Icon shown on the toolbar button. Should be a frozen <see cref="ImageSource" />
+        ///     Icon shown on the toolbar button. Should be a frozen <see cref="IImage" />
         ///     (e.g. a <see cref="DrawingImage" />) so it is safe to render regardless of which
         ///     thread it was created on. May be <c>null</c>.
         /// </summary>
-        ImageSource Icon { get; }
+        IImage Icon { get; }
 
         /// <summary>
         ///     Whether the action can run for the given context. Controls the button's enabled

@@ -13,6 +13,7 @@
 // GNU General Public License for more details.
 #endregion
 
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace SyncPOEditor;

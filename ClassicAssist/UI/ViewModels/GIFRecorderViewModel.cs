@@ -1,20 +1,24 @@
-﻿using System;
+using System;
 using System.Diagnostics;
-using System.Drawing;
+
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Threading;
-using AnimatedGif;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+
+using Avalonia.Threading;
+
 using Assistant;
+using ClassicAssist.Misc;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UI.Views;
-using Point = System.Drawing.Point;
-using Size = System.Drawing.Size;
+using SkiaSharp;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels
 {
@@ -34,7 +38,7 @@ namespace ClassicAssist.UI.ViewModels
 
         public GIFRecorderViewModel()
         {
-            _dispatcher = Dispatcher.CurrentDispatcher;
+            _dispatcher = Avalonia.Threading.Dispatcher.UIThread;
         }
 
         public bool IsRecording
@@ -79,10 +83,17 @@ namespace ClassicAssist.UI.ViewModels
                 LastStream.WriteTo( fs );
             }
 
-            string args = $"/e, /select, \"{fullPath}\"";
+            if ( OperatingSystem.IsWindows() )
+            {
+                string args = $"/e, /select, \"{fullPath}\"";
 
-            ProcessStartInfo info = new ProcessStartInfo { FileName = "explorer", Arguments = args };
-            Process.Start( info );
+                ProcessStartInfo info = new ProcessStartInfo { FileName = "explorer", Arguments = args };
+                Process.Start( info );
+            }
+            else
+            {
+                Process.Start( new ProcessStartInfo { FileName = directory, UseShellExecute = true } );
+            }
         }
 
         private void Record( object obj )
@@ -96,8 +107,7 @@ namespace ClassicAssist.UI.ViewModels
                 IsRecording = true;
                 _token = new CancellationTokenSource();
 
-                Window w = Window.GetWindow( _window );
-                WindowInteropHelper wih = new WindowInteropHelper( w ?? throw new InvalidOperationException() );
+                Window w = _window ?? throw new InvalidOperationException();
 
                 Task.Run( async () =>
                 {
@@ -106,27 +116,45 @@ namespace ClassicAssist.UI.ViewModels
                         TimeSpan frameInterval = TimeSpan.FromSeconds( 1.0 / 5 );
                         MemoryStream ms = new MemoryStream();
 
-                        using ( AnimatedGifCreator gif = new AnimatedGifCreator( ms, frameInterval.Milliseconds ) )
+                        using ( GifEncoder gif = new GifEncoder( ms, frameInterval.Milliseconds ) )
                         {
-                            Rectangle rect = new Rectangle();
-                            _dispatcher.Invoke( () => GetWindowRect( wih.Handle, ref rect ) );
+                            PixelPoint position = default;
+                            Size clientSize = default;
+                            double scaling = 1;
 
-                            Bitmap bmp = new Bitmap( rect.Width - rect.Left - 10, rect.Height - rect.Top - 70 );
+                            _dispatcher.Invoke( () =>
+                            {
+                                position = w.Position;
+                                clientSize = w.ClientSize;
+                                scaling = w.RenderScaling;
+                            } );
+
+                            int captureWidth = (int) ( clientSize.Width * scaling ) - 10;
+                            int captureHeight = (int) ( clientSize.Height * scaling ) - 70;
 
                             Stopwatch sw = new Stopwatch();
                             sw.Start();
 
                             while ( true )
                             {
-                                _dispatcher.Invoke( () => GetWindowRect( wih.Handle, ref rect ) );
-
-                                using ( Graphics g = Graphics.FromImage( bmp ) )
+                                _dispatcher.Invoke( () =>
                                 {
-                                    g.CopyFromScreen( new Point( rect.Left + 5, rect.Top + 50 ), Point.Empty,
-                                        new Size( bmp.Width, bmp.Height ) );
-                                }
+                                    position = w.Position;
+                                    clientSize = w.ClientSize;
+                                    scaling = w.RenderScaling;
+                                } );
 
-                                await gif.AddFrameAsync( bmp, -1, GifQuality.Bit8 );
+                                using ( SKBitmap frame = ScreenCapture.CaptureRectangle( position.X + 5,
+                                    position.Y + 50, captureWidth, captureHeight ) )
+                                {
+                                    if ( frame == null )
+                                    {
+                                        // Screen capture unsupported on this platform
+                                        return null;
+                                    }
+
+                                    gif.AddFrame( frame, -1, GifQuality.Bit8 );
+                                }
 
                                 sw.Stop();
 
@@ -136,6 +164,8 @@ namespace ClassicAssist.UI.ViewModels
                                 {
                                     await Task.Delay( wait );
                                 }
+
+                                sw.Restart();
 
                                 if ( _token.IsCancellationRequested )
                                 {
@@ -166,8 +196,5 @@ namespace ClassicAssist.UI.ViewModels
                 } );
             }
         }
-
-        [DllImport( "user32.dll" )]
-        private static extern IntPtr GetWindowRect( IntPtr hWnd, ref Rectangle rect );
     }
 }

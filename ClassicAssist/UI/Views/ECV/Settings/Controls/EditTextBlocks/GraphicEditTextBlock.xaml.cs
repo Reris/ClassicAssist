@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2024 Reetus
+// Copyright (C) 2024 Reetus
 //  
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,29 +13,33 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UO;
 using ClassicAssist.UO.Data;
 using ClassicAssist.UO.Objects;
+using ClassicAssist.Shared.UI.Compat;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views.ECV.Settings.Controls.EditTextBlocks
 {
     /// <summary>
     ///     Interaction logic for GraphicEditTextBlock.xaml
     /// </summary>
-    public partial class GraphicEditTextBlock : INotifyPropertyChanged
-    {
-        public static readonly DependencyProperty IDProperty = DependencyProperty.Register( nameof( ID ), typeof( int ), typeof( GraphicEditTextBlock ),
-            new FrameworkPropertyMetadata( -1, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, IDChangedCallback ) );
+    public partial class GraphicEditTextBlock : UserControl, INotifyPropertyChanged
+    {        public static readonly Avalonia.StyledProperty<int> IDProperty =
+        AvaloniaCompat.RegisterCompat<GraphicEditTextBlock, int>(nameof( ID ), -1, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: IDChangedCallback);
 
-        public static readonly DependencyProperty ClilocEditTextBlockProperty = DependencyProperty.Register( nameof( ClilocEditTextBlock ), typeof( ClilocEditTextBlock ),
-            typeof( GraphicEditTextBlock ), new PropertyMetadata( null ) );
+        public static readonly Avalonia.StyledProperty<ClilocEditTextBlock> ClilocEditTextBlockProperty =
+        AvaloniaCompat.RegisterCompat<GraphicEditTextBlock, ClilocEditTextBlock>(nameof( ClilocEditTextBlock ), null);
 
-        public static readonly DependencyProperty HueEditTextBlockProperty = DependencyProperty.Register( nameof( HueEditTextBlock ), typeof( HueEditTextBlock ),
-            typeof( GraphicEditTextBlock ), new PropertyMetadata( null ) );
+        public static readonly Avalonia.StyledProperty<HueEditTextBlock> HueEditTextBlockProperty =
+        AvaloniaCompat.RegisterCompat<GraphicEditTextBlock, HueEditTextBlock>(nameof( HueEditTextBlock ), null);
 
         private string _label;
         private ICommand _targetCommand;
@@ -75,7 +79,7 @@ namespace ClassicAssist.UI.Views.ECV.Settings.Controls.EditTextBlocks
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private static void IDChangedCallback( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void IDChangedCallback( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
             if ( !( e.NewValue is int id ) )
             {

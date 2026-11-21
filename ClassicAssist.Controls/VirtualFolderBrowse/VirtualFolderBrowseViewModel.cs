@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -22,11 +22,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Threading;
+
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Threading;
 using ClassicAssist.Shared.Resources;
 using ClassicAssist.Shared.UI;
+using ClassicAssist.Shared.UI.Compat;
+using System.Windows.Input;
 
 namespace ClassicAssist.Controls.VirtualFolderBrowse
 {
@@ -47,7 +50,7 @@ namespace ClassicAssist.Controls.VirtualFolderBrowse
         public VirtualFolderBrowseViewModel( Func<string, Task<IEnumerable<VirtualFolder>>> getChildren,
             Func<VirtualFolder, string, Task<VirtualFolder>> createFolder )
         {
-            _dispatcher = Dispatcher.CurrentDispatcher;
+            _dispatcher = Avalonia.Threading.Dispatcher.UIThread;
 
             GetChildren = getChildren;
             CreateFolder = createFolder;
@@ -136,7 +139,16 @@ namespace ClassicAssist.Controls.VirtualFolderBrowse
 
                 FolderPromptWindow window = new FolderPromptWindow();
 
-                window.ShowDialog();
+                Window owner = DialogHelper.GetActiveWindow();
+
+                if ( owner != null )
+                {
+                    await window.ShowDialog( owner );
+                }
+                else
+                {
+                    window.Show();
+                }
 
                 if ( window.DialogResult == true )
                 {

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -19,9 +19,13 @@
 
 using System.Collections;
 using System.Collections.Specialized;
-using System.Windows;
-using System.Windows.Controls;
-using Microsoft.Xaml.Behaviors;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Xaml.Interactivity;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
@@ -31,8 +35,8 @@ namespace ClassicAssist.UI.Misc.Behaviours
 
     public class MultiSelectionBehaviour : Behavior<ListBox>
     {
-        public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register( nameof( SelectedItems ), typeof( IList ), typeof( MultiSelectionBehaviour ),
-            new UIPropertyMetadata( null, SelectedItemsChanged ) );
+        public static readonly Avalonia.StyledProperty<IList> SelectedItemsProperty =
+        AvaloniaCompat.RegisterCompat<MultiSelectionBehaviour, IList>(nameof( SelectedItems ), null, onChanged: SelectedItemsChanged);
 
         private bool _isUpdatingSource;
 
@@ -61,7 +65,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
             }
         }
 
-        private static void SelectedItemsChanged( DependencyObject o, DependencyPropertyChangedEventArgs e )
+        private static void SelectedItemsChanged( AvaloniaObject o, AvaloniaPropertyChangedEventArgs e )
         {
             if ( o == null || !( o is MultiSelectionBehaviour behavior ) )
             {

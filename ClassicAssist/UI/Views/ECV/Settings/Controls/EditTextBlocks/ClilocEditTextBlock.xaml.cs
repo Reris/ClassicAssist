@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2024 Reetus
+// Copyright (C) 2024 Reetus
 //  
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,9 +13,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Forms;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+
 using Assistant;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UI.ViewModels.Autoloot;
@@ -24,16 +27,17 @@ using ClassicAssist.UO;
 using ClassicAssist.UO.Data;
 using ClassicAssist.UO.Objects;
 using UOCliloc = ClassicAssist.UO.Data.Cliloc;
+using ClassicAssist.Shared.UI.Compat;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views.ECV.Settings.Controls.EditTextBlocks
 {
     /// <summary>
     ///     Interaction logic for ClilocEditTextBlock.xaml
     /// </summary>
-    public partial class ClilocEditTextBlock : INotifyPropertyChanged
-    {
-        public static readonly DependencyProperty ClilocProperty = DependencyProperty.Register( nameof( Cliloc ), typeof( int ), typeof( ClilocEditTextBlock ),
-            new FrameworkPropertyMetadata( -1, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, ClilocChangedCallback ) );
+    public partial class ClilocEditTextBlock : UserControl, INotifyPropertyChanged
+    {        public static readonly Avalonia.StyledProperty<int> ClilocProperty =
+        AvaloniaCompat.RegisterCompat<ClilocEditTextBlock, int>(nameof( Cliloc ), -1, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: ClilocChangedCallback);
 
         private ICommand _chooseClilocCommand;
 
@@ -65,7 +69,7 @@ namespace ClassicAssist.UI.Views.ECV.Settings.Controls.EditTextBlocks
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private static void ClilocChangedCallback( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void ClilocChangedCallback( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
             if ( !( e.NewValue is int cliloc ) )
             {
@@ -122,7 +126,7 @@ namespace ClassicAssist.UI.Views.ECV.Settings.Controls.EditTextBlocks
             return true;
         }
 
-        private void ChooseCliloc( object obj )
+        private async void ChooseCliloc( object obj )
         {
             if ( !( obj is int ) )
             {
@@ -132,7 +136,7 @@ namespace ClassicAssist.UI.Views.ECV.Settings.Controls.EditTextBlocks
             ClilocSelectionViewModel vm = new ClilocSelectionViewModel();
             ClilocSelectionWindow window = new ClilocSelectionWindow { DataContext = vm };
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( vm.DialogResult != DialogResult.OK )
             {

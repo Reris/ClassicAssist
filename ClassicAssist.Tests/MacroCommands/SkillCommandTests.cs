@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -17,7 +17,7 @@
 
 #endregion
 
-using System.Windows.Threading;
+using Avalonia.Threading;
 using ClassicAssist.Data.Macros.Commands;
 using ClassicAssist.Data.Skills;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -32,7 +32,7 @@ namespace ClassicAssist.Tests.MacroCommands
         {
             SkillManager manager = SkillManager.GetInstance();
 
-            Dispatcher.CurrentDispatcher.Invoke( () => manager.Items.Add( new SkillEntry { Base = 80, Value = 100, Skill = new Skill { Name = "Hiding" } } ) );
+            Avalonia.Threading.Dispatcher.UIThread.Invoke( () => manager.Items.Add( new SkillEntry { Base = 80, Value = 100, Skill = new Skill { Name = "Hiding" } } ) );
 
             Assert.AreEqual( 80, SkillCommands.Skill( "Hiding", true ) );
             Assert.AreEqual( 100, SkillCommands.Skill( "Hiding" ) );

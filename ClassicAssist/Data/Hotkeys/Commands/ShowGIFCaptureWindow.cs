@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2020 Reetus
 // 
@@ -30,11 +30,11 @@ namespace ClassicAssist.Data.Hotkeys.Commands
 
         public override void Execute()
         {
-            _ = Engine.Dispatcher.BeginInvoke( (Action) ( () =>
+            Engine.Dispatcher.Post( () =>
             {
                 _window = new GIFRecorderWindow();
                 _window.Show();
-            } ) );
+            } );
         }
     }
 }

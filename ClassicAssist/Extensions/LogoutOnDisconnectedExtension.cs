@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2022 Reetus
 // 
@@ -16,7 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Windows.Threading;
+using Avalonia.Threading;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Data.ClassicUO.Objects.Gumps;

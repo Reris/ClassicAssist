@@ -1,14 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Annotations;
 using ClassicAssist.UI.ViewModels.Debug;
 using ClassicAssist.UO.Network.PacketFilter;
+using ClassicAssist.Shared.UI.Compat;
+using ClassicAssist.Shared.UI;
 
 namespace ClassicAssist.UI.Controls
 {
@@ -24,15 +30,12 @@ namespace ClassicAssist.UI.Controls
     /// <summary>
     ///     Interaction logic for HexDumpControl.xaml
     /// </summary>
-    public partial class HexDumpControl : INotifyPropertyChanged
-    {
-        public static readonly DependencyProperty PacketProperty = DependencyProperty.Register( nameof( Packet ),
-            typeof( PacketEntry ), typeof( HexDumpControl ),
-            new UIPropertyMetadata( default, PropertyChangedCallback ) );
+    public partial class HexDumpControl : UserControl, INotifyPropertyChanged
+    {        public static readonly Avalonia.StyledProperty<PacketEntry> PacketProperty =
+        AvaloniaCompat.RegisterCompat<HexDumpControl, PacketEntry>(nameof( Packet ), default, onChanged: PropertyChangedCallback);
 
-        public static readonly DependencyProperty PacketEntriesProperty =
-            DependencyProperty.Register( nameof( PacketEntries ),
-                typeof( ObservableCollection<DebugPacketsViewModel.PacketEnabledEntry> ), typeof( HexDumpControl ) );
+        public static readonly Avalonia.StyledProperty<ObservableCollection<DebugPacketsViewModel.PacketEnabledEntry>> PacketEntriesProperty =
+        AvaloniaCompat.RegisterCompat<HexDumpControl, ObservableCollection<DebugPacketsViewModel.PacketEnabledEntry>>(nameof( PacketEntries ), default);
 
         private string _binaryData;
         private string _textData;
@@ -83,7 +86,7 @@ namespace ClassicAssist.UI.Controls
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private static void PropertyChangedCallback( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void PropertyChangedCallback( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
             if ( !( d is HexDumpControl hexDump ) )
             {
@@ -175,7 +178,7 @@ namespace ClassicAssist.UI.Controls
 
                 prepend.Append( " };" );
 
-                Clipboard.SetData( DataFormats.Text, prepend.ToString() );
+                ClipboardHelper.SetText( prepend.ToString( ) );
             }
             catch ( Exception )
             {

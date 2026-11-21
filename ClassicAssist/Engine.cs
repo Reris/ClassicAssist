@@ -32,8 +32,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Windows.Threading;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Threading;
 using ClassicAssist.Data;
 using ClassicAssist.Data.Abilities;
 using ClassicAssist.Data.Commands;
@@ -59,6 +61,7 @@ using Newtonsoft.Json;
 using Sentry;
 using static ClassicAssist.Misc.SDLKeys;
 using MacroManager = ClassicAssist.Data.Macros.MacroManager;
+using ItemCollection = ClassicAssist.UO.Objects.ItemCollection;
 
 [assembly: InternalsVisibleTo( "ClassicAssist.Tests" )]
 [assembly: InternalsVisibleTo( "ClassicAssist.UITest" )]
@@ -101,6 +104,7 @@ namespace Assistant
         private static OnSetTitle _setTitle;
         private static MainWindow _window;
         private static Thread _mainThread;
+        private static readonly CancellationTokenSource _mainThreadCancellationTokenSource = new CancellationTokenSource();
         private static OnClientClose _onClientClosing;
         private static readonly PacketFilter _incomingPacketFilter = new PacketFilter();
         private static readonly PacketFilter _outgoingPacketPreFilter = new PacketFilter();
@@ -199,15 +203,25 @@ namespace Assistant
 
             _mainThread = new Thread( () =>
             {
-                SplashWindow splashWindow = new SplashWindow();
-                splashWindow.Show();
+                AppBuilder builder = AppBuilder.Configure<ClassicAssist.UI.App>()
+                    .UsePlatformDetect()
+                    .With( new Win32PlatformOptions() )
+                    .With( new X11PlatformOptions() )
+                    .With( new AvaloniaNativePlatformOptions() )
+                    .SetupWithoutStarting();
 
-                _window = new MainWindow();
-                _window.Show();
+                Dispatcher.UIThread.Post( () =>
+                {
+                    SplashWindow splashWindow = new SplashWindow();
+                    splashWindow.Show();
 
-                splashWindow.Close();
+                    _window = new MainWindow();
+                    _window.Show();
 
-                Dispatcher.Run();
+                    splashWindow.Close();
+                } );
+
+                Dispatcher.UIThread.MainLoop( _mainThreadCancellationTokenSource.Token );
             } ) { IsBackground = true };
 
             _mainThread.SetApartmentState( ApartmentState.STA );

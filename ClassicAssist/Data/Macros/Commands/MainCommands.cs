@@ -3,7 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Threading;
-using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data.Hotkeys;
 using ClassicAssist.Data.Screenshot;
@@ -18,6 +22,7 @@ using ClassicAssist.UO.Network.Packets;
 using ClassicAssist.UO.Objects;
 using UOC = ClassicAssist.UO.Commands;
 using static ClassicAssist.Misc.NativeMethods;
+using ClassicAssist.Shared.UI;
 
 namespace ClassicAssist.Data.Macros.Commands
 {
@@ -114,13 +119,13 @@ namespace ClassicAssist.Data.Macros.Commands
                 return;
             }
 
-            _ = Engine.Dispatcher.BeginInvoke( (Action) ( () =>
+            Engine.Dispatcher.Post( () =>
             {
                 ObjectInspectorWindow window =
                     new ObjectInspectorWindow { DataContext = new ObjectInspectorViewModel( entity ) };
 
                 window.Show();
-            } ) );
+            } );
         }
 
         [CommandsDisplay( Category = nameof( Strings.Main ),
@@ -148,15 +153,15 @@ namespace ClassicAssist.Data.Macros.Commands
                 return;
             }
 
-            ItemCollection collection = new ItemCollection( entity.Serial );
+            ClassicAssist.UO.Objects.ItemCollection collection = new ClassicAssist.UO.Objects.ItemCollection( entity.Serial );
 
             switch ( entity )
             {
                 case Item item:
-                    collection = item.Container ?? new ItemCollection( item.Serial );
+                    collection = item.Container ?? new ClassicAssist.UO.Objects.ItemCollection( item.Serial );
                     break;
                 case Mobile mobile:
-                    collection = new ItemCollection( entity.Serial ) { mobile.GetEquippedItems() };
+                    collection = new ClassicAssist.UO.Objects.ItemCollection( entity.Serial ) { mobile.GetEquippedItems() };
                     break;
             }
 
@@ -228,7 +233,7 @@ namespace ClassicAssist.Data.Macros.Commands
             Parameters = new[] { nameof( ParameterType.String ), nameof( ParameterType.String ) } )]
         public static void MessageBox( string title, string body )
         {
-            System.Windows.MessageBox.Show( body, title, MessageBoxButton.OK, MessageBoxImage.Information );
+            ClassicAssist.Shared.UI.MessageBoxHelper.Show( body, title, MessageBoxButton.OK, MessageBoxImage.Information );
         }
 
         [CommandsDisplay( Category = nameof( Strings.Main ) )]
@@ -249,15 +254,13 @@ namespace ClassicAssist.Data.Macros.Commands
                         return;
                     }
 
-                    SoundPlayer soundPlayer = new SoundPlayer( fullPath );
-
                     if ( playSync )
                     {
-                        soundPlayer.PlaySync();
+                        SoundHelper.PlaySync( fullPath );
                     }
                     else
                     {
-                        soundPlayer.Play();
+                        SoundHelper.Play( fullPath );
                     }
 
                     break;

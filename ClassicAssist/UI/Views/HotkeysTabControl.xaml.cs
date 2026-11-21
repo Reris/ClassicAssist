@@ -1,7 +1,8 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.VisualTree;
 
 namespace ClassicAssist.UI.Views
 {
@@ -15,7 +16,7 @@ namespace ClassicAssist.UI.Views
             InitializeComponent();
         }
 
-        private void UIElement_OnPreviewMouseWheel( object sender, MouseWheelEventArgs e )
+        private void UIElement_OnPreviewMouseWheel( object sender, PointerWheelEventArgs e )
         {
             if ( e.Handled )
             {
@@ -23,22 +24,28 @@ namespace ClassicAssist.UI.Views
             }
 
             e.Handled = true;
-            MouseWheelEventArgs eventArg = new MouseWheelEventArgs( e.MouseDevice, e.Timestamp, e.Delta ) { RoutedEvent = MouseWheelEvent, Source = sender };
+
+            PointerWheelEventArgs eventArg = new PointerWheelEventArgs( sender, e.Pointer, (Visual) sender, default,
+                e.Timestamp, e.Properties, e.KeyModifiers, e.Delta )
+            {
+                RoutedEvent = InputElement.PointerWheelChangedEvent,
+                Source = sender
+            };
+
             ScrollViewer parent = GetScrollViewer( (Control) sender );
-            parent.RaiseEvent( eventArg );
+
+            parent?.RaiseEvent( eventArg );
         }
 
-        public static ScrollViewer GetScrollViewer( DependencyObject depObj )
+        public static ScrollViewer GetScrollViewer( Visual depObj )
         {
             if ( depObj is ScrollViewer scrollViewer )
             {
                 return scrollViewer;
             }
 
-            for ( int i = 0; i < VisualTreeHelper.GetChildrenCount( depObj ); i++ )
+            foreach ( Visual child in depObj.GetVisualChildren() )
             {
-                DependencyObject child = VisualTreeHelper.GetChild( depObj, i );
-
                 ScrollViewer result = GetScrollViewer( child );
 
                 if ( result != null )

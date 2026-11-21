@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -19,12 +19,13 @@
 
 using System;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
-using System.Windows.Threading;
+using Avalonia.Input;
+using Avalonia.Threading;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UO.Network.PacketFilter;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels.Debug
 {
@@ -39,8 +40,7 @@ namespace ClassicAssist.UI.ViewModels.Debug
 
         public DebugPacketQueueViewModel()
         {
-            _timer = new DispatcherTimer( TimeSpan.FromMilliseconds( 50 ), DispatcherPriority.Normal, OnTick,
-                Dispatcher.CurrentDispatcher );
+            _timer = new DispatcherTimer( TimeSpan.FromMilliseconds( 50 ), DispatcherPriority.Normal, OnTick );
             _timer.Start();
 
             Threshold = Options.CurrentOptions.SlowHandlerThreshold;

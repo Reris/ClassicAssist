@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -21,9 +21,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Forms;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+
 using Assistant;
 using ClassicAssist.Shared.Resources;
 using ClassicAssist.Shared.UI;
@@ -31,7 +34,9 @@ using ClassicAssist.UI.ViewModels.Autoloot;
 using ClassicAssist.UI.Views.Autoloot;
 using ClassicAssist.UO;
 using ClassicAssist.UO.Objects;
-using UserControl = System.Windows.Controls.UserControl;
+using UserControl = Avalonia.Controls.UserControl;
+using ClassicAssist.Shared.UI.Compat;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views
 {
@@ -40,8 +45,8 @@ namespace ClassicAssist.UI.Views
     /// </summary>
     public partial class MultiClilocSelector : UserControl
     {
-        public static readonly DependencyProperty ValuesProperty = DependencyProperty.Register( nameof( Values ), typeof( ObservableCollection<int> ),
-            typeof( MultiClilocSelector ), new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<ObservableCollection<int>> ValuesProperty =
+        AvaloniaCompat.RegisterCompat<MultiClilocSelector, ObservableCollection<int>>(nameof( Values ), null, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
         private ICommand _chooseClilocCommand;
         private ICommand _chooseFromItemCommand;
@@ -60,7 +65,7 @@ namespace ClassicAssist.UI.Views
             set => SetValue( ValuesProperty, value );
         }
 
-        private void ChooseCliloc( object obj )
+        private async void ChooseCliloc( object obj )
         {
             if ( Values == null )
             {
@@ -70,7 +75,7 @@ namespace ClassicAssist.UI.Views
             ClilocSelectionViewModel vm = new ClilocSelectionViewModel();
             ClilocSelectionWindow window = new ClilocSelectionWindow { DataContext = vm };
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( vm.DialogResult != DialogResult.OK || Values.Contains( vm.SelectedCliloc.Key ) )
             {
@@ -111,7 +116,7 @@ namespace ClassicAssist.UI.Views
 
             PropertySelectionViewModel vm = new PropertySelectionViewModel( item.Properties );
             PropertySelectionWindow window = new PropertySelectionWindow { DataContext = vm };
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( vm.DialogResult != DialogResult.OK )
             {

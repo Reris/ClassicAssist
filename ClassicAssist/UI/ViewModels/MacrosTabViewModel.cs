@@ -27,9 +27,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Threading;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Threading;
 using Assistant;
 using ClassicAssist.Browser.Models;
 using ClassicAssist.Controls.DraggableTreeView;
@@ -45,12 +48,13 @@ using ClassicAssist.UI.ViewModels.Macros;
 using ClassicAssist.UI.Views;
 using ClassicAssist.UI.Views.Macros;
 using ClassicAssist.UO;
-using ICSharpCode.AvalonEdit.Document;
+using AvaloniaEdit.Document;
 using IronPython.Hosting;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels
 {
@@ -841,11 +845,11 @@ namespace ClassicAssist.UI.ViewModels
 
                     if ( errorObj != null && !string.IsNullOrEmpty( errorObj.Message ) )
                     {
-                        MessageBox.Show( $"Error sharing macro: {errorObj.Message}" );
+                        MessageBoxHelper.Show( $"Error sharing macro: {errorObj.Message}" );
                     }
                     else
                     {
-                        MessageBox.Show( $"Unknown error sharing macro: {response.StatusCode}" );
+                        MessageBoxHelper.Show( $"Unknown error sharing macro: {response.StatusCode}" );
                     }
                 }
             }
@@ -860,14 +864,14 @@ namespace ClassicAssist.UI.ViewModels
             MacroInvoker.ResetImportCache();
         }
 
-        private void RemoveMacroConfirm( object obj )
+        private async void RemoveMacroConfirm( object obj )
         {
             if ( !( obj is MacroEntry entry ) )
             {
                 return;
             }
 
-            MessageBoxResult result = MessageBox.Show( string.Format( Strings.Really_remove_macro___0___, entry.Name ), Strings.Warning, MessageBoxButton.YesNo,
+            MessageBoxResult result = await MessageBoxHelper.ShowAsync( string.Format( Strings.Really_remove_macro___0___, entry.Name ), Strings.Warning, MessageBoxButton.YesNo,
                 MessageBoxImage.Warning );
 
             if ( result == MessageBoxResult.No )
@@ -913,7 +917,7 @@ namespace ClassicAssist.UI.ViewModels
             Data.ClassicUO.Macros.CreateMacroButton( macro );
         }
 
-        private void CheckOverwriteHotkey( HotkeyEntry selectedItem, ShortcutKeys hotkey )
+        private async void CheckOverwriteHotkey( HotkeyEntry selectedItem, ShortcutKeys hotkey )
         {
             HotkeyEntry conflict = null;
 
@@ -930,7 +934,7 @@ namespace ClassicAssist.UI.ViewModels
 
             if ( conflict != null && !ReferenceEquals( selectedItem, conflict ) )
             {
-                MessageBoxResult result = MessageBox.Show( string.Format( Strings.Overwrite_existing_hotkey___0____, conflict ), Strings.Warning, MessageBoxButton.YesNo );
+                MessageBoxResult result = await MessageBoxHelper.ShowAsync( string.Format( Strings.Overwrite_existing_hotkey___0____, conflict ), Strings.Warning, MessageBoxButton.YesNo );
 
                 if ( result == MessageBoxResult.No )
                 {
@@ -1055,7 +1059,7 @@ namespace ClassicAssist.UI.ViewModels
         private void ShowCommands( object obj )
         {
             MacrosCommandWindow window = new MacrosCommandWindow { DataContext = new MacrosCommandViewModel( this ) };
-            window.ShowDialog();
+            window.ShowDialogCompat();
         }
 
         private void Record( object obj )

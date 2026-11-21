@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -17,15 +17,21 @@
 
 #endregion
 
-using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.Document;
-using Microsoft.Xaml.Behaviors;
+using AvaloniaEdit;
+using AvaloniaEdit.Document;
+using Avalonia.Xaml.Interactivity;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Windows;
-using System.Windows.Data;
-using System.Windows.Threading;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
+using Avalonia.Threading;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
@@ -33,8 +39,8 @@ namespace ClassicAssist.UI.Misc.Behaviours
     {
         internal static bool IsProgrammaticTextChange { get; private set; }
 
-        public static readonly DependencyProperty TextBindingProperty = DependencyProperty.Register( nameof( TextBinding ), typeof( string ), typeof( AvalonEditBehaviour ),
-            new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, PropertyChangedCallback ) );
+        public static readonly Avalonia.StyledProperty<string> TextBindingProperty =
+        AvaloniaCompat.RegisterCompat<AvalonEditBehaviour, string>(nameof( TextBinding ), null, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: PropertyChangedCallback);
 
         private object _textSource;
 
@@ -56,7 +62,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
             }
         }
 
-        private void AssociatedObjectOnDataContextChanged( object sender, DependencyPropertyChangedEventArgs e )
+        private void AssociatedObjectOnDataContextChanged( object sender, EventArgs e )
         {
             _textSource = null;
 
@@ -64,7 +70,10 @@ namespace ClassicAssist.UI.Misc.Behaviours
             AssociatedObject?.Document?.UndoStack.ClearAll();
 
             // The binding may not have updated yet, and won't call back at all if the new item's text is identical
-            AssociatedObject?.Dispatcher.BeginInvoke( DispatcherPriority.ContextIdle, new Action( () => _textSource = GetTextSource() ) );
+            if ( AssociatedObject != null )
+            {
+                Dispatcher.UIThread.Post( () => _textSource = GetTextSource(), DispatcherPriority.ContextIdle );
+            }
         }
 
         private void AssociatedObjectOnLostFocus( object sender, RoutedEventArgs routedEventArgs )
@@ -110,10 +119,10 @@ namespace ClassicAssist.UI.Misc.Behaviours
 
         private object GetTextSource()
         {
-            return BindingOperations.GetBindingExpression( this, TextBindingProperty )?.ResolvedSource;
+            return AssociatedObject?.DataContext;
         }
 
-        private static void PropertyChangedCallback( DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs )
+        private static void PropertyChangedCallback( AvaloniaObject dependencyObject, AvaloniaPropertyChangedEventArgs dependencyPropertyChangedEventArgs )
         {
             AvalonEditBehaviour behavior = dependencyObject as AvalonEditBehaviour;
 

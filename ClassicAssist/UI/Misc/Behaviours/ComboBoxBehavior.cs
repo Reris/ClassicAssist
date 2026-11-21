@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -17,23 +17,27 @@
 
 #endregion
 
-using System.Windows;
-using System.Windows.Controls;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Xaml.Interactivity;
+using ClassicAssist.Shared.UI.Compat;
 using System.Windows.Input;
-using Microsoft.Xaml.Behaviors;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
     public class ComboBoxBehavior : Behavior<ComboBox>
     {
-        public static readonly DependencyProperty CommandBindingProperty = DependencyProperty.Register( nameof( CommandBinding ), typeof( ICommand ), typeof( ComboBoxBehavior ),
-            new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.None, PropertyChangedCallback ) );
+        public static readonly Avalonia.StyledProperty<ICommand> CommandBindingProperty =
+        AvaloniaCompat.RegisterCompat<ComboBoxBehavior, ICommand>(nameof( CommandBinding ), null, onChanged: PropertyChangedCallback);
 
-        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register( nameof( CommandParameter ), typeof( object ), typeof( ComboBoxBehavior ),
-            new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.None, PropertyChangedCallback ) );
+        public static readonly Avalonia.StyledProperty<object> CommandParameterProperty =
+        AvaloniaCompat.RegisterCompat<ComboBoxBehavior, object>(nameof( CommandParameter ), null, onChanged: PropertyChangedCallback);
 
-        public static readonly DependencyProperty OnlyUserTriggeredProperty = DependencyProperty.Register( nameof( OnlyUserTriggered ), typeof( bool ), typeof( ComboBoxBehavior ),
-            new FrameworkPropertyMetadata( false, FrameworkPropertyMetadataOptions.None, PropertyChangedCallback ) );
+        public static readonly Avalonia.StyledProperty<bool> OnlyUserTriggeredProperty =
+        AvaloniaCompat.RegisterCompat<ComboBoxBehavior, bool>(nameof( OnlyUserTriggered ), false, onChanged: PropertyChangedCallback);
 
         private bool _userTriggered;
 
@@ -55,7 +59,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
             set => SetValue( OnlyUserTriggeredProperty, value );
         }
 
-        private static void PropertyChangedCallback( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void PropertyChangedCallback( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
         }
 
@@ -64,10 +68,10 @@ namespace ClassicAssist.UI.Misc.Behaviours
             base.OnAttached();
 
             AssociatedObject.SelectionChanged += OnSelectionChanged;
-            AssociatedObject.PreviewMouseDown += OnPreviewMouseDown;
+            AssociatedObject.AddHandler( InputElement.PointerPressedEvent, OnPreviewMouseDown, RoutingStrategies.Tunnel );
         }
 
-        private void OnPreviewMouseDown( object sender, MouseButtonEventArgs e )
+        private void OnPreviewMouseDown( object sender, PointerPressedEventArgs e )
         {
             _userTriggered = true;
         }
@@ -86,7 +90,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
         protected override void OnDetaching()
         {
             AssociatedObject.SelectionChanged -= OnSelectionChanged;
-            AssociatedObject.PreviewMouseDown -= OnPreviewMouseDown;
+            AssociatedObject.RemoveHandler( InputElement.PointerPressedEvent, OnPreviewMouseDown );
         }
     }
 }

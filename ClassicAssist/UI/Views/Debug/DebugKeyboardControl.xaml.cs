@@ -1,5 +1,5 @@
-﻿using System.Windows.Controls;
-using System.Windows.Input;
+using Avalonia.Controls;
+using Avalonia.Input;
 using ClassicAssist.UI.ViewModels.Debug;
 
 namespace ClassicAssist.UI.Views.Debug

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -20,7 +20,8 @@
 using System;
 using System.Globalization;
 using System.Linq.Expressions;
-using System.Windows.Data;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 
 namespace ClassicAssist.Shared.UI.ValueConverters
 {

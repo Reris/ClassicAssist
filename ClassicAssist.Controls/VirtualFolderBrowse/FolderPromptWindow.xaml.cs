@@ -1,11 +1,15 @@
-﻿using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 
 namespace ClassicAssist.Controls.VirtualFolderBrowse
 {
     /// <summary>
     ///     Interaction logic for FolderPromptWindow.xaml
     /// </summary>
-    public partial class FolderPromptWindow
+    public partial class FolderPromptWindow : Window
     {
         public FolderPromptWindow()
         {
@@ -13,6 +17,8 @@ namespace ClassicAssist.Controls.VirtualFolderBrowse
         }
 
         public string Text { get; set; }
+
+        public bool? DialogResult { get; private set; }
 
         private void CancelOnClick( object sender, RoutedEventArgs e )
         {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Input;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Data.Hotkeys;
@@ -21,6 +21,7 @@ using ClassicAssist.UO.Data;
 using ClassicAssist.UO.Network;
 using ClassicAssist.UO.Network.Packets;
 using Newtonsoft.Json.Linq;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels
 {

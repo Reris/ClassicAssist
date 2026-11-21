@@ -24,8 +24,11 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Controls.DraggableTreeView;
 using ClassicAssist.Data.Autoloot;
@@ -39,6 +42,7 @@ using ClassicAssist.UO.Objects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Sentry;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views.ECV.Filter
 {
@@ -74,7 +78,7 @@ namespace ClassicAssist.UI.Views.ECV.Filter
         public EntityCollectionFilterViewModel()
         {
 #if DEBUG
-            if ( DesignerProperties.GetIsInDesignMode( new DependencyObject() ) )
+            if ( Design.IsDesignMode )
             {
                 Environment.CurrentDirectory = @"C:\Users\johns\Documents\UO\ClassicAssist\Output\net48";
             }

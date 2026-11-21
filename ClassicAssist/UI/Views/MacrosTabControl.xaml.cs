@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -18,9 +18,11 @@
 #endregion
 
 using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Data.Macros;
 
 namespace ClassicAssist.UI.Views
@@ -28,7 +30,7 @@ namespace ClassicAssist.UI.Views
     /// <summary>
     ///     Interaction logic for MacrosTabControl.xaml
     /// </summary>
-    public partial class MacrosTabControl
+    public partial class MacrosTabControl : UserControl
     {
         public MacrosTabControl()
         {

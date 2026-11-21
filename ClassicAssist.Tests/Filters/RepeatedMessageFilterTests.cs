@@ -19,7 +19,9 @@
 
 using System;
 using Assistant;
+using ClassicAssist.Data;
 using ClassicAssist.Data.Filters;
+using ClassicAssist.Misc;
 using ClassicAssist.UO.Network;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -28,13 +30,16 @@ namespace ClassicAssist.Tests.Filters
     [TestClass]
     public class RepeatedMessageFilterTests
     {
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            // Tests share the process-wide static journal; start each test with an empty one.
+            Engine.Journal = new CircularBuffer<JournalEntry>( 1024 );
+        }
+
         [TestMethod]
         public void WillFilterOldAsciiSystemMessages()
         {
-            AppDomain appDomain = AppDomain.CreateDomain( "WillFilterOldAsciiSystemMessages",
-                AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation );
-
-            appDomain.DoCallBack( () =>
             {
                 byte[] packet =
                 {
@@ -60,16 +65,12 @@ namespace ClassicAssist.Tests.Filters
                 bool result = IncomingPacketFilters.CheckPacket( ref packet, ref length );
 
                 Assert.IsTrue( result );
-            } );
+                        }
         }
 
         [TestMethod]
         public void WillSendToJournalFilteredMessages()
         {
-            AppDomain appDomain = AppDomain.CreateDomain( "WillSendToJournalFilteredMessages",
-                AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation );
-
-            appDomain.DoCallBack( () =>
             {
                 byte[] packet =
                 {
@@ -97,16 +98,12 @@ namespace ClassicAssist.Tests.Filters
 
                 Assert.IsTrue( result );
                 Assert.IsTrue( Engine.Journal.Count > 0 );
-            } );
+                        }
         }
 
         [TestMethod]
         public void WontSendToJournalFilteredMessagesDisabled()
         {
-            AppDomain appDomain = AppDomain.CreateDomain( "WontSendToJournalFilteredMessagesDisabled",
-                AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation );
-
-            appDomain.DoCallBack( () =>
             {
                 byte[] packet =
                 {
@@ -134,7 +131,7 @@ namespace ClassicAssist.Tests.Filters
 
                 Assert.IsTrue( result );
                 Assert.AreEqual( 0, Engine.Journal.Count );
-            } );
+                        }
         }
     }
 }

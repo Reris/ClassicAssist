@@ -1,9 +1,13 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+using Avalonia;
+using Avalonia.Controls;
 
 namespace ClassicAssist.UI.Misc
 {
-    public class SkillsGridViewColumn : GridViewColumn
+    /// <summary>
+    ///     Supplies the <see cref="Enums" /> sort-field discriminator used by <see cref="SkillComparer" />
+    ///     and an attached property for tagging <see cref="DataGridColumn" />s with their sort field.
+    /// </summary>
+    public class SkillsGridViewColumn
     {
         public enum Enums
         {
@@ -15,13 +19,18 @@ namespace ClassicAssist.UI.Misc
             LockStatus
         }
 
-        public static readonly DependencyProperty SortFieldProperty = DependencyProperty.Register( "SortField",
-            typeof( Enums ), typeof( SkillsGridViewColumn ), new UIPropertyMetadata( null ) );
+        public static readonly AttachedProperty<Enums> SortFieldProperty =
+            AvaloniaProperty.RegisterAttached<SkillsGridViewColumn, DataGridColumn, Enums>( "SortField",
+                Enums.Name );
 
-        public Enums SortField
+        public static Enums GetSortField( DataGridColumn column )
         {
-            get => (Enums) GetValue( SortFieldProperty );
-            set => SetValue( SortFieldProperty, value );
+            return column.GetValue( SortFieldProperty );
+        }
+
+        public static void SetSortField( DataGridColumn column, Enums value )
+        {
+            column.SetValue( SortFieldProperty, value );
         }
     }
 }

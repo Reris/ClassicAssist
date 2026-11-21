@@ -1,7 +1,12 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using ClassicAssist.Shared.UI.Compat;
 using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views.ECV.Filter
@@ -9,22 +14,22 @@ namespace ClassicAssist.UI.Views.ECV.Filter
     /// <summary>
     ///     Interaction logic for EntityCollectionFilterControl.xaml
     /// </summary>
-    public partial class EntityCollectionFilterControl
+    public partial class EntityCollectionFilterControl : UserControl
     {
-        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register( nameof( Command ), typeof( ICommand ), typeof( EntityCollectionFilterControl ),
-            new PropertyMetadata( default( ICommand ), PropertyChangedCallback ) );
+        public static readonly Avalonia.StyledProperty<ICommand> CommandProperty =
+        AvaloniaCompat.RegisterCompat<EntityCollectionFilterControl, ICommand>(nameof( Command ), default( ICommand ), onChanged: PropertyChangedCallback);
 
-        public static readonly DependencyProperty AssembliesProperty = DependencyProperty.Register( nameof( Assemblies ), typeof( ObservableCollection<Assembly> ),
-            typeof( EntityCollectionFilterControl ), new PropertyMetadata( new ObservableCollection<Assembly>(), PropertyChangedCallback ) );
+        public static readonly Avalonia.StyledProperty<ObservableCollection<Assembly>> AssembliesProperty =
+        AvaloniaCompat.RegisterCompat<EntityCollectionFilterControl, ObservableCollection<Assembly>>(nameof( Assemblies ), new ObservableCollection<Assembly>(), onChanged: PropertyChangedCallback);
 
-        public static readonly DependencyProperty IsFilterAppliedProperty = DependencyProperty.Register( nameof( IsFilterApplied ), typeof( bool ),
-            typeof( EntityCollectionFilterControl ), new PropertyMetadata( default( bool ), PropertyChangedCallback ) );
+        public static readonly Avalonia.StyledProperty<bool> IsFilterAppliedProperty =
+        AvaloniaCompat.RegisterCompat<EntityCollectionFilterControl, bool>(nameof( IsFilterApplied ), default( bool ), onChanged: PropertyChangedCallback);
 
         public EntityCollectionFilterControl()
         {
             InitializeComponent();
 
-            IsVisibleChanged += OnIsVisibleChanged;
+            PropertyChanged += OnPropertyChanged;
         }
 
         public ObservableCollection<Assembly> Assemblies
@@ -45,15 +50,15 @@ namespace ClassicAssist.UI.Views.ECV.Filter
             set => SetValue( IsFilterAppliedProperty, value );
         }
 
-        private void OnIsVisibleChanged( object sender, DependencyPropertyChangedEventArgs e )
+        private void OnPropertyChanged( object sender, AvaloniaPropertyChangedEventArgs e )
         {
-            if ( DataContext is EntityCollectionFilterViewModel viewModel )
+            if ( e.Property.Name == nameof( IsVisible ) && DataContext is EntityCollectionFilterViewModel viewModel )
             {
                 viewModel.SaveFilterProfiles();
             }
         }
 
-        private static void PropertyChangedCallback( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void PropertyChangedCallback( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
             if ( !( d is EntityCollectionFilterControl control ) )
             {

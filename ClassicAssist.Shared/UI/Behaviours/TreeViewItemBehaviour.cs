@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -17,8 +17,12 @@
 
 #endregion
 
-using System.Windows;
-using System.Windows.Controls;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.Shared.UI.Behaviours
 {
@@ -29,6 +33,11 @@ namespace ClassicAssist.Shared.UI.Behaviours
     /// </summary>
     public static class TreeViewItemBehavior
     {
+        static TreeViewItemBehavior()
+        {
+            IsBroughtIntoViewWhenSelectedProperty.Changed.AddClassHandler<AvaloniaObject>( OnIsBroughtIntoViewWhenSelectedChanged );
+        }
+
         #region IsBroughtIntoViewWhenSelected
 
         public static bool GetIsBroughtIntoViewWhenSelected( TreeViewItem treeViewItem )
@@ -41,13 +50,11 @@ namespace ClassicAssist.Shared.UI.Behaviours
             treeViewItem.SetValue( IsBroughtIntoViewWhenSelectedProperty, value );
         }
 
-        public static readonly DependencyProperty IsBroughtIntoViewWhenSelectedProperty =
-            DependencyProperty.RegisterAttached( "IsBroughtIntoViewWhenSelected", typeof( bool ),
-                typeof( TreeViewItemBehavior ),
-                new UIPropertyMetadata( false, OnIsBroughtIntoViewWhenSelectedChanged ) );
+        public static readonly Avalonia.StyledProperty<bool> IsBroughtIntoViewWhenSelectedProperty =
+        AvaloniaProperty.RegisterAttached<AvaloniaObject, bool>( "IsBroughtIntoViewWhenSelected", typeof( TreeViewItemBehavior ), false );
 
-        private static void OnIsBroughtIntoViewWhenSelectedChanged( DependencyObject depObj,
-            DependencyPropertyChangedEventArgs e )
+        private static void OnIsBroughtIntoViewWhenSelectedChanged( AvaloniaObject depObj,
+            AvaloniaPropertyChangedEventArgs e )
         {
             TreeViewItem item = depObj as TreeViewItem;
 
@@ -63,25 +70,25 @@ namespace ClassicAssist.Shared.UI.Behaviours
 
             if ( (bool) e.NewValue )
             {
-                item.Selected += OnTreeViewItemSelected;
+                item.PropertyChanged += OnTreeViewItemPropertyChanged;
             }
             else
             {
-                item.Selected -= OnTreeViewItemSelected;
+                item.PropertyChanged -= OnTreeViewItemPropertyChanged;
             }
         }
 
-        private static void OnTreeViewItemSelected( object sender, RoutedEventArgs e )
+        private static void OnTreeViewItemPropertyChanged( object sender, AvaloniaPropertyChangedEventArgs e )
         {
             // Only react to the Selected event raised by the TreeViewItem
             // whose IsSelected property was modified. Ignore all ancestors
             // who are merely reporting that a descendant's Selected fired.
-            if ( !ReferenceEquals( sender, e.OriginalSource ) )
+            if ( e.Property != TreeViewItem.IsSelectedProperty || !(bool) e.NewValue )
             {
                 return;
             }
 
-            if ( e.OriginalSource is TreeViewItem item )
+            if ( sender is TreeViewItem item )
             {
                 item.BringIntoView();
             }

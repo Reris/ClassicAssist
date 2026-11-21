@@ -1,12 +1,18 @@
-﻿using System.Windows;
-using System.Windows.Input;
-using System.Windows.Threading;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Input;
+using Avalonia.Threading;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Shared.Resources;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UI.Views;
-using Hardcodet.Wpf.TaskbarNotification;
+using System.IO;
+using System.Windows.Input;
+
 
 namespace ClassicAssist.UI.ViewModels
 {
@@ -17,12 +23,12 @@ namespace ClassicAssist.UI.ViewModels
         private ICommand _minimizeCommand;
         private ICommand _restoreWindowCommand;
         private string _status = Strings.Ready___;
-        private TaskbarIcon _taskbarIcon;
+        private TrayIcon _trayIcon;
         private string _title = Strings.ProductName;
 
         public MainWindowViewModel()
         {
-            Engine.Dispatcher = Dispatcher.CurrentDispatcher;
+            Engine.Dispatcher = Avalonia.Threading.Dispatcher.UIThread;
             Engine.UpdateWindowTitleEvent += OnUpdateWindowTitleEvent;
             Engine.ClientClosing += OnClientClosing;
         }
@@ -50,9 +56,9 @@ namespace ClassicAssist.UI.ViewModels
 
         private void OnClientClosing()
         {
-            if ( _taskbarIcon != null )
+            if ( _trayIcon != null )
             {
-                _dispatcher.Invoke( () => { _taskbarIcon.Visibility = Visibility.Hidden; } );
+                _dispatcher.Invoke( () => { _trayIcon.IsVisible = false; } );
             }
         }
 
@@ -62,9 +68,9 @@ namespace ClassicAssist.UI.ViewModels
                 ? Strings.ProductName
                 : $"{Engine.Player?.Name} - {( Options.CurrentOptions.ShowProfileNameWindowTitle ? $"({Options.CurrentOptions.Name}) - " : "" )}{Strings.ProductName}";
 
-            if ( _taskbarIcon != null )
+            if ( _trayIcon != null )
             {
-                _dispatcher.Invoke( () => { _taskbarIcon.ToolTipText = Title; } );
+                _dispatcher.Invoke( () => { _trayIcon.ToolTipText = Title; } );
             }
         }
 
@@ -87,20 +93,21 @@ namespace ClassicAssist.UI.ViewModels
                 return;
             }
 
-            if ( _taskbarIcon == null )
+            if ( _trayIcon == null )
             {
-                _taskbarIcon = new TaskbarIcon
+                _trayIcon = new TrayIcon
                 {
-                    Icon = Properties.Resources.logo,
-                    Visibility = Visibility.Visible,
-                    LeftClickCommand = RestoreWindowCommand,
-                    LeftClickCommandParameter = window,
-                    NoLeftClickDelay = true
+                    Icon = new WindowIcon( new Bitmap( new MemoryStream( Properties.Resources.logo ) ) ),
+                    IsVisible = true,
+                    Command = RestoreWindowCommand,
+                    CommandParameter = window
                 };
+
+                TrayIcon.SetIcons( Application.Current, new TrayIcons { _trayIcon } );
             }
 
-            _taskbarIcon.ToolTipText = Title;
-            _taskbarIcon.Visibility = Visibility.Visible;
+            _trayIcon.ToolTipText = Title;
+            _trayIcon.IsVisible = true;
             window.ShowInTaskbar = false;
             window.Hide();
         }
@@ -115,7 +122,11 @@ namespace ClassicAssist.UI.ViewModels
             window.ShowInTaskbar = true;
             window.WindowState = WindowState.Normal;
             window.Show();
-            _taskbarIcon.Visibility = Visibility.Hidden;
+
+            if ( _trayIcon != null )
+            {
+                _trayIcon.IsVisible = false;
+            }
         }
     }
 }

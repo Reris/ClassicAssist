@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Timers;
-using System.Windows.Input;
-using System.Windows.Threading;
+using Avalonia.Input;
+using Avalonia.Threading;
 using Assistant;
 using ClassicAssist.Shared;
 using ClassicAssist.Shared.Resources;
@@ -15,6 +15,7 @@ using ClassicAssist.UO.Network.PacketFilter;
 using ClassicAssist.UO.Network.Packets;
 using ClassicAssist.UO.Objects;
 using Semver;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels
 {
@@ -175,7 +176,7 @@ namespace ClassicAssist.UI.ViewModels
         {
             Item[] e = ItemCollection.GetAllItems( Engine.Items.GetItems() );
 
-            Dispatcher.CurrentDispatcher.Invoke( () =>
+            Avalonia.Threading.Dispatcher.UIThread.Invoke( () =>
             {
                 EntityCollectionViewer window = new EntityCollectionViewer
                 {

@@ -1,11 +1,15 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Data;
 using ClassicAssist.Shared.Resources;
 using ClassicAssist.Shared.UI;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels
 {
@@ -73,7 +77,7 @@ namespace ClassicAssist.UI.ViewModels
 
                 if ( File.Exists( Path.Combine( profilePath, $"{profileName}.json" ) ) )
                 {
-                    MessageBox.Show( Strings.A_profile_already_exists_by_this_name__choose_a_new_name___,
+                    MessageBoxHelper.Show( Strings.A_profile_already_exists_by_this_name__choose_a_new_name___,
                         Strings.Error );
                     return;
                 }
@@ -108,7 +112,7 @@ namespace ClassicAssist.UI.ViewModels
             }
             else
             {
-                MessageBox.Show( Strings.Profile_name_contains_illegal_characters_, Strings.Error, MessageBoxButton.OK,
+                MessageBoxHelper.Show( Strings.Profile_name_contains_illegal_characters_, Strings.Error, MessageBoxButton.OK,
                     MessageBoxImage.Error );
             }
         }

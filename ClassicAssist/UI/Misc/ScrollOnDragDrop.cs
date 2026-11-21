@@ -1,7 +1,9 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using Microsoft.Xaml.Behaviors;
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.VisualTree;
+using Avalonia.Xaml.Interactivity;
 
 namespace ClassicAssist.UI.Misc
 {
@@ -9,7 +11,7 @@ namespace ClassicAssist.UI.Misc
      * https://weblogs.asp.net/akjoshi/Attached-behavior-for-auto-scrolling-containers-while-doing-drag-amp-drop
      */
 
-    public class ScrollOnDragDrop : Behavior<FrameworkElement>
+    public class ScrollOnDragDrop : Behavior<Control>
     {
         protected override void OnAttached()
         {
@@ -25,14 +27,14 @@ namespace ClassicAssist.UI.Misc
             base.OnDetaching();
         }
 
-        private static void Subscribe( FrameworkElement container )
+        private static void Subscribe( Control container )
         {
-            container.PreviewDragOver += OnContainerPreviewDragOver;
+            container.AddHandler( DragDrop.DragOverEvent, OnContainerPreviewDragOver, RoutingStrategies.Tunnel );
         }
 
         private static void OnContainerPreviewDragOver( object sender, DragEventArgs e )
         {
-            if ( !( sender is FrameworkElement container ) )
+            if ( !( sender is Control container ) )
             {
                 return;
             }
@@ -48,35 +50,33 @@ namespace ClassicAssist.UI.Misc
             double verticalPos = e.GetPosition( container ).Y;
             const double offset = 20;
 
-            if ( verticalPos < tolerance ) // Top of visible list? 
+            if ( verticalPos < tolerance ) // Top of visible list?
             {
-                scrollViewer.ScrollToVerticalOffset( scrollViewer.VerticalOffset - offset ); //Scroll up. 
+                scrollViewer.Offset = scrollViewer.Offset.WithY( scrollViewer.Offset.Y - offset ); //Scroll up.
             }
-            else if ( verticalPos > container.ActualHeight - tolerance ) //Bottom of visible list? 
+            else if ( verticalPos > container.Bounds.Height - tolerance ) //Bottom of visible list?
             {
-                scrollViewer.ScrollToVerticalOffset( scrollViewer.VerticalOffset + offset ); //Scroll down.     
+                scrollViewer.Offset = scrollViewer.Offset.WithY( scrollViewer.Offset.Y + offset ); //Scroll down.
             }
         }
 
-        private static void Unsubscribe( FrameworkElement container )
+        private static void Unsubscribe( Control container )
         {
-            container.PreviewDragOver -= OnContainerPreviewDragOver;
+            container.RemoveHandler( DragDrop.DragOverEvent, OnContainerPreviewDragOver );
         }
 
-        public static T GetFirstVisualChild<T>( DependencyObject depObj ) where T : DependencyObject
+        public static T GetFirstVisualChild<T>( Visual depObj ) where T : Visual
         {
             if ( depObj == null )
             {
                 return null;
             }
 
-            for ( int i = 0; i < VisualTreeHelper.GetChildrenCount( depObj ); i++ )
+            foreach ( Visual child in depObj.GetVisualChildren() )
             {
-                DependencyObject child = VisualTreeHelper.GetChild( depObj, i );
-
-                if ( child is T dependencyObject )
+                if ( child is T typedChild )
                 {
-                    return dependencyObject;
+                    return typedChild;
                 }
 
                 T childItem = GetFirstVisualChild<T>( child );

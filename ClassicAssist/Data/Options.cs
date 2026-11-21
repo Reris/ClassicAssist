@@ -1,10 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Windows;
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data.Friends;
 using ClassicAssist.Data.Hotkeys;
@@ -769,7 +772,7 @@ namespace ClassicAssist.Data
                 catch ( Exception e )
                 {
 #if DEBUG
-                    MessageBox.Show( "Error loading profile: \n\n" + e );
+                    MessageBoxHelper.Show( "Error loading profile: \n\n" + e );
                     Environment.Exit( 0 );
 #endif
                     Console.WriteLine( e );

@@ -1,46 +1,34 @@
-﻿<UserControl x:Class="ClassicAssist.Data.Backup.OneDrive.OneDriveConfigureControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:ClassicAssist.Data.Backup.OneDrive"
-             xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared"
-             xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared"
-             mc:Ignorable="d">
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:local="clr-namespace:ClassicAssist.Data.Backup.OneDrive" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.Data.Backup.OneDrive.OneDriveConfigureControl" mc:Ignorable="d" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <shared:SharedResourceDictionary Source="../../../Resources/DarkTheme.xaml" />
-                <ResourceDictionary>
-                    <Style x:Key="HideIfEmpty" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                        <Setter Property="Visibility" Value="Visible" />
-                        <Style.Triggers>
-                            <Trigger Property="Text" Value="">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                    <Style x:Key="HideOnLoggedIn" TargetType="StackPanel">
-                        <Setter Property="Visibility" Value="Visible" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                    <Style x:Key="ShowOnLoggedIn" TargetType="StackPanel">
-                        <Setter Property="Visibility" Value="Collapsed" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
-                                <Setter Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <ResourceDictionary />
     </UserControl.Resources>
+    <UserControl.Styles>
+        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
+        <Style Selector="TextBlock.HideIfEmpty">
+            <Setter Property="IsVisible" Value="True" />
+            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Text, RelativeSource={RelativeSource Self}}" />
+            <Setter Property="ca:TriggerCondition.Value" Value="" />
+            <Style Selector="^.ca-dt1">
+                <Setter Property="IsVisible" Value="False" />
+            </Style>
+        </Style>
+        <Style Selector="StackPanel.HideOnLoggedIn">
+            <Setter Property="IsVisible" Value="True" />
+            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsLoggedIn}" />
+            <Setter Property="ca:TriggerCondition.Value" Value="True" />
+            <Style Selector="^.ca-dt2">
+                <Setter Property="IsVisible" Value="False" />
+            </Style>
+        </Style>
+        <Style Selector="StackPanel.ShowOnLoggedIn">
+            <Setter Property="IsVisible" Value="False" />
+            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsLoggedIn}" />
+            <Setter Property="ca:TriggerCondition.Value" Value="True" />
+            <Style Selector="^.ca-dt3">
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+        </Style>
+    </UserControl.Styles>
     <UserControl.DataContext>
         <local:OneDriveConfigureViewModel />
     </UserControl.DataContext>
@@ -49,19 +37,17 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="5" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Style="{StaticResource HideOnLoggedIn}">
+        <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Classes="HideOnLoggedIn">
             <Button Content="{x:Static resources:Strings.Login_With_Windows}" Command="{Binding LoginCommand}" />
-            <TextBlock Text="{Binding ErrorMessage}" TextAlignment="Center" Style="{StaticResource HideIfEmpty}" />
+            <TextBlock Text="{Binding ErrorMessage}" TextAlignment="Center" Classes="HideIfEmpty" />
         </StackPanel>
-        <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Style="{StaticResource ShowOnLoggedIn}">
+        <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Classes="ShowOnLoggedIn">
             <Button Content="{x:Static resources:Strings.Logout}" Command="{Binding LogoutCommand}" Margin="0,0,0,10" />
             <StackPanel Orientation="Horizontal">
                 <Label Content="{x:Static resources:Strings.Username}" Width="100" />
                 <TextBlock Text="{Binding AuthenticationResult.Account.Username}" />
             </StackPanel>
         </StackPanel>
-        <ProgressBar Grid.Row="1" IsIndeterminate="True" Height="5"
-                     Visibility="{Binding IsWorking, Converter={StaticResource BooleanToVisibilityConverter}}" />
-
+        <ProgressBar Grid.Row="1" IsIndeterminate="True" Height="5" IsVisible="{Binding IsWorking}" />
     </Grid>
 </UserControl>

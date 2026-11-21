@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -22,30 +22,35 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
+using Avalonia.Layout;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Data.Macros;
 using ClassicAssist.UI.Controls;
-using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.CodeCompletion;
-using ICSharpCode.AvalonEdit.Document;
+using AvaloniaEdit;
+using AvaloniaEdit.CodeCompletion;
+using AvaloniaEdit.Document;
 using IronPython.Runtime;
 using Microsoft.Scripting.Utils;
-using Microsoft.Xaml.Behaviors;
+using Avalonia.Xaml.Interactivity;
 using static ClassicAssist.UI.Views.MacrosTabControl;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
     public class AvalonEditShowCompletionTooltipBehaviour : Behavior<TextEditor>
     {
-        public static readonly DependencyProperty FrameVariablesProperty = DependencyProperty.Register( nameof( FrameVariables ), typeof( Dictionary<string, object> ),
-            typeof( AvalonEditShowCompletionTooltipBehaviour ), new PropertyMetadata( default( Dictionary<string, object> ) ) );
+        public static readonly Avalonia.StyledProperty<Dictionary<string, object>> FrameVariablesProperty =
+        AvaloniaCompat.RegisterCompat<AvalonEditShowCompletionTooltipBehaviour, Dictionary<string, object>>(nameof( FrameVariables ), default( Dictionary<string, object> ));
 
-        public static readonly DependencyProperty IsPausedProperty =
-            DependencyProperty.Register( nameof( IsPaused ), typeof( bool ), typeof( AvalonEditShowCompletionTooltipBehaviour ), new PropertyMetadata( false ) );
+        public static readonly Avalonia.StyledProperty<bool> IsPausedProperty =
+        AvaloniaCompat.RegisterCompat<AvalonEditShowCompletionTooltipBehaviour, bool>(nameof( IsPaused ), false);
 
-        private readonly ToolTip _toolTip = new ToolTip();
+        private readonly Popup _toolTip = new Popup { PlacementMode = PlacementMode.Pointer };
         private List<PythonCompletionData> _completionData;
         private CompletionWindow _completionWindow;
         private TextEditor _textEditor;
@@ -115,16 +120,16 @@ namespace ClassicAssist.UI.Misc.Behaviours
             }
 
             _textEditor.TextArea.TextEntered += OnTextEntered;
-            _textEditor.MouseHover += OnMouseHover;
-            _textEditor.MouseHoverStopped += OnMouseHoverStopped;
+            _textEditor.TextArea.PointerMoved += OnMouseHover;
+            _textEditor.TextArea.PointerExited += OnMouseHoverStopped;
         }
 
-        private void OnMouseHoverStopped( object sender, MouseEventArgs e )
+        private void OnMouseHoverStopped( object sender, PointerEventArgs e )
         {
             _toolTip.IsOpen = false;
         }
 
-        private void OnMouseHover( object sender, MouseEventArgs e )
+        private void OnMouseHover( object sender, PointerEventArgs e )
         {
             //https://stackoverflow.com/questions/51711692/how-to-fire-an-event-when-mouse-hover-over-a-specific-text-in-avalonedit
             TextViewPosition? pos = _textEditor.GetPositionFromPoint( e.GetPosition( _textEditor ) );
@@ -187,12 +192,12 @@ namespace ClassicAssist.UI.Misc.Behaviours
                     {
                         TextBlock descriptionText = new TextBlock { Text = match.Description.ToString(), TextWrapping = TextWrapping.Wrap, Margin = new Thickness( 0, 2, 0, 5 ) };
                         panel.Children.Add( descriptionText );
-                        TextBlock nameText = new TextBlock { Text = match.Name, FontWeight = FontWeights.Bold, Margin = new Thickness( 0, 5, 0, 0 ) };
+                        TextBlock nameText = new TextBlock { Text = match.Name, FontWeight = FontWeight.Bold, Margin = new Thickness( 0, 5, 0, 0 ) };
                         panel.Children.Add( nameText );
                     }
 
                     _toolTip.PlacementTarget = _textEditor;
-                    _toolTip.Content = panel;
+                    _toolTip.Child = panel;
                     _toolTip.IsOpen = true;
                 }
                 else if ( IsPaused )
@@ -207,7 +212,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
                         {
                             TextBlock nameText = new TextBlock
                             {
-                                Text = $"{variable.Key} : {variable.Value?.GetType().Name ?? "null"}", FontWeight = FontWeights.Bold, Margin = new Thickness( 0, 5, 0, 0 )
+                                Text = $"{variable.Key} : {variable.Value?.GetType().Name ?? "null"}", FontWeight = FontWeight.Bold, Margin = new Thickness( 0, 5, 0, 0 )
                             };
                             panel.Children.Add( nameText );
                             TextBlock valueText = new TextBlock
@@ -218,7 +223,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
                         }
 
                         _toolTip.PlacementTarget = _textEditor;
-                        _toolTip.Content = panel;
+                        _toolTip.Child = panel;
                         _toolTip.IsOpen = true;
                     }
                 }
@@ -231,7 +236,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
             }
         }
 
-        private void OnTextEntered( object sender, TextCompositionEventArgs e )
+        private void OnTextEntered( object sender, TextInputEventArgs e )
         {
             DocumentLine line = _textEditor.TextArea.Document.Lines[_textEditor.TextArea.Caret.Line - 1];
 
@@ -258,7 +263,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
 
             _completionWindow = new CompletionWindow( _textEditor.TextArea )
             {
-                CloseWhenCaretAtBeginning = true, CloseAutomatically = false, Width = 500, SizeToContent = SizeToContent.WidthAndHeight
+                CloseWhenCaretAtBeginning = true, CloseAutomatically = false, Width = 500
             };
             _completionWindow.CompletionList.CompletionData.AddRange( data );
             _completionWindow.Show();

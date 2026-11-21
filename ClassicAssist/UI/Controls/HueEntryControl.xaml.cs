@@ -1,8 +1,11 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Controls.Shapes;
 using ClassicAssist.UO.Data;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.Controls
 {
@@ -11,10 +14,8 @@ namespace ClassicAssist.UI.Controls
     /// </summary>
     public partial class HueEntryControl : UserControl
     {
-        public static readonly DependencyProperty HueEntryProperty = DependencyProperty.Register( nameof( HueEntry ),
-            typeof( HueEntry ), typeof( HueEntryControl ),
-            new FrameworkPropertyMetadata( default( HueEntry ), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-                PropertyChangedCallback ) );
+        public static readonly Avalonia.StyledProperty<HueEntry> HueEntryProperty =
+        AvaloniaCompat.RegisterCompat<HueEntryControl, HueEntry>(nameof( HueEntry ), default( HueEntry ), defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: PropertyChangedCallback);
 
         public HueEntryControl()
         {
@@ -27,7 +28,7 @@ namespace ClassicAssist.UI.Controls
             set => SetValue( HueEntryProperty, value );
         }
 
-        private static void PropertyChangedCallback( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void PropertyChangedCallback( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
             if ( d is HueEntryControl control )
             {

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -19,9 +19,10 @@
 
 using System;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using Avalonia.Input;
 using ClassicAssist.Shared.UI;
 using Microsoft.Identity.Client;
+using System.Windows.Input;
 
 namespace ClassicAssist.Data.Backup.OneDrive
 {

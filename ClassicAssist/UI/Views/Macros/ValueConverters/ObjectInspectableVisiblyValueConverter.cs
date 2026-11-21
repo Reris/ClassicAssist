@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 // Copyright (C) 2025 Reetus
 // 
 // This program is free software: you can redistribute it and/or modify
@@ -17,8 +17,13 @@
 
 using System;
 using System.Globalization;
-using System.Windows;
-using System.Windows.Data;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using ClassicAssist.UO.Objects;
 
 namespace ClassicAssist.UI.Views.Macros.ValueConverters
@@ -27,7 +32,7 @@ namespace ClassicAssist.UI.Views.Macros.ValueConverters
     {
         public object Convert( object value, Type targetType, object parameter, CultureInfo culture )
         {
-            return value is Item ? Visibility.Visible : Visibility.Collapsed;
+            return value is Item ? true : false;
         }
 
         public object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )

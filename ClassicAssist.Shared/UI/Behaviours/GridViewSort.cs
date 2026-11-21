@@ -1,42 +1,46 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #endregion
 
 using System;
-using System.Collections;
 using System.ComponentModel;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using Microsoft.Xaml.Behaviors;
+using Avalonia;
+using Avalonia.Collections;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
+using Avalonia.Xaml.Interactivity;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.Shared.UI.Behaviours
 {
-    public class GridViewSort : Behavior<ListView>
+    /// <summary>
+    ///     Sorts a list when a header/button is clicked. Avalonia port of the WPF GridView
+    ///     column-sort behaviour - works against DataGridCollectionView.SortDescriptions.
+    /// </summary>
+    public class GridViewSort : Behavior<ListBox>
     {
-        public static readonly DependencyProperty ComparerTypeProperty =
-            DependencyProperty.RegisterAttached( nameof( ComparerType ), typeof( Type ), typeof( GridViewSort ),
-                new UIPropertyMetadata( null ) );
+        public static readonly Avalonia.StyledProperty<Type> ComparerTypeProperty =
+        AvaloniaCompat.RegisterAttachedCompat<GridViewSort, Type>(nameof( ComparerType ), null);
 
         private ListSortDirection _lastDirection;
 
-        private GridViewColumnHeader _lastHeaderClicked;
+        private string _lastProperty;
 
         public Type ComparerType
         {
@@ -48,24 +52,33 @@ namespace ClassicAssist.Shared.UI.Behaviours
         {
             base.OnAttached();
 
-            AssociatedObject.AddHandler( ButtonBase.ClickEvent, new RoutedEventHandler( ColumnHeader_Click ) );
+            AssociatedObject.AddHandler( Button.ClickEvent, ColumnHeader_Click );
         }
 
         private void ColumnHeader_Click( object sender, RoutedEventArgs e )
         {
-            if ( !( e.OriginalSource is GridViewColumnHeader headerClicked ) )
+            if ( !( e.Source is Control clicked ) )
             {
                 return;
             }
 
-            ListCollectionView dataView =
-                (ListCollectionView) CollectionViewSource.GetDefaultView( AssociatedObject.ItemsSource );
+            string propertyName = clicked.Tag as string ?? clicked.Name;
+
+            if ( string.IsNullOrEmpty( propertyName ) )
+            {
+                return;
+            }
+
+            DataGridCollectionView view = CollectionViewSource.GetDefaultView( AssociatedObject.ItemsSource );
+
+            if ( view == null )
+            {
+                return;
+            }
 
             ListSortDirection direction;
 
-            string propertyName = headerClicked.Column.Header.ToString();
-
-            if ( !Equals( headerClicked, _lastHeaderClicked ) )
+            if ( _lastProperty != propertyName )
             {
                 direction = ListSortDirection.Ascending;
             }
@@ -76,18 +89,19 @@ namespace ClassicAssist.Shared.UI.Behaviours
                     : ListSortDirection.Ascending;
             }
 
-            IComparer comparer = (IComparer) Activator.CreateInstance( ComparerType, direction, propertyName );
+            using ( view.DeferRefresh() )
+            {
+                view.SortDescriptions.Clear();
+                view.SortDescriptions.Add( DataGridSortDescription.FromPath( propertyName, direction ) );
+            }
 
-            dataView.CustomSort = comparer;
-            dataView.Refresh();
-
-            _lastHeaderClicked = headerClicked;
+            _lastProperty = propertyName;
             _lastDirection = direction;
         }
 
         protected override void OnDetaching()
         {
-            AssociatedObject.RemoveHandler( ButtonBase.ClickEvent, new RoutedEventHandler( ColumnHeader_Click ) );
+            AssociatedObject.RemoveHandler( Button.ClickEvent, ColumnHeader_Click );
             base.OnDetaching();
         }
     }

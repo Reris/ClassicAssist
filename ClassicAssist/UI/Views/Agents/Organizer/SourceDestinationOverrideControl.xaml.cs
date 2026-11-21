@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2024 Reetus
+// Copyright (C) 2024 Reetus
 //  
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,8 +8,12 @@
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY
 
-using System.Windows;
-using System.Windows.Controls;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using ClassicAssist.Shared.UI.Compat;
 using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views.Agents.Organizer
@@ -19,17 +23,17 @@ namespace ClassicAssist.UI.Views.Agents.Organizer
     /// </summary>
     public partial class SourceDestinationOverrideControl : UserControl
     {
-        public static readonly DependencyProperty SerialProperty = DependencyProperty.Register( nameof( Serial ), typeof( int? ), typeof( SourceDestinationOverrideControl ),
-            new PropertyMetadata( defaultValue: null ) );
+        public static readonly Avalonia.StyledProperty<int?> SerialProperty =
+        AvaloniaCompat.RegisterCompat<SourceDestinationOverrideControl, int?>(nameof( Serial ), null);
 
-        public static readonly DependencyProperty SetCommandProperty = DependencyProperty.Register( nameof( SetCommand ), typeof( ICommand ),
-            typeof( SourceDestinationOverrideControl ), new PropertyMetadata( defaultValue: null ) );
+        public static readonly Avalonia.StyledProperty<ICommand> SetCommandProperty =
+        AvaloniaCompat.RegisterCompat<SourceDestinationOverrideControl, ICommand>(nameof( SetCommand ), null);
 
-        public static readonly DependencyProperty SetCommandParameterProperty = DependencyProperty.Register( nameof( SetCommandParameter ), typeof( object ),
-            typeof( SourceDestinationOverrideControl ), new PropertyMetadata( defaultValue: null ) );
+        public static readonly Avalonia.StyledProperty<object> SetCommandParameterProperty =
+        AvaloniaCompat.RegisterCompat<SourceDestinationOverrideControl, object>(nameof( SetCommandParameter ), null);
 
-        public static readonly DependencyProperty ClearCommandProperty = DependencyProperty.Register( nameof( ClearCommand ), typeof( ICommand ),
-            typeof( SourceDestinationOverrideControl ), new PropertyMetadata( defaultValue: null ) );
+        public static readonly Avalonia.StyledProperty<ICommand> ClearCommandProperty =
+        AvaloniaCompat.RegisterCompat<SourceDestinationOverrideControl, ICommand>(nameof( ClearCommand ), null);
 
         public SourceDestinationOverrideControl()
         {

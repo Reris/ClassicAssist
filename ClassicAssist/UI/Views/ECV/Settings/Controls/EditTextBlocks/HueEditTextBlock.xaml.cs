@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2024 Reetus
+// Copyright (C) 2024 Reetus
 //  
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -11,17 +11,21 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.Views.ECV.Settings.Controls.EditTextBlocks
 {
     /// <summary>
     ///     Interaction logic for HueEditTextBlock.xaml
     /// </summary>
-    public partial class HueEditTextBlock : INotifyPropertyChanged
-    {
-        public static readonly DependencyProperty HueProperty = DependencyProperty.Register( nameof( Hue ), typeof( int ), typeof( HueEditTextBlock ),
-            new FrameworkPropertyMetadata( -1, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, HueChangedCallback ) );
+    public partial class HueEditTextBlock : UserControl, INotifyPropertyChanged
+    {        public static readonly Avalonia.StyledProperty<int> HueProperty =
+        AvaloniaCompat.RegisterCompat<HueEditTextBlock, int>(nameof( Hue ), -1, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: HueChangedCallback);
 
         private string _label;
 
@@ -51,7 +55,7 @@ namespace ClassicAssist.UI.Views.ECV.Settings.Controls.EditTextBlocks
             block.Label = id == -1 ? "Any" : $"{id}";
         }
 
-        private static void HueChangedCallback( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void HueChangedCallback( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
             if ( !( e.NewValue is int id ) )
             {

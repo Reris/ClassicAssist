@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -20,10 +20,11 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using Avalonia.Input;
 using ClassicAssist.Shared.Resources;
 using ClassicAssist.Shared.UI;
 using Google.Apis.Auth.OAuth2;
+using System.Windows.Input;
 
 namespace ClassicAssist.Data.Backup.GoogleDrive
 {

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2023 Reetus
 // 
@@ -21,12 +21,14 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+
 using ClassicAssist.Controls.VirtualFolderBrowse;
 using ClassicAssist.Data.Backup.WebDAV;
 using Newtonsoft.Json.Linq;
 using WebDav;
-using UserControl = System.Windows.Controls.UserControl;
+using UserControl = Avalonia.Controls.UserControl;
+using ClassicAssist.Shared.UI.Compat;
+using ClassicAssist.Shared.UI;
 
 namespace ClassicAssist.Data.Backup
 {
@@ -97,7 +99,7 @@ namespace ClassicAssist.Data.Backup
 
             VirtualFolderBrowseWindow window = new VirtualFolderBrowseWindow { DataContext = odppvm };
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( odppvm.DialogResult != DialogResult.OK )
             {

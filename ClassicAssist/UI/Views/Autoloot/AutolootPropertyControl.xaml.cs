@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2023 Reetus
+// Copyright (C) 2023 Reetus
 //  
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -11,10 +11,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Controls.Primitives;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using ClassicAssist.Data.Autoloot;
 using ClassicAssist.UI.ViewModels.Agents;
 
@@ -30,7 +34,7 @@ namespace ClassicAssist.UI.Views.Autoloot
             InitializeComponent();
         }
 
-        private void OnDataContextChanged( object sender, DependencyPropertyChangedEventArgs e )
+        private void OnDataContextChanged( object sender, AvaloniaPropertyChangedEventArgs e )
         {
             // TODO: Convert to XAML
             if ( !( e.NewValue is AutolootConstraintEntry autolootConstraintEntry ) )
@@ -54,7 +58,7 @@ namespace ClassicAssist.UI.Views.Autoloot
 
                 ComboBox comboBox = new ComboBox { Width = 140, ItemsSource = source };
 
-                BindingOperations.SetBinding( comboBox, Selector.SelectedItemProperty, selectedItemBinding );
+                comboBox.Bind( SelectingItemsControl.SelectedItemProperty, selectedItemBinding );
 
                 Content = comboBox;
             }

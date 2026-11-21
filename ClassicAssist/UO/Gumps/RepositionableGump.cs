@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2020 Reetus
 // 
@@ -19,9 +19,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Windows.Interop;
+
 using Assistant;
 using ClassicAssist.UI.ViewModels;
+using ClassicAssist.Shared.UI;
 using ClassicAssist.UI.Views;
 using ClassicAssist.UO.Objects.Gumps;
 
@@ -62,15 +63,14 @@ namespace ClassicAssist.UO.Gumps
         {
             if ( buttonID == REPOSITION_BUTTON_ID )
             {
-                _ = Engine.Dispatcher.BeginInvoke( (Action) ( () =>
+                Engine.Dispatcher.Post( () =>
                 {
                     SetPosition( GumpX, GumpY );
                     RepositionableGumpViewModel vm = new RepositionableGumpViewModel( this, GumpX, GumpY );
                     RepositionableGumpWindow window = new RepositionableGumpWindow { DataContext = vm };
-                    WindowInteropHelper helper = new WindowInteropHelper( window ) { Owner = Engine.WindowHandle };
                     window.ShowInTaskbar = false;
-                    window.ShowDialog();
-                } ) );
+                    window.ShowDialogCompat();
+                } );
             }
 
             base.OnResponse( buttonID, switches, textEntries );

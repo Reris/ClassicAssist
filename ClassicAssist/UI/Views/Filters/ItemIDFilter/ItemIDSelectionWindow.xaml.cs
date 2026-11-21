@@ -1,25 +1,27 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Windows.Media;
+using Avalonia.Input;
+using Avalonia;
+using Avalonia.Media;
 using ClassicAssist.Misc;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UO.Data;
 using Microsoft.Scripting.Utils;
+using System.Windows.Input;
 
+using Avalonia.Controls;
 namespace ClassicAssist.UI.Views.Filters.ItemIDFilter
 {
     /// <summary>
     ///     Interaction logic for ItemIDSelectionWindow.xaml
     /// </summary>
-    public partial class ItemIDSelectionWindow : INotifyPropertyChanged
-    {
-        private bool _imagesLoaded;
+    public partial class ItemIDSelectionWindow : Window, INotifyPropertyChanged
+    {        private bool _imagesLoaded;
         private ICommand _okCommand;
         private string _searchText;
         private ImageData _selectedItem;
@@ -70,8 +72,7 @@ namespace ClassicAssist.UI.Views.Filters.ItemIDFilter
 
                 for ( int i = 0; i < 10000; i++ )
                 {
-                    ImageSource image = Art.GetStatic( i ).ToImageSource();
-                    image.Freeze();
+                    IImage image = Art.GetStatic( i ).ToImageSource();
 
                     images.Add( new ImageData
                     {
@@ -81,7 +82,7 @@ namespace ClassicAssist.UI.Views.Filters.ItemIDFilter
 
                 ImagesLoaded = true;
 
-                Dispatcher.Invoke( () =>
+                Avalonia.Threading.Dispatcher.UIThread.Invoke( () =>
                 {
                     Images.AddRange( images );
                     UpdateFilter();
@@ -140,7 +141,7 @@ namespace ClassicAssist.UI.Views.Filters.ItemIDFilter
         public class ImageData
         {
             public int ID { get; set; }
-            public ImageSource ImageSource { get; set; }
+            public IImage ImageSource { get; set; }
             public string Name { get; set; }
         }
     }

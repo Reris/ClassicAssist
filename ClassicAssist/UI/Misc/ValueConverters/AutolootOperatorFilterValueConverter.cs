@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -21,7 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Windows.Data;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using ClassicAssist.Data.Autoloot;
 
 namespace ClassicAssist.UI.Misc.ValueConverters
@@ -29,9 +30,9 @@ namespace ClassicAssist.UI.Misc.ValueConverters
     public class AutolootOperatorFilterValueConverter : IMultiValueConverter
 
     {
-        public object Convert( object[] values, Type targetType, object parameter, CultureInfo culture )
+        public object Convert( IList<object> values, Type targetType, object parameter, CultureInfo culture )
         {
-            if ( values.Length < 2 || !( values[0] is Type enumType ) )
+            if ( values.Count < 2 || !( values[0] is Type enumType ) )
             {
                 return null;
             }
@@ -71,11 +72,6 @@ namespace ClassicAssist.UI.Misc.ValueConverters
             }
 
             return filtered;
-        }
-
-        public object[] ConvertBack( object value, Type[] targetTypes, object parameter, CultureInfo culture )
-        {
-            throw new NotImplementedException();
         }
     }
 }

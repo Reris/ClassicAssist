@@ -1,4 +1,8 @@
-﻿using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 
 namespace ClassicAssist.UI.Views.Macros
 {

@@ -1,32 +1,21 @@
-﻿<UserControl x:Class="ClassicAssist.UI.Views.Agents.FriendsTabControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared"
-             xmlns:agents="clr-namespace:ClassicAssist.UI.ViewModels.Agents"
-             xmlns:draggableListBox="clr-namespace:ClassicAssist.Controls.DraggableListBox;assembly=ClassicAssist.Controls"
-             xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared"
-             xmlns:valueConverters="clr-namespace:ClassicAssist.Shared.UI.ValueConverters;assembly=ClassicAssist.Shared"
-             mc:Ignorable="d"
-             d:DesignHeight="300">
+﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:agents="clr-namespace:ClassicAssist.UI.ViewModels.Agents" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:draggableListBox="clr-namespace:ClassicAssist.Controls.DraggableListBox;assembly=ClassicAssist.Controls" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:valueConverters="clr-namespace:ClassicAssist.Shared.UI.ValueConverters;assembly=ClassicAssist.Shared" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.Agents.FriendsTabControl" mc:Ignorable="d" d:DesignHeight="300" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <valueConverters:InverseBooleanValueConverter x:Key="InverseBooleanValueConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
+        <StyleInclude Source="avares://ClassicAssist/UI/Views/ECV/Icons.xaml" />
+    </UserControl.Styles>
     <d:DesignerProperties.DesignStyle>
-        <Style TargetType="UserControl">
+        <Style Selector="UserControl">
             <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
         </Style>
     </d:DesignerProperties.DesignStyle>
     <UserControl.DataContext>
         <agents:FriendsTabViewModel />
     </UserControl.DataContext>
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <shared:SharedResourceDictionary Source="../../../Resources/DarkTheme.xaml" />
-                <ResourceDictionary Source="../ECV/Icons.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <valueConverters:InverseBooleanValueConverter x:Key="InverseBooleanValueConverter" />
-        </ResourceDictionary>
-    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -38,69 +27,51 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <draggableListBox:DraggableListBox Grid.Row="0" ItemsSource="{Binding Options.Friends}"
-                                               SelectedItem="{Binding SelectedItem}" />
+            <draggableListBox:DraggableListBox Grid.Row="0" SelectedItem="{Binding SelectedItem}" ItemsSource="{Binding Options.Friends}" />
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Content="{x:Static resources:Strings.Insert}" Grid.Column="0" Margin="0,5,5,5"
-                        Command="{Binding AddFriendCommand}" />
-                <Button Content="{x:Static resources:Strings.Remove}" Grid.Column="1" Margin="5"
-                        Command="{Binding RemoveFriendCommand}" CommandParameter="{Binding SelectedItem}" />
-                <Button Content="{x:Static resources:Strings.Import}" Grid.Column="2" Margin="5, 5, 0, 5"
-                        Command="{Binding ImportCommand}" />
+                <Button Content="{x:Static resources:Strings.Insert}" Grid.Column="0" Margin="0,5,5,5" Command="{Binding AddFriendCommand}" />
+                <Button Content="{x:Static resources:Strings.Remove}" Grid.Column="1" Margin="5" Command="{Binding RemoveFriendCommand}" CommandParameter="{Binding SelectedItem}" />
+                <Button Content="{x:Static resources:Strings.Import}" Grid.Column="2" Margin="5, 5, 0, 5" Command="{Binding ImportCommand}" />
             </Grid>
         </Grid>
         <StackPanel Grid.Column="1" Margin="0, 10, 10, 10">
             <GroupBox Header="{x:Static resources:Strings.Options}">
                 <StackPanel Margin="10">
-                    <CheckBox Content="{x:Static resources:Strings.Include_party_members}"
-                              IsChecked="{Binding Options.IncludePartyMembersInFriends}" />
-                    <CheckBox Content="{x:Static resources:Strings.Prevent_attacking_friends_in_war_mode}"
-                              IsChecked="{Binding Options.PreventAttackingFriendsInWarMode}" />
-                    <CheckBox Content="{x:Static resources:Strings.Prevent_targeting_friends_with_Harmful_spells}"
-                              IsChecked="{Binding Options.PreventTargetingFriendsWithHarmful}" />
+                    <CheckBox Content="{x:Static resources:Strings.Include_party_members}" IsChecked="{Binding Options.IncludePartyMembersInFriends}" />
+                    <CheckBox Content="{x:Static resources:Strings.Prevent_attacking_friends_in_war_mode}" IsChecked="{Binding Options.PreventAttackingFriendsInWarMode}" />
+                    <CheckBox Content="{x:Static resources:Strings.Prevent_targeting_friends_with_Harmful_spells}" IsChecked="{Binding Options.PreventTargetingFriendsWithHarmful}" />
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Content="{x:Static resources:Strings.Rehue_friends}"
-                                  IsChecked="{Binding Options.CurrentOptions.RehueFriends}"
-                                  Command="{Binding ChangeRehueOption}" />
-                        <Button Margin="10,0,0,0" Command="{Binding SelectHueCommand}"
-                                CommandParameter="{Binding Options.CurrentOptions.RehueFriendsHue}">
-                            <Button.ToolTip>
+                        <CheckBox Content="{x:Static resources:Strings.Rehue_friends}" IsChecked="{Binding Options.CurrentOptions.RehueFriends}" Command="{Binding ChangeRehueOption}" />
+                        <Button Margin="10,0,0,0" Command="{Binding SelectHueCommand}" CommandParameter="{Binding Options.CurrentOptions.RehueFriendsHue}">
+                            <ToolTip.Tip>
                                 <TextBlock>
-                                    <Run Text="{x:Static resources:Strings.Hue}" /><Run Text=": " /><Run
-                                        Text="{Binding Options.CurrentOptions.RehueFriendsHue, Mode=OneWay}" />
+                                    <Run Text="{x:Static resources:Strings.Hue}" />
+                                    <Run Text=": " />
+                                    <Run Text="{Binding Options.CurrentOptions.RehueFriendsHue, Mode=OneWay}" />
                                 </TextBlock>
-                            </Button.ToolTip>
-                            <Image Source="{StaticResource ColorWheelIcon}" Height="12" Width="12" />
+                            </ToolTip.Tip>
+                            <Image Source="{DynamicResource ColorWheelIcon}" Height="12" Width="12" />
                         </Button>
-                        <Button x:Name="RehueLayersButton" Margin="5,0,0,0"
-                                ToolTip="{x:Static resources:Strings.Layers}"
-                                Command="{Binding OpenRehueLayersCommand}"
-                                IsHitTestVisible="{Binding IsOpen, ElementName=RehueLayersPopup, Converter={StaticResource InverseBooleanValueConverter}}">
-                            <Image Source="{StaticResource FilterIcon}" Height="12" Width="12" />
+                        <Button x:Name="RehueLayersButton" Margin="5,0,0,0" Command="{Binding OpenRehueLayersCommand}" IsHitTestVisible="{Binding IsOpen, ElementName=RehueLayersPopup, Converter={StaticResource InverseBooleanValueConverter}}" ToolTip.Tip="{x:Static resources:Strings.Layers}">
+                            <Image Source="{DynamicResource FilterIcon}" Height="12" Width="12" />
                         </Button>
-                        <Popup x:Name="RehueLayersPopup" StaysOpen="False" Placement="Bottom"
-                               PlacementTarget="{Binding ElementName=RehueLayersButton}"
-                               IsOpen="{Binding RehueLayersOpen}">
-                            <Border Background="{DynamicResource ThemeBackgroundBrush}"
-                                    BorderBrush="{DynamicResource ThemeBorderBrush}" BorderThickness="1" Padding="5">
+                        <Popup x:Name="RehueLayersPopup" IsLightDismissEnabled="True" Placement="Bottom" PlacementTarget="{Binding ElementName=RehueLayersButton}" IsOpen="{Binding RehueLayersOpen}">
+                            <Border Background="{DynamicResource ThemeBackgroundBrush}" BorderBrush="{DynamicResource ThemeBorderBrush}" BorderThickness="1" Padding="5">
                                 <StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                        <Button Content="{x:Static resources:Strings.Select_All}" Padding="5,2"
-                                                Command="{Binding SelectAllLayersCommand}" />
-                                        <Button Content="{x:Static resources:Strings.Deselect_All}" Padding="5,2"
-                                                Margin="5,0,0,0" Command="{Binding DeselectAllLayersCommand}" />
+                                        <Button Content="{x:Static resources:Strings.Select_All}" Padding="5,2" Command="{Binding SelectAllLayersCommand}" />
+                                        <Button Content="{x:Static resources:Strings.Deselect_All}" Padding="5,2" Margin="5,0,0,0" Command="{Binding DeselectAllLayersCommand}" />
                                     </StackPanel>
                                     <ScrollViewer MaxHeight="300" VerticalScrollBarVisibility="Auto">
                                         <ItemsControl ItemsSource="{Binding RehueLayers}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <CheckBox Content="{Binding Name}" IsChecked="{Binding Enabled}"
-                                                              Margin="0,1" />
+                                                    <CheckBox Content="{Binding Name}" IsChecked="{Binding Enabled}" Margin="0,1" />
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>

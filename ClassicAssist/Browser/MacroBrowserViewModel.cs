@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2020 Reetus
 // 
@@ -22,8 +22,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Browser.Data;
 using ClassicAssist.Browser.Models;
 using ClassicAssist.Data.Macros;
@@ -31,6 +34,7 @@ using ClassicAssist.Shared.Resources;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UI.ViewModels;
 using Microsoft.Scripting.Utils;
+using System.Windows.Input;
 
 namespace ClassicAssist.Browser
 {
@@ -188,7 +192,7 @@ namespace ClassicAssist.Browser
                 return;
             }
 
-            MessageBoxResult result = MessageBox.Show( Strings.Macro_Warning, Strings.Warning, MessageBoxButton.YesNo,
+            MessageBoxResult result = await MessageBoxHelper.ShowAsync( Strings.Macro_Warning, Strings.Warning, MessageBoxButton.YesNo,
                 MessageBoxImage.Warning );
 
             if ( result != MessageBoxResult.Yes )
@@ -213,7 +217,7 @@ namespace ClassicAssist.Browser
 
             try
             {
-                Clipboard.SetText( macro );
+                ClipboardHelper.SetText( macro );
             }
             catch ( Exception )
             {
@@ -284,7 +288,7 @@ namespace ClassicAssist.Browser
             }
             catch ( Exception e )
             {
-                MessageBox.Show( $"{Strings.Failed_to_download_macro___}\n\n{e.Message}", Strings.Error,
+                MessageBoxHelper.Show( $"{Strings.Failed_to_download_macro___}\n\n{e.Message}", Strings.Error,
                     MessageBoxButton.OK, MessageBoxImage.Error );
             }
             finally
@@ -334,7 +338,7 @@ namespace ClassicAssist.Browser
             }
             catch ( Exception e )
             {
-                MessageBox.Show( e.Message, Strings.Error );
+                MessageBoxHelper.Show( e.Message, Strings.Error );
             }
         }
 

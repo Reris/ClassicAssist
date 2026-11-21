@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -23,13 +23,16 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+
 using ClassicAssist.Controls.VirtualFolderBrowse;
 using ClassicAssist.Data.Backup.OneDrive;
 using Microsoft.Graph;
+using Microsoft.Graph.Models;
 using Newtonsoft.Json.Linq;
 using File = System.IO.File;
-using UserControl = System.Windows.Controls.UserControl;
+using UserControl = Avalonia.Controls.UserControl;
+using ClassicAssist.Shared.UI.Compat;
+using ClassicAssist.Shared.UI;
 
 namespace ClassicAssist.Data.Backup
 {
@@ -51,10 +54,12 @@ namespace ClassicAssist.Data.Backup
         {
             GraphServiceClient client = await OneDriveClient.GetGraphClient();
 
+            Drive drive = await client.Me.Drive.GetAsync();
+
             using ( FileStream fileStream = File.OpenRead( fileName ) )
             {
-                DriveItem result = await client.Drive.Items[BackupPath].ItemWithPath( Path.GetFileName( fileName ) )
-                    .Content.Request().PutAsync<DriveItem>( fileStream );
+                DriveItem result = await client.Drives[drive.Id].Items[BackupPath]
+                    .ItemWithPath( Path.GetFileName( fileName ) ).Content.PutAsync( fileStream );
 
                 return result != null;
             }
@@ -66,7 +71,7 @@ namespace ClassicAssist.Data.Backup
 
             VirtualFolderBrowseWindow window = new VirtualFolderBrowseWindow { DataContext = odppvm };
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( odppvm.DialogResult != DialogResult.OK )
             {
@@ -118,12 +123,13 @@ namespace ClassicAssist.Data.Backup
         {
             GraphServiceClient graphClient = await OneDriveClient.GetGraphClient();
 
-            IDriveItemChildrenCollectionRequestBuilder parentDriveItem = parent == null
-                ? graphClient.Drive.Root.Children
-                : graphClient.Drive.Items[parent.Id].Children;
+            Drive drive = await graphClient.Me.Drive.GetAsync();
 
-            DriveItem result = await parentDriveItem.Request()
-                .AddAsync( new DriveItem { Name = folder, Folder = new Folder() } );
+            DriveItem newFolder = new DriveItem { Name = folder, Folder = new Folder() };
+
+            DriveItem result = parent == null
+                ? await graphClient.Drives[drive.Id].Items["root"].Children.PostAsync( newFolder )
+                : await graphClient.Drives[drive.Id].Items[parent.Id].Children.PostAsync( newFolder );
 
             return result != null
                 ? new VirtualFolder { Id = result.Id, Name = result.Name, ContainsChildren = false }
@@ -134,18 +140,25 @@ namespace ClassicAssist.Data.Backup
         {
             GraphServiceClient client = await OneDriveClient.GetGraphClient();
 
-            IDriveItemChildrenCollectionPage files;
+            Drive drive = await client.Me.Drive.GetAsync();
+
+            DriveItemCollectionResponse files;
 
             if ( string.IsNullOrEmpty( id ) )
             {
-                files = await client.Drive.Root.Children.Request().GetAsync();
+                files = await client.Drives[drive.Id].Items["root"].Children.GetAsync();
             }
             else
             {
-                files = await client.Drive.Items[id].Children.Request().GetAsync();
+                files = await client.Drives[drive.Id].Items[id].Children.GetAsync();
             }
 
-            return files.Where( driveItem => driveItem.Folder != null ).Select( driveItem => new VirtualFolder
+            if ( files?.Value == null )
+            {
+                return Enumerable.Empty<VirtualFolder>();
+            }
+
+            return files.Value.Where( driveItem => driveItem.Folder != null ).Select( driveItem => new VirtualFolder
             {
                 Id = driveItem.Id, Name = driveItem.Name, ContainsChildren = driveItem.Folder?.ChildCount > 0
             } );

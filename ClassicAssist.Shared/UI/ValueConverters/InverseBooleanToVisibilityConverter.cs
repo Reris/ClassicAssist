@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2022 Reetus
 // 
@@ -14,8 +14,13 @@
 
 using System;
 using System.Globalization;
-using System.Windows;
-using System.Windows.Data;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 
 namespace ClassicAssist.Shared.UI.ValueConverters
 {
@@ -28,7 +33,7 @@ namespace ClassicAssist.Shared.UI.ValueConverters
                 return null;
             }
 
-            return enabled ? Visibility.Collapsed : Visibility.Visible;
+            return enabled ? false : true;
         }
 
         public object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )

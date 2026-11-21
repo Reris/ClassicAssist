@@ -1,14 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data.Hotkeys.Commands;
 using ClassicAssist.Data.Macros.Commands;
 using ClassicAssist.Shared.UI;
 using System.Collections.ObjectModel;
 using static ClassicAssist.Misc.SDLKeys;
+using ClassicAssist.Misc;
 
 namespace ClassicAssist.Data.Hotkeys
 {
@@ -182,9 +183,7 @@ namespace ClassicAssist.Data.Hotkeys
                 {
                     try
                     {
-                        ModKey modifier =
-                            KeymodFromKeyList(
-                                Engine.Dispatcher.Invoke( () => _modifierKeys.Where( Keyboard.IsKeyDown ) ) );
+                        ModKey modifier = KeymodFromKeyList( _modifierKeys.Where( KeyboardState.IsKeyDown ) );
 
                         IEnumerable<HotkeyEntry> hotkeyEntries = hke.Children.Where( t =>
                             t.Hotkey.Modifier == modifier && t.Hotkey.Key == Key.None && t.Hotkey.Mouse == mouse );

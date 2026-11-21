@@ -1,6 +1,10 @@
-﻿using System.Diagnostics;
-using System.Windows;
-using System.Windows.Navigation;
+using System.Diagnostics;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+
 
 namespace ClassicAssist.Updater
 {
@@ -14,9 +18,12 @@ namespace ClassicAssist.Updater
             InitializeComponent();
         }
 
-        private void Hyperlink_OnRequestNavigate( object sender, RequestNavigateEventArgs e )
+        private void Hyperlink_OnRequestNavigate( object sender, RoutedEventArgs e )
         {
-            Process.Start( e.Uri.ToString() );
+            if ( sender is Button button && button.Tag is string url )
+            {
+                Process.Start( new ProcessStartInfo( url ) { UseShellExecute = true } );
+            }
         }
     }
 }

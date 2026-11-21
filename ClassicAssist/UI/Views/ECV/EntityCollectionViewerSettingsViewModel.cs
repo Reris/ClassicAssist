@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) $CURRENT_YEAR$ Reetus
 // 
@@ -12,9 +12,10 @@
 
 #endregion
 
-using System.Windows.Input;
+using Avalonia.Input;
 using ClassicAssist.Data.Misc;
 using ClassicAssist.Shared.UI;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views.ECV
 {

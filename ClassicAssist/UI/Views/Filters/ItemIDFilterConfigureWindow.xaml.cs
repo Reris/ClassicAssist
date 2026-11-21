@@ -1,4 +1,4 @@
-﻿// Copyright (C) $CURRENT_YEAR$ Reetus
+// Copyright (C) $CURRENT_YEAR$ Reetus
 //  
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,7 +8,11 @@
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY
 
-using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 
 namespace ClassicAssist.UI.Views.Filters
 {

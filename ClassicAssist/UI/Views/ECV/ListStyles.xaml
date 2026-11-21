@@ -1,90 +1,82 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels"
-                    xmlns:misc="clr-namespace:ClassicAssist.Misc"
-                    xmlns:controls="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel">
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="ContextMenu.xaml" />
+﻿<Styles xmlns="https://github.com/avaloniaui" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:controls="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel" xmlns:misc="clr-namespace:ClassicAssist.Misc" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels">
+    <Styles.Resources>
         <ResourceDictionary>
             <misc:BindingProxy x:Key="Proxy" Data="{Binding}" />
             <ItemsPanelTemplate x:Key="ItemsPanelTemplate">
-                <controls:VirtualizingWrapPanel Orientation="Horizontal" AllowDifferentSizedItems="True" SpacingMode="None"/>
-            </ItemsPanelTemplate>
+        <VirtualizingStackPanel Orientation="Horizontal" />
+    </ItemsPanelTemplate>
             <DataTemplate x:Key="DataTemplate">
-                <DockPanel x:Name="DockPanel" Background="Transparent">
-                    <DockPanel.InputBindings>
-                        <MouseBinding Gesture="LeftDoubleClick"
-                                      Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ItemDoubleClickCommand)}"
-                                      CommandParameter="{Binding SelectedItem, ElementName=listView}" />
-                    </DockPanel.InputBindings>
-                    <StackPanel ContextMenu="{StaticResource ContextMenu}">
-                        <Grid DockPanel.Dock="Top" HorizontalAlignment="Center">
-                            <Image Source="{Binding Bitmap}" Height="32"
-                                   Stretch="Uniform" HorizontalAlignment="Center" />
-                            <Image x:Name="LockIcon" Width="12" Height="12"
-                                   HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                                   Source="{x:Static viewModels:EntityCollectionViewerViewModel.PadlockIcon}"
-                                   Visibility="Collapsed" />
-                        </Grid>
-                        <Border x:Name="Border" BorderThickness="1">
-                            <TextBlock x:Name="TextBlock" Text="{Binding Name}"
-                                       TextAlignment="Center"
-                                       Foreground="{DynamicResource ThemeForegroundBrush}"
-                                       DockPanel.Dock="Bottom" Padding="1" TextWrapping="WrapWithOverflow"
-                                       ToolTip="{Binding FullName}" />
-                        </Border>
-                    </StackPanel>
-                </DockPanel>
-                <DataTemplate.Triggers>
-                    <DataTrigger Binding="{Binding IsLocked}" Value="True">
-                        <Setter TargetName="LockIcon" Property="Visibility" Value="Visible" />
-                    </DataTrigger>
-                    <DataTrigger
-                        Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"
-                        Value="True">
-                        <Setter TargetName="TextBlock" Property="Background"
-                                Value="{DynamicResource SelectionColor1Brush}" />
-                        <Setter TargetName="Border" Property="BorderBrush"
-                                Value="{DynamicResource SelectionColor2Brush}" />
-                        <Setter TargetName="TextBlock" Property="Foreground"
-                                Value="{DynamicResource ThemeForegroundBrush}" />
-                    </DataTrigger>
-                    <DataTrigger
-                        Binding="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ShowProperties)}"
-                        Value="False">
-                        <Setter Property="Width" Value="60" />
-                        <Setter TargetName="TextBlock" Property="FontSize" Value="10" />
-                        <Setter TargetName="TextBlock" Property="Text"
-                                Value="{Binding Name}" />
-                    </DataTrigger>
-                    <DataTrigger
-                        Binding="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ShowProperties)}"
-                        Value="True">
-                        <Setter Property="Width" Value="120" />
-                        <Setter TargetName="TextBlock" Property="FontSize" Value="10" />
-                        <Setter TargetName="TextBlock" Property="Text"
-                                Value="{Binding FullName}" />
-                    </DataTrigger>
-                </DataTemplate.Triggers>
-            </DataTemplate>
-            <Style x:Key="FileItemStyle" TargetType="{x:Type ListViewItem}">
-                <Setter Property="Margin" Value="5" />
-                <Setter Property="Padding" Value="0" />
-                <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type ListViewItem}">
-                            <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
-                                <ContentPresenter />
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style TargetType="ListView" x:Key="EntityListViewStyle">
-                <Setter Property="ItemsPanel" Value="{StaticResource ItemsPanelTemplate}" />
-                <Setter Property="ItemTemplate" Value="{StaticResource DataTemplate}" />
-            </Style>
+        <DockPanel x:Name="DockPanel" Background="Transparent" ca:TriggerCondition.Bind="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ShowProperties)}" ca:TriggerCondition.Value="True" ca:TriggerCondition.Key="dt4">
+            <Interaction.Behaviors>
+                <behaviours:DoubleClickBehaviour Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ItemDoubleClickCommand)}" CommandParameter="{Binding $parent[ListBox].SelectedItem}" />
+            </Interaction.Behaviors>
+            <StackPanel ContextMenu="{DynamicResource ContextMenu}">
+                <Grid DockPanel.Dock="Top" HorizontalAlignment="Center">
+                    <Image Source="{Binding Bitmap}" Height="32" Stretch="Uniform" HorizontalAlignment="Center" />
+                    <Image x:Name="LockIcon" Width="12" Height="12" HorizontalAlignment="Right" VerticalAlignment="Bottom" Source="{x:Static viewModels:EntityCollectionViewerViewModel.PadlockIcon}" IsVisible="False" />
+                </Grid>
+                <Border x:Name="Border" BorderThickness="1">
+                    <TextBlock x:Name="TextBlock" Text="{Binding Name}" TextAlignment="Center" Foreground="{DynamicResource ThemeForegroundBrush}" DockPanel.Dock="Bottom" Padding="1" TextWrapping="WrapWithOverflow" ToolTip.Tip="{Binding FullName}" />
+                </Border>
+            </StackPanel>
+        </DockPanel>
+    </DataTemplate>
         </ResourceDictionary>
-    </ResourceDictionary.MergedDictionaries>
-</ResourceDictionary>
+    </Styles.Resources>
+        <StyleInclude Source="avares://ClassicAssist/UI/Views/ECV/ContextMenu.xaml" />
+    
+    
+    
+    <Style Selector="ListBoxItem.FileItemStyle">
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <ContentPresenter />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style Selector="ListBox.EntityListViewStyle">
+        <Setter Property="ItemsPanel" Value="{StaticResource ItemsPanelTemplate}" />
+        <Setter Property="ItemTemplate" Value="{StaticResource DataTemplate}" />
+    </Style>
+    <Style Selector="DockPanel.ca-dt1">
+        <Style Selector="DockPanel.ca-dt1 Image#LockIcon">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+    </Style>
+    <Style Selector="DockPanel.ca-dt2">
+        <Style Selector="DockPanel.ca-dt2 TextBlock#TextBlock">
+            <Setter Property="Background" Value="{DynamicResource SelectionColor1Brush}" />
+        </Style>
+        <Style Selector="DockPanel.ca-dt2 Border#Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource SelectionColor2Brush}" />
+        </Style>
+        <Style Selector="DockPanel.ca-dt2 TextBlock#TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
+        </Style>
+    </Style>
+    <Style Selector="DockPanel.ca-dt3">
+        <Setter Property="Width" Value="60" />
+        <Style Selector="DockPanel.ca-dt3 TextBlock#TextBlock">
+            <Setter Property="FontSize" Value="10" />
+        </Style>
+        <Style Selector="DockPanel.ca-dt3 TextBlock#TextBlock">
+            <Setter Property="Text" Value="{Binding Name}" />
+        </Style>
+    </Style>
+    <Style Selector="DockPanel.ca-dt4">
+        <Setter Property="Width" Value="120" />
+        <Style Selector="DockPanel.ca-dt4 TextBlock#TextBlock">
+            <Setter Property="FontSize" Value="10" />
+        </Style>
+        <Style Selector="DockPanel.ca-dt4 TextBlock#TextBlock">
+            <Setter Property="Text" Value="{Binding FullName}" />
+        </Style>
+    </Style>
+</Styles>

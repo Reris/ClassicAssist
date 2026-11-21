@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2024 Reetus
 // 
@@ -12,29 +12,29 @@
 
 #endregion
 
-using System.Windows;
-using System.Windows.Threading;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Threading;
 using Assistant;
-using Microsoft.Xaml.Behaviors;
+using Avalonia.Xaml.Interactivity;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
     public class SmartOnTopBehaviour : Behavior<Window>
     {
-        private Dispatcher _dispatcher;
-
         protected override void OnAttached()
         {
             base.OnAttached();
-
-            _dispatcher = AssociatedObject.Dispatcher;
 
             Engine.FocusChangedEvent += OnFocusChangedEvent;
         }
 
         private void OnFocusChangedEvent( bool focus )
         {
-            _dispatcher.InvokeAsync( () => { AssociatedObject.Topmost = focus; }, DispatcherPriority.Background );
+            Dispatcher.UIThread.Post( () => { AssociatedObject.Topmost = focus; }, DispatcherPriority.Background );
         }
 
         protected override void OnDetaching()

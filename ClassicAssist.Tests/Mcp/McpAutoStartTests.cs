@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Windows.Threading;
+using Avalonia.Threading;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Mcp;

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -19,13 +19,17 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
+
 using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Misc;
 using ClassicAssist.UO.Data;
+using ClassicAssist.Shared.UI.Compat;
+using Avalonia.Media.Imaging;
 
 namespace ClassicAssist.UI.Views.Filters.ItemIDFilter
 {
@@ -34,13 +38,13 @@ namespace ClassicAssist.UI.Views.Filters.ItemIDFilter
     /// </summary>
     public partial class ItemIDTooltipControl : UserControl, INotifyPropertyChanged
     {
-        public static readonly DependencyProperty ItemIDProperty = DependencyProperty.Register( nameof( ItemID ), typeof( int ), typeof( ItemIDTooltipControl ),
-            new FrameworkPropertyMetadata( 0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnItemIDChanged ) );
+        public static readonly Avalonia.StyledProperty<int> ItemIDProperty =
+        AvaloniaCompat.RegisterCompat<ItemIDTooltipControl, int>(nameof( ItemID ), 0, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: OnItemIDChanged);
 
-        public static readonly DependencyProperty HueProperty = DependencyProperty.Register( nameof( Hue ), typeof( int ), typeof( ItemIDTooltipControl ),
-            new FrameworkPropertyMetadata( 0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnHueChanged ) );
+        public static readonly Avalonia.StyledProperty<int> HueProperty =
+        AvaloniaCompat.RegisterCompat<ItemIDTooltipControl, int>(nameof( Hue ), 0, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: OnHueChanged);
 
-        private ImageSource _image;
+        private IImage _image;
         private string _itemName;
 
         public ItemIDTooltipControl()
@@ -54,7 +58,7 @@ namespace ClassicAssist.UI.Views.Filters.ItemIDFilter
             set => SetValue( HueProperty, value );
         }
 
-        public ImageSource Image
+        public IImage Image
         {
             get => _image;
             set => SetField( ref _image, value );
@@ -74,7 +78,7 @@ namespace ClassicAssist.UI.Views.Filters.ItemIDFilter
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private static void OnHueChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void OnHueChanged( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
             if ( !( d is ItemIDTooltipControl control ) )
             {
@@ -87,7 +91,7 @@ namespace ClassicAssist.UI.Views.Filters.ItemIDFilter
             }
         }
 
-        private static void OnItemIDChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void OnItemIDChanged( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
             if ( !( d is ItemIDTooltipControl control ) )
             {
@@ -103,7 +107,7 @@ namespace ClassicAssist.UI.Views.Filters.ItemIDFilter
         private void UpdateImage()
         {
             Bitmap bitmap = Art.GetStatic( ItemID, Hue > 0 ? Hue : 0 );
-            Image = bitmap?.ToImageSource();
+            Image = bitmap;
             ItemName = TileData.GetStaticTile( ItemID ).Name;
         }
 

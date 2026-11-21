@@ -1,5 +1,5 @@
-﻿using System.Threading;
-using System.Windows.Threading;
+using System.Threading;
+using Avalonia.Threading;
 using Assistant;
 using ClassicAssist.Shared.Resources;
 using ClassicAssist.UI.ViewModels;

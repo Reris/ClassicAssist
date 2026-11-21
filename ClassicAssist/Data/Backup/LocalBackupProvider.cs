@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -20,10 +20,12 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+
 using Assistant;
 using ClassicAssist.Shared.Resources;
 using Newtonsoft.Json.Linq;
+using ClassicAssist.Shared.UI.Compat;
+using ClassicAssist.Shared.UI;
 
 namespace ClassicAssist.Data.Backup
 {
@@ -78,14 +80,10 @@ namespace ClassicAssist.Data.Backup
                 fullPath = Path.Combine( Engine.StartupPath, currentPath );
             }
 
-            FolderBrowserDialog folderBrowseDialog = new FolderBrowserDialog
-            {
-                Description = Strings.Choose_backup_folder, SelectedPath = fullPath, ShowNewFolderButton = true
-            };
+            string selectedPath =
+                await DialogHelper.ShowFolderBrowserDialogAsync( Strings.Choose_backup_folder, fullPath );
 
-            DialogResult result = folderBrowseDialog.ShowDialog();
-
-            return await Task.FromResult( result == DialogResult.OK ? folderBrowseDialog.SelectedPath : currentPath );
+            return await Task.FromResult( string.IsNullOrEmpty( selectedPath ) ? currentPath : selectedPath );
         }
 
         public override void Deserialize( JObject json, Options options, bool _ = false )

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2023 Reetus
 // 
@@ -33,7 +33,7 @@ namespace ClassicAssist.Data.Filters
         {
             ItemIDFilterConfigureWindowViewModel vm = new ItemIDFilterConfigureWindowViewModel( Items );
             ItemIDFilterConfigureWindow window = new ItemIDFilterConfigureWindow { DataContext = vm };
-            window.ShowDialog();
+            window.ShowDialogCompat();
         }
 
         public void Deserialize( JToken token )

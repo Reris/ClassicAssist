@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-ClassicAssist is a plugin for [ClassicUO](https://github.com/andreakarasho/ClassicUO) (Ultima Online client) providing a UOSteam-like interface with IronPython 2.7 macro scripting, hotkeys, autoloot, and various automation agents. WPF-only (Windows).
+ClassicAssist is a plugin for [ClassicUO](https://github.com/andreakarasho/ClassicUO) (Ultima Online client) providing a UOSteam-like interface with IronPython 3.4 macro scripting, hotkeys, autoloot, and various automation agents. UI is Avalonia (cross-platform) on .NET 11.
 
 ## Build & Test
 
@@ -16,34 +16,34 @@ dotnet test --no-build --verbosity normal       # Run all tests (MSTest)
 dotnet test --no-build --filter "FullyQualifiedName~ClassName.MethodName"  # Single test
 ```
 
-Build output goes to `.\Output\`. Configurations: Debug, Develop, Release. Platform: x64.
+Build output goes to `.\Output\`. Configurations: Debug, Develop, Release. Platform: x64. All projects target `net11.0`.
 
 ## Architecture
 
-**Plugin loading:** ClassicUO loads `ClassicAssist.Plugin.dll` (net48 + net9.0) → Plugin uses StreamJsonRpc IPC over named pipes → `ClassicAssist.UI.exe` (standalone WPF app) hosts the main `ClassicAssist.dll` library.
+**Plugin loading:** ClassicUO loads `ClassicAssist.dll` in-process (via `cuoapi.dll`). `Engine.Install( PluginHeader* )` (ClassicAssist/Engine.cs) initializes the engine, then boots Avalonia (`AppBuilder.SetupWithoutStarting()`) on a dedicated background UI thread and shows `SplashWindow` + `MainWindow`. There is no separate UI process or IPC layer.
 
 ### Key Projects
 
-| Project | Framework | Role |
-|---------|-----------|------|
-| **ClassicAssist** | net48 | Core library — macros, hotkeys, networking, UI, game logic |
-| **ClassicAssist.Plugin** | net48 + net9.0 | ClassicUO plugin entry point |
-| **ClassicAssist.Plugin.Shared** | netstandard2.0 | Cross-runtime interfaces (IHostMethods, IPluginMethods, NativeMethods) |
-| **ClassicAssist.Shared** | net48 | Localization (Strings.resx), settings, utilities |
-| **ClassicAssist.Controls** | net48 | Reusable WPF controls |
-| **ClassicAssist.UI** | net48 | Standalone WPF host app |
-| **ClassicAssist.Launcher** | net48 | Launches ClassicUO with plugin configured |
-| **ClassicAssist.Tests** | net48 | MSTest unit tests |
+| Project | Role |
+|---------|------|
+| **ClassicAssist** | Core library — macros, hotkeys, networking, Avalonia UI, game logic |
+| **ClassicAssist.Shared** | Localization (Strings.resx), settings, utilities, UI compat shims |
+| **ClassicAssist.Controls** | Reusable Avalonia controls |
+| **ClassicAssist.Launcher** | Launches ClassicUO with the plugin configured |
+| **ClassicAssist.Updater** | Self-update UI (Avalonia) |
+| **ClassicAssist.Tests** | MSTest unit tests |
+| **ClassicAssist.UITest** | Avalonia headless UI test harness |
+| **Tools/ExportCommands, Tools/SyncPOEditor** | Command-line utilities |
 
 ### Core Singletons
 
-- `Engine` (namespace `Assistant`, ClassicAssist/Engine.cs) — Central static partial class: player state, `Dispatcher` (WPF UI thread), packet send/receive, options, client version. Most game state flows through here.
+- `Engine` (namespace `Assistant`, ClassicAssist/Engine.cs) — Central static partial class: player state, packet send/receive, options, client version. Most game state flows through here. UI work goes through `Avalonia.Threading.Dispatcher.UIThread`.
 - `Options` / `Options.CurrentOptions` — Global settings, profile-aware.
 - Managers: `MacroManager`, `HotkeyManager`, `AutolootManager`, `ActionPacketQueue` — all use `GetInstance()` singleton pattern.
 
 ### Macro System
 
-Macros use IronPython 2.7. Command functions are static methods in `Data/Macros/Commands/*Commands.cs`, decorated with `[CommandsDisplay]` for UI categorization and wiki generation. Each file is a category (e.g., `TargetCommands.cs`, `MovementCommands.cs`). Translations for command descriptions/examples are loaded from `MacroCommandHelp.resx` using the convention `{METHOD_NAME_UPPER}_COMMAND_DESCRIPTION`, `_COMMAND_INSERTTEXT`, `_COMMAND_EXAMPLE`.
+Macros use IronPython 3.4. Command functions are static methods in `Data/Macros/Commands/*Commands.cs`, decorated with `[CommandsDisplay]` for UI categorization and wiki generation. Each file is a category (e.g., `TargetCommands.cs`, `MovementCommands.cs`). Translations for command descriptions/examples are loaded from `MacroCommandHelp.resx` using the convention `{METHOD_NAME_UPPER}_COMMAND_DESCRIPTION`, `_COMMAND_INSERTTEXT`, `_COMMAND_EXAMPLE`.
 
 ### Packet Handling
 
@@ -56,12 +56,23 @@ Macros use IronPython 2.7. Command functions are static methods in `Data/Macros/
 
 Variable-length packets store length big-endian at bytes [1],[2]: high byte = `(byte)(length >> 8)`, low byte = `(byte)length`.
 
-### UI Pattern (MVVM)
+### UI Pattern (MVVM, Avalonia)
 
-- ViewModels in `UI/ViewModels/`, Views in `UI/Views/`
-- `BaseViewModel` (UI/ViewModels/BaseViewModel.cs) captures `Dispatcher.CurrentDispatcher` at construction time into `_dispatcher`. This means ViewModels **must be created on the UI thread** — if created from a background thread (e.g., a macro), wrap in `Engine.Dispatcher.Invoke()`.
-- `_dispatcher.Invoke()` is used throughout ViewModels for ObservableCollection mutations from background threads.
+- ViewModels in `UI/ViewModels/`, Views in `UI/Views/`. XAML files are Avalonia XAML (included as `AvaloniaXaml` items).
+- **Code-behind must declare its base class explicitly** (`public partial class FooWindow : Window`) — unlike WPF, Avalonia's generated partial does not supply it.
+- `BaseViewModel` (UI/ViewModels/BaseViewModel.cs) uses `Avalonia.Threading.Dispatcher.UIThread`. ViewModels **must be created on the UI thread** — if created from a background thread (e.g., a macro), wrap in `Dispatcher.UIThread.Invoke()`.
+- `Dispatcher.UIThread.Invoke()` is used throughout ViewModels for ObservableCollection mutations from background threads.
+- `BaseViewModel.Instances` tracks live instances via weak references (thread-safe, latest instance per type). `Options.Save`/`Options.Load` iterate it to serialize every `ISettingProvider`.
 - Settings persistence uses `ISettingProvider` with `Serialize`/`Deserialize` methods using `Newtonsoft.Json.Linq.JObject`.
+- Dialogs: `MessageBox.Avalonia`; async `ShowDialog` tasks are obtained on the UI thread via `Dispatcher.UIThread.Invoke(() => window.ShowDialog(owner))` and awaited from the caller thread.
+
+### Key Packages
+
+Avalonia 11.3.x (Desktop, Themes.Fluent, Diagnostics in Debug/Develop, Xaml.Behaviors, Controls.DataGrid, Controls.ColorPicker), Avalonia.AvaloniaEdit 11.4.x (macro editor), MessageBox.Avalonia, IronPython 3.4, Newtonsoft.Json, Sentry, Exceptionless (Launcher/Updater), MSTest 3.11 + Microsoft.NET.Test.Sdk 18, Avalonia.Headless (tests).
+
+### Tests
+
+All tests run in a single process — there is no per-test `AppDomain` isolation (removed in modern .NET). Static state (`Engine.Journal`, managers, event subscriptions) is shared across tests: reset it in `[TestInitialize]`/`[TestCleanup]` and always unsubscribe `Engine.InternalPacketSentEvent`/`InternalPacketReceivedEvent` handlers a test adds, or background-thread assertion failures can crash the test host.
 
 ### Game Objects
 

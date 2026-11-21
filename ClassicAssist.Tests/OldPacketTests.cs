@@ -38,10 +38,6 @@ namespace ClassicAssist.Tests
         [TestMethod]
         public void WillSendProperDropRequest()
         {
-            AppDomain appDomain = AppDomain.CreateDomain( "WillSendProperDropRequest", AppDomain.CurrentDomain.Evidence,
-                AppDomain.CurrentDomain.SetupInformation );
-
-            appDomain.DoCallBack( () =>
             {
                 Engine.ClientVersion = new Version( 5, 0, 9, 1 );
                 AutoResetEvent are = new AutoResetEvent( false );
@@ -72,17 +68,14 @@ namespace ClassicAssist.Tests
 
                 Engine.SendPacketToServer( new DropItem( 0x11223344, 0x55667788, 1, 2, 3 ) );
                 are.WaitOne( 5000 );
+                Engine.InternalPacketSentEvent -= OnInternalPacketSentEvent;
                 Engine.ClientVersion = new Version( 7, 0, 45, 1 );
-            } );
+                        }
         }
 
         [TestMethod]
         public void WillParseOldContainerContents()
         {
-            AppDomain appDomain = AppDomain.CreateDomain( "WillParseOldContainerContents",
-                AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation );
-
-            appDomain.DoCallBack( () =>
             {
                 Engine.ClientVersion = new Version( 5, 0, 9, 1 );
                 byte[] packet =
@@ -105,16 +98,12 @@ namespace ClassicAssist.Tests
                 Assert.AreEqual( 2, container.Container.GetItemCount() );
                 Engine.Items = null;
                 Engine.ClientVersion = new Version( 7, 0, 45, 1 );
-            } );
+                        }
         }
 
         [TestMethod]
         public void WillParseOldHealthbarColour()
         {
-            AppDomain appDomain = AppDomain.CreateDomain( "WillParseOldHealthbarColour",
-                AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation );
-
-            appDomain.DoCallBack( () =>
             {
                 Engine.ClientVersion = new Version( 5, 0, 9, 1 );
 
@@ -133,16 +122,12 @@ namespace ClassicAssist.Tests
                 handler?.OnReceive( new PacketReader( packet, packet.Length, false ) );
 
                 Assert.IsTrue( mobile.IsPoisoned );
-            } );
+                        }
         }
 
         [TestMethod]
         public void WillSetPoisonedFromOldMoving()
         {
-            AppDomain appDomain = AppDomain.CreateDomain( "WillSetPoisonedFromOldMoving",
-                AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation );
-
-            appDomain.DoCallBack( () =>
             {
                 Engine.ClientVersion = new Version( 5, 0, 9, 1 );
 
@@ -174,7 +159,7 @@ namespace ClassicAssist.Tests
 
                 Assert.IsNotNull( mobile );
                 Assert.IsTrue( mobile.IsPoisoned );
-            } );
+                        }
         }
 
         //[TestMethod]
@@ -287,10 +272,6 @@ namespace ClassicAssist.Tests
         [TestMethod]
         public void WontThrowErrorParseDropItem()
         {
-            AppDomain appDomain = AppDomain.CreateDomain( "WontThrowErrorParseDropItem",
-                AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation );
-
-            appDomain.DoCallBack( () =>
             {
                 Engine.ClientVersion = new Version( 5, 0, 9, 1 );
 
@@ -306,16 +287,12 @@ namespace ClassicAssist.Tests
                 {
                     Assert.Fail();
                 }
-            } );
+                        }
         }
 
         [TestMethod]
         public void WontThrowErrorParseGumpButtonClick()
         {
-            AppDomain appDomain = AppDomain.CreateDomain( "WontThrowErrorParseGumpButtonClick",
-                AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation );
-
-            appDomain.DoCallBack( () =>
             {
                 Engine.ClientVersion = new Version( 5, 0, 9, 1 );
 
@@ -335,7 +312,7 @@ namespace ClassicAssist.Tests
                     Assert.Fail();
                     throw;
                 }
-            } );
+                        }
         }
 
         [TestMethod]

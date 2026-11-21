@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -18,23 +18,23 @@
 #endregion
 
 using System;
-using System.Windows;
-using System.Windows.Controls;
-using Microsoft.Xaml.Behaviors;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Xaml.Interactivity;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.Shared.UI.Behaviours
 {
     public class GridSizeChangedBehaviour : Behavior<Grid>
     {
-        public static readonly DependencyProperty WidthProperty = DependencyProperty.Register( nameof( Width ),
-            typeof( double ), typeof( GridSizeChangedBehaviour ),
-            new FrameworkPropertyMetadata( 0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-                WidthChangedCallback ) );
+        public static readonly Avalonia.StyledProperty<double> WidthProperty =
+        AvaloniaCompat.RegisterCompat<GridSizeChangedBehaviour, double>(nameof( Width ), 0.0, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: WidthChangedCallback);
 
-        public static readonly DependencyProperty HeightProperty = DependencyProperty.Register( nameof( Height ),
-            typeof( double ), typeof( GridSizeChangedBehaviour ),
-            new FrameworkPropertyMetadata( 0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-                HeightChangedCallback ) );
+        public static readonly Avalonia.StyledProperty<double> HeightProperty =
+        AvaloniaCompat.RegisterCompat<GridSizeChangedBehaviour, double>(nameof( Height ), 0.0, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: HeightChangedCallback);
 
         public double Height
         {
@@ -48,11 +48,11 @@ namespace ClassicAssist.Shared.UI.Behaviours
             set => SetValue( WidthProperty, value );
         }
 
-        private static void WidthChangedCallback( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void WidthChangedCallback( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
         }
 
-        private static void HeightChangedCallback( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void HeightChangedCallback( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
         }
 

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2020 Reetus
 // 
@@ -23,9 +23,13 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Data;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using Assistant;
 using ClassicAssist.Data.Macros.Commands;
 using ClassicAssist.Shared.Resources;
@@ -34,6 +38,7 @@ using ClassicAssist.UO;
 using ClassicAssist.UO.Data;
 using ClassicAssist.UO.Objects;
 using Microsoft.Scripting.Utils;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels.Debug
 {
@@ -84,7 +89,7 @@ namespace ClassicAssist.UI.ViewModels.Debug
                 return;
             }
 
-            Clipboard.SetText( $"{SelectedItem.Cliloc} // {SelectedItem.Text}" );
+            ClipboardHelper.SetText( $"{SelectedItem.Cliloc} // {SelectedItem.Text}" );
         }
 
         private async Task Target( object arg )

@@ -1,7 +1,8 @@
-﻿using System.Media;
+using System.Media;
 using System.Timers;
-using System.Windows.Controls;
-using System.Windows.Input;
+using Avalonia.Controls;
+using Avalonia.Input;
+using ClassicAssist.Misc;
 
 namespace ClassicAssist.UI.Views
 {
@@ -17,7 +18,7 @@ namespace ClassicAssist.UI.Views
             InitializeComponent();
         }
 
-        private void TextBlock_MouseEnter( object sender, MouseEventArgs e )
+        private void TextBlock_MouseEnter( object sender, PointerEventArgs e )
         {
             if ( !( sender is TextBlock textBlock ) )
             {
@@ -29,21 +30,18 @@ namespace ClassicAssist.UI.Views
             {
                 _timer.Stop();
 
-                if ( !textBlock.IsMouseOver )
+                if ( !textBlock.IsPointerOver )
                 {
                     return;
                 }
 
-                using ( SoundPlayer sound = new SoundPlayer( Properties.Resources.kiss ) )
-                {
-                    sound.Play();
-                }
+                SoundHelper.Play( Properties.Resources.kiss );
             };
 
             _timer.Start();
         }
 
-        private void TextBlock_MouseLeave( object sender, MouseEventArgs e )
+        private void TextBlock_MouseLeave( object sender, PointerEventArgs e )
         {
             _timer?.Stop();
         }

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -24,31 +24,38 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Threading;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Markup.Xaml.Templates;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Threading;
 using ClassicAssist.Shared.UI;
+using ClassicAssist.Shared.UI.Compat;
+using System.Windows.Input;
 
 namespace ClassicAssist.Controls
 {
     /// <summary>
     ///     Interaction logic for MultiValueSelector.xaml
     /// </summary>
-    public partial class MultiValueSelector : INotifyPropertyChanged
+    public partial class MultiValueSelector : UserControl, INotifyPropertyChanged
     {
-        public static readonly DependencyProperty ValuesProperty = DependencyProperty.Register( nameof( Values ), typeof( ObservableCollection<int> ), typeof( MultiValueSelector ),
-            new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnValuesChanged ) );
+        public static readonly Avalonia.StyledProperty<ObservableCollection<int>> ValuesProperty =
+        AvaloniaCompat.RegisterCompat<MultiValueSelector, ObservableCollection<int>>(nameof( Values ), null, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: OnValuesChanged);
 
-        public static readonly DependencyProperty PopupWidthProperty = DependencyProperty.Register( nameof( PopupWidth ), typeof( int ), typeof( MultiValueSelector ),
-            new FrameworkPropertyMetadata( 200, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<int> PopupWidthProperty =
+        AvaloniaCompat.RegisterCompat<MultiValueSelector, int>(nameof( PopupWidth ), 200, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
-        public static readonly DependencyProperty ButtonsProperty = DependencyProperty.Register( nameof( Buttons ), typeof( object ), typeof( MultiValueSelector ) );
+        public static readonly Avalonia.StyledProperty<object> ButtonsProperty =
+        AvaloniaCompat.RegisterCompat<MultiValueSelector, object>(nameof( Buttons ), default);
 
-        public static readonly DependencyProperty HexDisplayProperty = DependencyProperty.Register( nameof( HexDisplay ), typeof( bool ), typeof( MultiValueSelector ) );
+        public static readonly Avalonia.StyledProperty<bool> HexDisplayProperty =
+        AvaloniaCompat.RegisterCompat<MultiValueSelector, bool>(nameof( HexDisplay ), default);
 
-        public static readonly DependencyProperty ItemTemplateProperty =
-            DependencyProperty.Register( nameof( ItemTemplate ), typeof( DataTemplate ), typeof( MultiValueSelector ) );
+        public static readonly Avalonia.StyledProperty<DataTemplate> ItemTemplateProperty =
+        AvaloniaCompat.RegisterCompat<MultiValueSelector, DataTemplate>(nameof( ItemTemplate ), default);
 
         private RelayCommand _removeItemCommand;
 
@@ -100,14 +107,14 @@ namespace ClassicAssist.Controls
 
         public string ValuesDisplay => string.Join( ", ", Values?.Select( v => HexDisplay ? $"0x{v:x}" : $"{v}" ) ?? Array.Empty<string>() );
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public new event PropertyChangedEventHandler PropertyChanged;
 
         public void OnValuesCollectionChanged( object s, NotifyCollectionChangedEventArgs args )
         {
             OnPropertyChanged( nameof( ValuesDisplay ) );
         }
 
-        private static void OnValuesChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void OnValuesChanged( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
             if ( e.NewValue == null )
             {
@@ -173,11 +180,10 @@ namespace ClassicAssist.Controls
 
         private void Popup_Opened( object sender, EventArgs e )
         {
-            Dispatcher.BeginInvoke( new Action( () =>
+            Dispatcher.UIThread.Post( () =>
             {
                 TextBox.Focus();
-                Keyboard.Focus( TextBox );
-            } ), DispatcherPriority.Input );
+            }, DispatcherPriority.Input );
         }
 
         protected virtual void OnPropertyChanged( [CallerMemberName] string propertyName = null )

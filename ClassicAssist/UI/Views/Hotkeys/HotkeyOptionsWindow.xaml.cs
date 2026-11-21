@@ -1,4 +1,4 @@
-﻿// Copyright (C) $CURRENT_YEAR$ Reetus
+// Copyright (C) $CURRENT_YEAR$ Reetus
 //  
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,20 +13,23 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Data.Hotkeys;
 using ClassicAssist.Data.Hotkeys.Commands;
 using ClassicAssist.Shared.Resources;
 using ClassicAssist.Shared.UI;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views.Hotkeys
 {
     /// <summary>
     ///     Interaction logic for HotkeyOptionsWindow.xaml
     /// </summary>
-    public partial class HotkeyOptionsWindow
+    public partial class HotkeyOptionsWindow : Window
     {
         private ICommand _okCommand;
 
@@ -36,7 +39,7 @@ namespace ClassicAssist.UI.Views.Hotkeys
 
             HotkeyCommand = hotkeyCommand;
 
-            Grid content = (Grid) FindName( "ContentGrid" );
+            Grid content = ContentGrid;
 
             if ( content == null )
             {

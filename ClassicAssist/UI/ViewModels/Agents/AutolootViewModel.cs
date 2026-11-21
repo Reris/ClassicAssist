@@ -24,8 +24,11 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Controls.DraggableTreeView;
 using ClassicAssist.Data;
@@ -48,6 +51,7 @@ using Microsoft.Scripting.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UOC = ClassicAssist.UO.Commands;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels.Agents
 {
@@ -472,14 +476,14 @@ namespace ClassicAssist.UI.ViewModels.Agents
             Draggables.Remove( group );
         }
 
-        private void ClipboardPaste( object obj )
+        private async void ClipboardPaste( object obj )
         {
             if ( SelectedItem == null )
             {
                 return;
             }
 
-            string text = Clipboard.GetText();
+            string text = await ClipboardHelper.GetTextAsync();
 
             try
             {
@@ -515,7 +519,7 @@ namespace ClassicAssist.UI.ViewModels.Agents
             {
                 string text = JsonConvert.SerializeObject( entries );
 
-                Clipboard.SetText( text );
+                ClipboardHelper.SetText( text );
             }
             catch ( Exception )
             {
@@ -692,10 +696,10 @@ namespace ClassicAssist.UI.ViewModels.Agents
 
         private void DefineCustomProperties( object obj )
         {
-            Engine.Dispatcher.Invoke( () =>
+            Engine.Dispatcher.InvokeAsync( async () =>
             {
                 CustomPropertiesWindow window = new CustomPropertiesWindow();
-                window.ShowDialog();
+                await window.ShowDialogAsync();
 
                 Constraints.Clear();
                 _manager.LoadProperties( Constraints );
@@ -787,11 +791,11 @@ namespace ClassicAssist.UI.ViewModels.Agents
             return newArguments.Count == 0 ? item.Name.Trim() : Cliloc.GetLocalString( property.Cliloc, newArguments.ToArray() ).Trim();
         }
 
-        private void CSVImport( object obj )
+        private async void CSVImport( object obj )
         {
             CSVImportWindow importWindow = new CSVImportWindow { Topmost = Options.CurrentOptions.AlwaysOnTop };
 
-            importWindow.ShowDialog();
+            await importWindow.ShowDialogAsync();
 
             if ( !( importWindow.DataContext is CSVImportViewModel vm ) || !vm.Import )
             {
@@ -839,14 +843,16 @@ namespace ClassicAssist.UI.ViewModels.Agents
             await Task.CompletedTask;
         }
 
-        private static void SelectHue( object obj )
+        private static async void SelectHue( object obj )
         {
             if ( !( obj is AutolootEntry entry ) )
             {
                 return;
             }
 
-            if ( HuePickerWindow.GetHue( out int hue ) )
+            int hue = await HuePickerWindow.GetHueAsync();
+
+            if ( hue != -1 )
             {
                 entry.RehueHue = hue;
             }

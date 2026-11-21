@@ -1,26 +1,10 @@
-﻿<Window x:Class="ClassicAssist.UI.Views.BackupWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels"
-        xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared"
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared"
-        xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared"
-        mc:Ignorable="d" Background="{DynamicResource ThemeWindowBackgroundBrush}"
-        WindowStartupLocation="CenterScreen"
-        Title="{x:Static resources:Strings.Profile_Backup}" Height="500" Width="600">
+﻿<Window xmlns="https://github.com/avaloniaui" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.BackupWindow" mc:Ignorable="d" Background="{DynamicResource ThemeWindowBackgroundBrush}" WindowStartupLocation="CenterScreen" Title="{x:Static resources:Strings.Profile_Backup}" Height="500" Width="600" ExtendClientAreaToDecorationsHint="True" TransparencyLevelHint="AcrylicBlur" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <shared:SharedResourceDictionary Source="../../Resources/DarkTheme.xaml" />
-                <ResourceDictionary>
-                    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <ResourceDictionary />
     </Window.Resources>
+    <Window.Styles>
+        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
+    </Window.Styles>
     <Window.DataContext>
         <viewModels:BackupWindowViewModel />
     </Window.DataContext>
@@ -31,12 +15,11 @@
             <RowDefinition Height="5" />
         </Grid.RowDefinitions>
         <TextBlock Text="{x:Static resources:Strings.Profile_backup_in_progress___}" Margin="10" />
-        <ListBox ItemsSource="{Binding Messages}" Grid.Row="1" Margin="10,0,10,10">
-            <i:Interaction.Behaviors>
+        <ListBox Grid.Row="1" Margin="10,0,10,10" ItemsSource="{Binding Messages}">
+            <Interaction.Behaviors>
                 <behaviours:ItemsControlAutoScrollBehaviour />
-            </i:Interaction.Behaviors>
+            </Interaction.Behaviors>
         </ListBox>
-        <ProgressBar IsIndeterminate="True" Grid.Row="2"
-                     Visibility="{Binding IsWorking, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <ProgressBar IsIndeterminate="True" Grid.Row="2" IsVisible="{Binding IsWorking}" />
     </Grid>
 </Window>

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2023 Reetus
 // 
@@ -12,17 +12,21 @@
 
 #endregion
 
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.Controls.Headered
 {
     public class HorizontalHeaderedTextBox : HorizontalHeaderedContentControl
     {
-        public static readonly DependencyProperty TextProperty = DependencyProperty.Register( nameof( Text ),
-            typeof( string ), typeof( HorizontalHeaderedTextBox ),
-            new FrameworkPropertyMetadata( default( string ), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<string> TextProperty =
+        AvaloniaCompat.RegisterCompat<HorizontalHeaderedTextBox, string>(nameof( Text ), default( string ), defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
         public HorizontalHeaderedTextBox()
         {
@@ -31,7 +35,7 @@ namespace ClassicAssist.Controls.Headered
             {
                 Source = this, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
-            textBox.SetBinding( TextBox.TextProperty, binding );
+            textBox[!TextBox.TextProperty] = binding;
             Content = textBox;
         }
 

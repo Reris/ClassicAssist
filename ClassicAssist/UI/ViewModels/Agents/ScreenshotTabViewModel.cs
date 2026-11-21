@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2023 Reetus
 // 
@@ -21,12 +21,14 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+
+
+using Avalonia.Media.Imaging;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Data.Macros.Commands;
@@ -42,8 +44,11 @@ using ClassicAssist.UI.Views.OptionsTab;
 using ClassicAssist.UO.Objects;
 using Microsoft.Scripting.Utils;
 using Newtonsoft.Json.Linq;
+using SkiaSharp;
 using static ClassicAssist.Misc.NativeMethods;
-using FlowDirection = System.Windows.FlowDirection;
+using FlowDirection = Avalonia.Media.FlowDirection;
+using System.Windows.Input;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.ViewModels.Agents
 {
@@ -323,7 +328,7 @@ namespace ClassicAssist.UI.ViewModels.Agents
                     new ScreenshotMobileFilterEntry { ID = b.Graphic, Note = b.Name, Enabled = true } ).ToList();
         }
 
-        private void ConfigureFilter( object obj )
+        private async void ConfigureFilter( object obj )
         {
             ScreenshotMobileFilterViewModel vm = new ScreenshotMobileFilterViewModel();
 
@@ -331,7 +336,7 @@ namespace ClassicAssist.UI.ViewModels.Agents
 
             ScreenshotMobileFilterWindow window = new ScreenshotMobileFilterWindow { DataContext = vm };
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( vm.DialogResult == DialogResult.OK )
             {
@@ -405,7 +410,7 @@ namespace ClassicAssist.UI.ViewModels.Agents
             MainCommands.Snapshot();
         }
 
-        private void SetBackgroundColour( object obj )
+        private async void SetBackgroundColour( object obj )
         {
             if ( !( obj is Color colour ) )
             {
@@ -417,7 +422,7 @@ namespace ClassicAssist.UI.ViewModels.Agents
 
             MacrosGumpTextColorSelectorWindow window = new MacrosGumpTextColorSelectorWindow { DataContext = vm };
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( !vm.Result )
             {
@@ -427,7 +432,7 @@ namespace ClassicAssist.UI.ViewModels.Agents
             BackgroundColor = vm.SelectedColor;
         }
 
-        private void SetFontColour( object obj )
+        private async void SetFontColour( object obj )
         {
             if ( !( obj is Color colour ) )
             {
@@ -439,7 +444,7 @@ namespace ClassicAssist.UI.ViewModels.Agents
 
             MacrosGumpTextColorSelectorWindow window = new MacrosGumpTextColorSelectorWindow { DataContext = vm };
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( !vm.Result )
             {
@@ -472,37 +477,27 @@ namespace ClassicAssist.UI.ViewModels.Agents
                     new ScreenshotEntry
                     {
                         Path = file,
-                        BitmapSource = new Lazy<BitmapSource>( () => LoadBitmap( file ) ),
+                        BitmapSource = new Lazy<Bitmap>( () => LoadBitmap( file ) ),
                         CreatedDate = File.GetCreationTime( file ),
                         Extension = Path.GetExtension( file ).Replace( ".", string.Empty ).ToUpper()
                     }, _comparer );
             } );
         }
 
-        private static BitmapSource LoadBitmap( string file )
+        private static Bitmap LoadBitmap( string file )
         {
             if ( !File.Exists( file ) )
             {
-                return new BitmapImage();
+                return null;
             }
 
             try
             {
-                using ( FileStream stream = new FileStream( file, FileMode.Open ) )
-                {
-                    BitmapImage bitmap = new BitmapImage();
-                    bitmap.BeginInit();
-                    bitmap.StreamSource = stream;
-                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmap.EndInit();
-                    bitmap.Freeze();
-
-                    return bitmap;
-                }
+                return new Bitmap( file );
             }
             catch
             {
-                return new BitmapImage();
+                return null;
             }
         }
 
@@ -552,75 +547,95 @@ namespace ClassicAssist.UI.ViewModels.Agents
 
         public string TakeScreenshot( bool? fullscreen = null, string mobileName = null, string filename = null )
         {
-            IntPtr screenDC;
-            int width, height;
+            bool isFullscreen = fullscreen.HasValue && fullscreen.Value || Fullscreen;
 
-            if ( fullscreen.HasValue && fullscreen.Value || Fullscreen )
+            int x = 0, y = 0, width = 0, height = 0;
+
+            if ( isFullscreen )
             {
-                screenDC = GetDC( IntPtr.Zero );
-                width = (int) SystemParameters.VirtualScreenWidth;
-                height = (int) SystemParameters.VirtualScreenHeight;
+                x = GetSystemMetrics( SM_XVIRTUALSCREEN );
+                y = GetSystemMetrics( SM_YVIRTUALSCREEN );
+                width = GetSystemMetrics( SM_CXVIRTUALSCREEN );
+                height = GetSystemMetrics( SM_CYVIRTUALSCREEN );
             }
-            else
+            else if ( Engine.WindowHandle != IntPtr.Zero )
             {
-                screenDC = GetDC( Engine.WindowHandle );
-                GetClientRect( Engine.WindowHandle, out RECT rect );
+                POINT clientOrigin = default;
+
+                if ( !ClientToScreen( Engine.WindowHandle, ref clientOrigin ) ||
+                     !GetClientRect( Engine.WindowHandle, out RECT rect ) )
+                {
+                    return null;
+                }
+
+                x = clientOrigin.X;
+                y = clientOrigin.Y;
                 width = rect.Right - rect.Left;
                 height = rect.Bottom - rect.Top;
             }
+            else
+            {
+                return null;
+            }
 
-            bool isFullscreen = fullscreen.HasValue && fullscreen.Value || Fullscreen;
-            IntPtr dcOwner = isFullscreen ? IntPtr.Zero : Engine.WindowHandle;
+            using ( SKBitmap capture = ScreenCapture.CaptureRectangle( x, y, width, height ) )
+            {
+                if ( capture == null )
+                {
+                    return null;
+                }
 
-            IntPtr memDC = CreateCompatibleDC( screenDC );
-            IntPtr hBitmap = CreateCompatibleBitmap( screenDC, width, height );
-            IntPtr oldBitmap = SelectObject( memDC, hBitmap );
+                return ComposeScreenshot( capture, filename, mobileName );
+            }
+        }
 
-            BitBlt( memDC, 0, 0, width, height, screenDC, 0, 0, TernaryRasterOperations.SRCCOPY );
-            BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHBitmap( hBitmap, IntPtr.Zero, Int32Rect.Empty,
-                BitmapSizeOptions.FromEmptyOptions() );
-
-            SelectObject( memDC, oldBitmap );
-            DeleteObject( hBitmap );
-            DeleteDC( memDC );
-            ReleaseDC( dcOwner, screenDC );
-
+        private string ComposeScreenshot( SKBitmap capture, string filename, string mobileName )
+        {
             DateTime now = DateTime.Now;
 
             string filePath =
                 $"{GetFormattedText( !string.IsNullOrEmpty( filename ) ? filename : FilenameFormat, now, mobileName, true )}.png";
 
-            DrawingVisual drawingVisual = new DrawingVisual();
+            Bitmap screenshot;
 
-            ImageSource screenshotLogo = Properties.Resources.screenshot_logo.ToImageSource();
-
-            using ( DrawingContext drawingContext = drawingVisual.RenderOpen() )
+            using ( SKData data = capture.Encode( SKEncodedImageFormat.Png, 100 ) )
+            using ( MemoryStream stream = new MemoryStream( data.ToArray() ) )
             {
-                drawingContext.DrawImage( bitmapSource, new Rect( 0, 0, bitmapSource.Width, bitmapSource.Height ) );
+                screenshot = new Bitmap( stream );
+            }
 
-                ImageBrush imageBrush = new ImageBrush( screenshotLogo ) { Opacity = 0.6 };
+            double width = screenshot.PixelSize.Width;
+            double height = screenshot.PixelSize.Height;
 
-                drawingContext.DrawRectangle( imageBrush, null,
-                    new Rect( bitmapSource.Width - screenshotLogo.Width - 5, 5, screenshotLogo.Width,
-                        screenshotLogo.Height ) );
+            RenderTargetBitmap result = new RenderTargetBitmap( new PixelSize( (int) width, (int) height ),
+                new Vector( 96, 96 ) );
+
+            using ( DrawingContext drawingContext = result.CreateDrawingContext() )
+            {
+                drawingContext.DrawImage( screenshot, new Rect( 0, 0, width, height ) );
+
+                IImage screenshotLogo = Properties.Resources.screenshot_logo.ToImageSource();
+
+                using ( drawingContext.PushOpacity( 0.6 ) )
+                {
+                    drawingContext.DrawImage( screenshotLogo,
+                        new Rect( width - screenshotLogo.Size.Width - 5, 5, screenshotLogo.Size.Width,
+                            screenshotLogo.Size.Height ) );
+                }
 
                 if ( IncludeInfoBar )
                 {
                     string text = GetFormattedText( Format, now, mobileName );
 
                     FormattedText formattedText = new FormattedText( text, CultureInfo.CurrentCulture,
-                        FlowDirection.LeftToRight, new Typeface( "Arial" ), FontSize, new SolidColorBrush( FontColor ),
-                        96 );
+                        FlowDirection.LeftToRight, new Typeface( "Arial" ), FontSize,
+                        new SolidColorBrush( FontColor ) );
 
-                    drawingContext.DrawRoundedRectangle( new SolidColorBrush( BackgroundColor ), null,
+                    drawingContext.DrawRectangle( new SolidColorBrush( BackgroundColor ), null,
                         new Rect( 0, 0, formattedText.Width + 10, formattedText.Height + 10 ), 5, 5 );
                     drawingContext.DrawText( formattedText, new Point( 5, 5 ) );
                 }
             }
-
-            RenderTargetBitmap result = new RenderTargetBitmap( (int) bitmapSource.Width, (int) bitmapSource.Height, 96,
-                96, PixelFormats.Pbgra32 );
-            result.Render( drawingVisual );
 
             if ( !Path.IsPathRooted( filePath ) )
             {
@@ -636,14 +651,11 @@ namespace ClassicAssist.UI.ViewModels.Agents
 
             using ( FileStream fileStream = new FileStream( filePath, FileMode.Create ) )
             {
-                BitmapEncoder encoder = new PngBitmapEncoder();
-                encoder.Frames.Add( BitmapFrame.Create( result ) );
-                encoder.Save( fileStream );
+                result.Save( fileStream );
             }
 
             return filePath;
         }
-
         private static string GetFormattedText( string format, DateTime now, string mobileName,
             bool filenameChars = false )
         {
@@ -710,7 +722,7 @@ namespace ClassicAssist.UI.ViewModels.Agents
 
         public class ScreenshotEntry
         {
-            public Lazy<BitmapSource> BitmapSource { get; set; }
+            public Lazy<Bitmap> BitmapSource { get; set; }
             public DateTime CreatedDate { get; set; }
             public string Extension { get; set; }
             public string Path { get; set; }

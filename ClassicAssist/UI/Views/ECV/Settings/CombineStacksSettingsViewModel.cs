@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2024 Reetus
 // 
@@ -14,12 +14,16 @@
 
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Threading;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Threading;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UI.Views.ECV.Settings.Models;
 using ClassicAssist.UO.Data;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views.ECV.Settings
 {
@@ -33,9 +37,9 @@ namespace ClassicAssist.UI.Views.ECV.Settings
 
         public CombineStacksSettingsViewModel()
         {
-            _dispatcher = Dispatcher.CurrentDispatcher;
+            _dispatcher = Avalonia.Threading.Dispatcher.UIThread;
 
-            if ( DesignerProperties.GetIsInDesignMode( new DependencyObject() ) )
+            if ( Design.IsDesignMode )
             {
                 Cliloc.Initialize( @"C:\Users\johns\Documents\UO\Ultima Online Classic" );
             }

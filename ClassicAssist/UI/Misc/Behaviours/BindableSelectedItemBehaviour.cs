@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -17,9 +17,13 @@
 
 #endregion
 
-using System.Windows;
-using System.Windows.Controls;
-using Microsoft.Xaml.Behaviors;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Xaml.Interactivity;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
@@ -29,7 +33,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
         {
             base.OnAttached();
 
-            AssociatedObject.SelectedItemChanged += OnTreeViewSelectedItemChanged;
+            AssociatedObject.SelectionChanged += OnTreeViewSelectedItemChanged;
         }
 
         protected override void OnDetaching()
@@ -38,13 +42,13 @@ namespace ClassicAssist.UI.Misc.Behaviours
 
             if ( AssociatedObject != null )
             {
-                AssociatedObject.SelectedItemChanged -= OnTreeViewSelectedItemChanged;
+                AssociatedObject.SelectionChanged -= OnTreeViewSelectedItemChanged;
             }
         }
 
-        private void OnTreeViewSelectedItemChanged( object sender, RoutedPropertyChangedEventArgs<object> e )
+        private void OnTreeViewSelectedItemChanged( object sender, SelectionChangedEventArgs e )
         {
-            SelectedItem = e.NewValue;
+            SelectedItem = e.AddedItems.Count > 0 ? e.AddedItems[0] : null;
         }
 
         #region SelectedItem Property
@@ -55,10 +59,10 @@ namespace ClassicAssist.UI.Misc.Behaviours
             set => SetValue( SelectedItemProperty, value );
         }
 
-        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register( "SelectedItem", typeof( object ), typeof( BindableSelectedItemBehavior ),
-            new UIPropertyMetadata( null, OnSelectedItemChanged ) );
+        public static readonly Avalonia.StyledProperty<object> SelectedItemProperty =
+        AvaloniaCompat.RegisterCompat<BindableSelectedItemBehavior, object>("SelectedItem", null, onChanged: OnSelectedItemChanged);
 
-        private static void OnSelectedItemChanged( DependencyObject sender, DependencyPropertyChangedEventArgs e )
+        private static void OnSelectedItemChanged( AvaloniaObject sender, AvaloniaPropertyChangedEventArgs e )
         {
             if ( e.NewValue is TreeViewItem item )
             {

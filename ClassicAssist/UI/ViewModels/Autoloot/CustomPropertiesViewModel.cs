@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2020 Reetus
 // 
@@ -25,8 +25,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Input;
+
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data.Autoloot;
 using ClassicAssist.Shared.Misc;
@@ -36,6 +36,8 @@ using ClassicAssist.UI.Views.Autoloot;
 using ClassicAssist.UO;
 using ClassicAssist.UO.Objects;
 using Newtonsoft.Json;
+using System.Windows.Input;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.ViewModels.Autoloot
 {
@@ -74,12 +76,12 @@ namespace ClassicAssist.UI.ViewModels.Autoloot
             set => SetProperty( ref _selectedProperty, value );
         }
 
-        private void ChooseFromCliloc( object obj )
+        private async void ChooseFromCliloc( object obj )
         {
             ClilocSelectionViewModel vm = new ClilocSelectionViewModel();
             ClilocSelectionWindow window = new ClilocSelectionWindow { DataContext = vm };
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( vm.DialogResult != DialogResult.OK )
             {
@@ -120,7 +122,7 @@ namespace ClassicAssist.UI.ViewModels.Autoloot
 
             PropertySelectionViewModel vm = new PropertySelectionViewModel( item.Properties );
             PropertySelectionWindow window = new PropertySelectionWindow { DataContext = vm };
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( vm.DialogResult != DialogResult.OK )
             {

@@ -8,8 +8,13 @@
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY
 
-using System.Windows;
-using System.Windows.Controls;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.Controls
 {
@@ -19,9 +24,8 @@ namespace ClassicAssist.Controls
     /// </summary>
     public class OptionedCheckBoxControl : CheckBox
     {
-        public static readonly DependencyProperty ChildContentProperty =
-            DependencyProperty.Register( nameof( ChildContent ), typeof( object ), typeof( OptionedCheckBoxControl ),
-                new PropertyMetadata( null, OnChildContentChanged ) );
+        public static readonly Avalonia.StyledProperty<object> ChildContentProperty =
+        AvaloniaCompat.RegisterCompat<OptionedCheckBoxControl, object>(nameof( ChildContent ), null, onChanged: OnChildContentChanged);
 
         private object _label;
         private bool _rebuilding;
@@ -38,10 +42,18 @@ namespace ClassicAssist.Controls
             set => SetValue( ChildContentProperty, value );
         }
 
-        protected override void OnContentChanged( object oldContent, object newContent )
+        protected override void OnPropertyChanged( AvaloniaPropertyChangedEventArgs e )
         {
-            base.OnContentChanged( oldContent, newContent );
+            base.OnPropertyChanged( e );
 
+            if ( e.Property == ContentProperty )
+            {
+                OnContentChanged( e.OldValue, e.NewValue );
+            }
+        }
+
+        private void OnContentChanged( object oldContent, object newContent )
+        {
             // Ignore the composed Content we assign ourselves while rebuilding the layout, otherwise
             // we would capture the DockPanel as the label and nest it on the next rebuild.
             if ( _rebuilding )
@@ -53,7 +65,7 @@ namespace ClassicAssist.Controls
             Rebuild();
         }
 
-        private static void OnChildContentChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void OnChildContentChanged( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
             ( (OptionedCheckBoxControl) d ).Rebuild();
         }
@@ -73,14 +85,16 @@ namespace ClassicAssist.Controls
 
             DockPanel dockPanel = new DockPanel { LastChildFill = true };
 
-            ContentPresenter checkBoxPresenter =
-                new ContentPresenter { Content = _label, VerticalAlignment = VerticalAlignment.Center };
+            ContentPresenter checkBoxPresenter = new ContentPresenter
+            {
+                Content = _label, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
+            };
             DockPanel.SetDock( checkBoxPresenter, Dock.Left );
             dockPanel.Children.Add( checkBoxPresenter );
 
             ContentPresenter childContentPresenter = new ContentPresenter
             {
-                Content = ChildContent, HorizontalAlignment = HorizontalAlignment.Stretch
+                Content = ChildContent, HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch
             };
             DockPanel.SetDock( childContentPresenter, Dock.Right );
             dockPanel.Children.Add( childContentPresenter );
@@ -104,7 +118,7 @@ namespace ClassicAssist.Controls
 
         private void UpdateChildEnabled()
         {
-            if ( ChildContent is UIElement childElement )
+            if ( ChildContent is Control childElement )
             {
                 childElement.IsEnabled = IsChecked ?? false;
             }

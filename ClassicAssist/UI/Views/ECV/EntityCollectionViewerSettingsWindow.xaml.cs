@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2024 Reetus
+// Copyright (C) 2024 Reetus
 //  
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,8 +8,13 @@
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY
 
-using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Data.Misc;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.Views.ECV
 {
@@ -18,8 +23,8 @@ namespace ClassicAssist.UI.Views.ECV
     /// </summary>
     public partial class EntityCollectionViewerSettingsWindow : Window
     {
-        public static readonly DependencyProperty OptionsProperty = DependencyProperty.Register( nameof( Options ), typeof( EntityCollectionViewerOptions ),
-            typeof( EntityCollectionViewerSettingsWindow ), new PropertyMetadata( default( EntityCollectionViewerOptions ), PropertyChangedCallback ) );
+        public static readonly Avalonia.StyledProperty<EntityCollectionViewerOptions> OptionsProperty =
+        AvaloniaCompat.RegisterCompat<EntityCollectionViewerSettingsWindow, EntityCollectionViewerOptions>(nameof( Options ), default( EntityCollectionViewerOptions ), onChanged: PropertyChangedCallback);
 
         public EntityCollectionViewerSettingsWindow()
         {
@@ -32,7 +37,7 @@ namespace ClassicAssist.UI.Views.ECV
             set => SetValue( OptionsProperty, value );
         }
 
-        private static void PropertyChangedCallback( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void PropertyChangedCallback( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
             if ( !( d is EntityCollectionViewerSettingsWindow window ) )
             {

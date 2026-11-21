@@ -18,9 +18,11 @@
 #endregion
 
 using System;
-using System.Windows.Input;
-using System.Windows.Media;
+using Avalonia.Input;
+using Avalonia;
+using Avalonia.Media;
 using ClassicAssist.Shared.UI;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views.ECV.Extensibility
 {
@@ -43,7 +45,7 @@ namespace ClassicAssist.UI.Views.ECV.Extensibility
 
         public string Name => _action.Name;
 
-        public ImageSource Icon => _action.Icon;
+        public IImage Icon => _action.Icon;
 
         public ICommand ExecuteCommand =>
             _executeCommand ?? ( _executeCommand = new RelayCommand( OnExecute, OnCanExecute ) );

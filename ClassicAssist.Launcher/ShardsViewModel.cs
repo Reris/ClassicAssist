@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -6,7 +6,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+
+using Avalonia.Input;
+using ClassicAssist.Shared.UI.Compat;
 using System.Windows.Input;
 
 namespace ClassicAssist.Launcher

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2022 Reetus
 // 
@@ -16,7 +16,8 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Windows.Data;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using ClassicAssist.Shared.Resources;
 using IronPython.Runtime.Operations;
 using Microsoft.Scripting;

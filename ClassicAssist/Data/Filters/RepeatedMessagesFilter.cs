@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ClassicAssist.UI.Views.Filters;
 using ClassicAssist.UO.Data;
 using Newtonsoft.Json.Linq;
+using ClassicAssist.Shared.UI;
 
 namespace ClassicAssist.Data.Filters
 {
@@ -18,7 +19,7 @@ namespace ClassicAssist.Data.Filters
         public void Configure()
         {
             RepeatedMessagesFilterConfigureWindow window = new RepeatedMessagesFilterConfigureWindow( FilterOptions );
-            window.ShowDialog();
+            window.ShowDialogCompat();
         }
 
         public void Deserialize( JToken token )

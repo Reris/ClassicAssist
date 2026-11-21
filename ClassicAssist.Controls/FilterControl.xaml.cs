@@ -1,25 +1,27 @@
-﻿using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Shared.UI;
+using ClassicAssist.Shared.UI.Compat;
+using System.Windows.Input;
 
 namespace ClassicAssist.Controls
 {
     /// <summary>
     ///     Interaction logic for FilterControl.xaml
     /// </summary>
-    public partial class FilterControl
+    public partial class FilterControl : UserControl
     {
-        public static readonly DependencyProperty FilterTextProperty = DependencyProperty.Register(
-            nameof( FilterText ), typeof( string ), typeof( FilterControl ),
-            new FrameworkPropertyMetadata( default( string ), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<string> FilterTextProperty =
+        AvaloniaCompat.RegisterCompat<FilterControl, string>(nameof( FilterText ), default( string ), defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
-        public static readonly DependencyProperty IsFilterVisibleProperty = DependencyProperty.Register(
-            nameof( IsFilterVisible ), typeof( bool ), typeof( FilterControl ),
-            new FrameworkPropertyMetadata( default( bool ), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<bool> IsFilterVisibleProperty =
+        AvaloniaCompat.RegisterCompat<FilterControl, bool>(nameof( IsFilterVisible ), default( bool ), defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
-        public static readonly DependencyProperty ShowCloseButtonProperty = DependencyProperty.Register(
-            nameof( ShowCloseButton ), typeof( bool ), typeof( FilterControl ),
-            new FrameworkPropertyMetadata( true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<bool> ShowCloseButtonProperty =
+        AvaloniaCompat.RegisterCompat<FilterControl, bool>(nameof( ShowCloseButton ), true, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
         private ICommand _closeCommand;
 

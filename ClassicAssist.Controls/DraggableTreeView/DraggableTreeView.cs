@@ -2,39 +2,52 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Threading;
-using GongSolutions.Wpf.DragDrop;
-using DragDrop = GongSolutions.Wpf.DragDrop.DragDrop;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Threading;
+using Avalonia.VisualTree;
+
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.Controls.DraggableTreeView
 {
     /*
      * Credit: https://www.codeproject.com/Articles/55168/Drag-and-Drop-Feature-in-WPF-TreeView-Control
      */
-    public class DraggableTreeView : TreeView, IDropTarget
+    public class DraggableTreeView : TreeView
     {
-        public static readonly DependencyProperty BindableSelectedItemProperty = DependencyProperty.RegisterAttached( nameof( BindableSelectedItem ), typeof( object ),
-            typeof( DraggableTreeView ), new FrameworkPropertyMetadata( default, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedPropertyChanged ) );
+        public static readonly Avalonia.StyledProperty<object> BindableSelectedItemProperty =
+        AvaloniaCompat.RegisterAttachedCompat<DraggableTreeView, object>(nameof( BindableSelectedItem ), default, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: OnSelectedPropertyChanged);
 
-        public static readonly DependencyProperty BindableSelectedGroupProperty = DependencyProperty.RegisterAttached( nameof( BindableSelectedGroup ), typeof( object ),
-            typeof( DraggableTreeView ), new FrameworkPropertyMetadata( default, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedPropertyChanged ) );
+        public static readonly Avalonia.StyledProperty<object> BindableSelectedGroupProperty =
+        AvaloniaCompat.RegisterAttachedCompat<DraggableTreeView, object>(nameof( BindableSelectedGroup ), default, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: OnSelectedPropertyChanged);
 
-        public static readonly DependencyProperty AllowDragGroupsProperty =
-            DependencyProperty.RegisterAttached( nameof( AllowDragGroups ), typeof( bool ), typeof( DraggableTreeView ), new PropertyMetadata( true ) );
+        public static readonly Avalonia.StyledProperty<bool> AllowDragGroupsProperty =
+        AvaloniaCompat.RegisterAttachedCompat<DraggableTreeView, bool>(nameof( AllowDragGroups ), true);
 
-        public static readonly DependencyProperty AllowDragItemsOntoItemsProperty =
-            DependencyProperty.RegisterAttached( nameof( AllowDragItemsOntoItems ), typeof( bool ), typeof( DraggableTreeView ), new PropertyMetadata( true ) );
+        public static readonly Avalonia.StyledProperty<bool> AllowDragItemsOntoItemsProperty =
+        AvaloniaCompat.RegisterAttachedCompat<DraggableTreeView, bool>(nameof( AllowDragItemsOntoItems ), true);
+
+        private object _dragItem;
+
+        private Point _dragStartPosition;
+
+        private bool _pointerDown;
 
         public DraggableTreeView()
         {
-            DragDrop.SetIsDragSource( this, true );
-            DragDrop.SetIsDropTarget( this, true );
-            DragDrop.SetDropHandler( this, this );
-            SelectedItemChanged += OnSelectedItemChanged;
-            ItemContainerGenerator.StatusChanged += OnStatusChanged;
+            DragDrop.SetAllowDrop( this, true );
+
+            AddHandler( DragDrop.DragOverEvent, OnDragOver );
+            AddHandler( DragDrop.DropEvent, OnDrop );
+            AddHandler( PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel );
+            AddHandler( PointerMovedEvent, OnPointerMoved, RoutingStrategies.Tunnel );
+            AddHandler( PointerReleasedEvent, OnPointerReleased, RoutingStrategies.Tunnel );
+
+            SelectionChanged += OnSelectionChanged;
+            ContainerPrepared += OnContainerPrepared;
         }
 
         public bool AllowDragGroups
@@ -61,13 +74,75 @@ namespace ClassicAssist.Controls.DraggableTreeView
             set => SetValue( BindableSelectedItemProperty, value );
         }
 
-        public new void DragEnter( IDropInfo dropInfo )
+        protected override void PrepareContainerForItemOverride( Control container, object item, int index )
         {
+            base.PrepareContainerForItemOverride( container, item, index );
+
+            // Under container recycling a reused TreeViewItem can keep a stale IsSelected from the
+            // item it previously displayed, making several rows appear selected at once. Sync it to
+            // the bound selection every time a container is (re)assigned to an item.
+            if ( container is TreeViewItem tvi )
+            {
+                bool selected = ReferenceEquals( item, BindableSelectedItem ) || ReferenceEquals( item, BindableSelectedGroup );
+
+                if ( tvi.IsSelected != selected )
+                {
+                    tvi.IsSelected = selected;
+                }
+            }
         }
 
-        public new void DragOver( IDropInfo dropInfo )
+        private void OnPointerPressed( object sender, PointerPressedEventArgs e )
         {
-            if ( !( dropInfo.DragInfo.SourceItem is IDraggable sourceItem ) )
+            if ( !e.GetCurrentPoint( this ).Properties.IsLeftButtonPressed )
+            {
+                return;
+            }
+
+            TreeViewItem container = FindAncestor<TreeViewItem>( e.Source as Visual );
+
+            if ( container == null )
+            {
+                return;
+            }
+
+            _dragItem = container.DataContext ?? container.Header;
+            _dragStartPosition = e.GetPosition( this );
+            _pointerDown = true;
+        }
+
+        private async void OnPointerMoved( object sender, PointerEventArgs e )
+        {
+            if ( !_pointerDown || _dragItem == null )
+            {
+                return;
+            }
+
+            Point position = e.GetPosition( this );
+
+            if ( Math.Abs( position.X - _dragStartPosition.X ) < 4 && Math.Abs( position.Y - _dragStartPosition.Y ) < 4 )
+            {
+                return;
+            }
+
+            _pointerDown = false;
+
+            DataObject data = new DataObject();
+            data.Set( DataFormats.Text, string.Empty );
+
+#pragma warning disable CS0618
+            await DragDrop.DoDragDrop( e, data, DragDropEffects.Move );
+#pragma warning restore CS0618
+        }
+
+        private void OnPointerReleased( object sender, PointerReleasedEventArgs e )
+        {
+            _pointerDown = false;
+        }
+
+        private void OnDragOver( object sender, DragEventArgs e )
+        {
+            if ( !( _dragItem is IDraggable sourceItem ) )
             {
                 return;
             }
@@ -79,28 +154,27 @@ namespace ClassicAssist.Controls.DraggableTreeView
 
             ObservableCollection<IDraggable> sourceParent = GetParent( sourceItem, items );
 
-            if ( !AllowDragItemsOntoItems && sourceItem is IDraggableEntry && sourceParent == items && !( dropInfo?.TargetItem is IDraggableGroup ) )
+            object targetItem = GetTargetItem( e );
+
+            if ( !AllowDragItemsOntoItems && sourceItem is IDraggableEntry && sourceParent == items && !( targetItem is IDraggableGroup ) )
             {
-                dropInfo.Effects = DragDropEffects.None;
+                e.DragEffects = DragDropEffects.None;
 
                 return;
             }
 
-            dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-            dropInfo.Effects = DragDropEffects.Move;
+            e.DragEffects = DragDropEffects.Move;
         }
 
-        public new void DragLeave( IDropInfo dropInfo )
+        private void OnDrop( object sender, DragEventArgs e )
         {
-        }
+            object target = GetTargetItem( e );
 
-        public new void Drop( IDropInfo dropInfo )
-        {
-            switch ( dropInfo.TargetItem )
+            switch ( target )
             {
                 case IDraggableGroup destinationGroup:
                 {
-                    IDraggable sourceItem = dropInfo.DragInfo.SourceItem as IDraggable;
+                    IDraggable sourceItem = _dragItem as IDraggable;
 
                     ObservableCollection<IDraggable> parent = GetParent( sourceItem, ItemsSource as ObservableCollection<IDraggable> );
 
@@ -138,7 +212,7 @@ namespace ClassicAssist.Controls.DraggableTreeView
                     {
                         IDraggable item = parent[newSelectedIndex];
 
-                        if ( item != null && ItemContainerGenerator.ContainerFromItem( item ) is TreeViewItem tvi && !tvi.IsSelected )
+                        if ( item != null && FindContainer( item ) is TreeViewItem tvi && !tvi.IsSelected )
                         {
                             tvi.IsSelected = true;
                         }
@@ -150,7 +224,7 @@ namespace ClassicAssist.Controls.DraggableTreeView
                 }
                 case IDraggableEntry destinationItem:
                 {
-                    IDraggable sourceItem = dropInfo.DragInfo.SourceItem as IDraggable;
+                    IDraggable sourceItem = _dragItem as IDraggable;
 
                     if ( !( ItemsSource is ObservableCollection<IDraggable> items ) )
                     {
@@ -186,7 +260,7 @@ namespace ClassicAssist.Controls.DraggableTreeView
                 }
                 case null:
                 {
-                    IDraggable sourceItem = dropInfo.DragInfo.SourceItem as IDraggable;
+                    IDraggable sourceItem = _dragItem as IDraggable;
 
                     if ( !( ItemsSource is ObservableCollection<IDraggable> items ) )
                     {
@@ -203,38 +277,92 @@ namespace ClassicAssist.Controls.DraggableTreeView
             }
         }
 
-        protected override void PrepareContainerForItemOverride( DependencyObject element, object item )
+        private void OnContainerPrepared( object sender, ContainerPreparedEventArgs e )
         {
-            base.PrepareContainerForItemOverride( element, item );
-
-            // Under container recycling a reused TreeViewItem can keep a stale IsSelected from the
-            // item it previously displayed, making several rows appear selected at once. Sync it to
-            // the bound selection every time a container is (re)assigned to an item.
-            if ( element is TreeViewItem tvi )
+            if ( !( e.Container is TreeViewItem tvi ) )
             {
-                bool selected = ReferenceEquals( item, BindableSelectedItem ) || ReferenceEquals( item, BindableSelectedGroup );
+                return;
+            }
 
-                if ( tvi.IsSelected != selected )
-                {
-                    tvi.IsSelected = selected;
-                }
+            object item = tvi.DataContext ?? tvi.Header;
+
+            if ( item == null )
+            {
+                return;
+            }
+
+            if ( !ReferenceEquals( item, BindableSelectedItem ) && !ReferenceEquals( item, BindableSelectedGroup ) )
+            {
+                return;
+            }
+
+            if ( !tvi.IsSelected )
+            {
+                tvi.IsSelected = true;
             }
         }
 
-        private void OnStatusChanged( object sender, EventArgs e )
+        private void OnSelectionChanged( object sender, SelectionChangedEventArgs e )
         {
-            foreach ( object item in ItemContainerGenerator.Items )
-            {
-                if ( !item.Equals( BindableSelectedItem ) )
-                {
-                    continue;
-                }
+            object selected = e.AddedItems.Count > 0 ? e.AddedItems[0] : null;
 
-                if ( ItemContainerGenerator.ContainerFromItem( item ) is TreeViewItem tvi && !tvi.IsSelected )
+            switch ( selected )
+            {
+                case IDraggableGroup draggableGroup:
+                    BindableSelectedGroup = draggableGroup;
+                    BindableSelectedItem = null;
+                    break;
+                case IDraggableEntry draggableEntry:
+                    BindableSelectedItem = draggableEntry;
+                    BindableSelectedGroup = null;
+                    break;
+            }
+        }
+
+        private object GetTargetItem( DragEventArgs e )
+        {
+            TreeViewItem container = FindAncestor<TreeViewItem>( e.Source as Visual );
+
+            if ( container == null )
+            {
+                container = this.GetVisualDescendants().OfType<TreeViewItem>()
+                    .FirstOrDefault( tvi => tvi.Bounds.Contains( e.GetPosition( tvi ) ) );
+            }
+
+            return container?.DataContext ?? container?.Header;
+        }
+
+        private TreeViewItem FindContainer( object item )
+        {
+            return this.GetVisualDescendants().OfType<TreeViewItem>()
+                .FirstOrDefault( tvi => ReferenceEquals( tvi.DataContext ?? tvi.Header, item ) );
+        }
+
+        private void SelectAndBringIntoView( object item )
+        {
+            TreeViewItem container = FindContainer( item );
+
+            if ( container != null )
+            {
+                container.IsSelected = true;
+                container.BringIntoView();
+
+                return;
+            }
+
+            // The container hasn't been realized yet - either layout is still pending or, under
+            // virtualization, the item is scrolled out of view. Retry once layout has run; nested
+            // items are handled by OnContainerPrepared once their container is generated.
+            Dispatcher.UIThread.Post( () =>
+            {
+                TreeViewItem tvi = FindContainer( item );
+
+                if ( tvi != null )
                 {
                     tvi.IsSelected = true;
+                    tvi.BringIntoView();
                 }
-            }
+            }, DispatcherPriority.Loaded );
         }
 
         private static bool IsParentOf( IDraggable sourceItem, IDraggableGroup destinationGroup )
@@ -248,7 +376,7 @@ namespace ClassicAssist.Controls.DraggableTreeView
             return collection.Where( i => i is IDraggableGroup ).Cast<IDraggableGroup>();
         }
 
-        private static void OnSelectedPropertyChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void OnSelectedPropertyChanged( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
             if ( !( d is DraggableTreeView draggableTreeView ) || e.NewValue == null )
             {
@@ -258,70 +386,14 @@ namespace ClassicAssist.Controls.DraggableTreeView
             draggableTreeView.SelectAndBringIntoView( e.NewValue );
         }
 
-        private void SelectAndBringIntoView( object item )
+        private static T FindAncestor<T>( Visual visual ) where T : Visual
         {
-            // Already realized (non-virtualized or currently on-screen).
-            if ( ItemContainerGenerator.ContainerFromItem( item ) is TreeViewItem container )
+            while ( visual != null && !( visual is T ) )
             {
-                container.IsSelected = true;
-                container.BringIntoView();
-
-                return;
+                visual = visual.GetVisualParent();
             }
 
-            // The container hasn't been generated yet - either layout is still pending or, under
-            // virtualization, the item is scrolled out of view. For a top-level item we force its
-            // container to be realized by scrolling its index into view; nested items are handled
-            // by OnStatusChanged once the generator produces the container.
-            int index = Items.IndexOf( item );
-
-            if ( index < 0 )
-            {
-                return;
-            }
-
-            Dispatcher.BeginInvoke( (Action) ( () =>
-            {
-                if ( GetItemsHost() is VirtualizingPanel panel )
-                {
-                    ScrollIndexIntoView( panel, index );
-                    UpdateLayout();
-                }
-
-                if ( ItemContainerGenerator.ContainerFromItem( item ) is TreeViewItem tvi )
-                {
-                    tvi.IsSelected = true;
-                    tvi.BringIntoView();
-                }
-            } ), DispatcherPriority.Loaded );
-        }
-
-        private Panel GetItemsHost()
-        {
-            return typeof( ItemsControl ).GetProperty( "ItemsHost", BindingFlags.Instance | BindingFlags.NonPublic )?.GetValue( this ) as Panel;
-        }
-
-        private static void ScrollIndexIntoView( VirtualizingPanel panel, int index )
-        {
-            // VirtualizingPanel.BringIndexIntoView is protected internal, so there is no public
-            // way to realize an off-screen container; reflection is the standard workaround.
-            typeof( VirtualizingPanel ).GetMethod( "BringIndexIntoView", BindingFlags.Instance | BindingFlags.NonPublic, null, new[] { typeof( int ) }, null )
-                ?.Invoke( panel, new object[] { index } );
-        }
-
-        private void OnSelectedItemChanged( object sender, RoutedPropertyChangedEventArgs<object> e )
-        {
-            switch ( e.NewValue )
-            {
-                case IDraggableGroup draggableGroup:
-                    BindableSelectedGroup = draggableGroup;
-                    BindableSelectedItem = null;
-                    break;
-                case IDraggableEntry draggableEntry:
-                    BindableSelectedItem = draggableEntry;
-                    BindableSelectedGroup = null;
-                    break;
-            }
+            return visual as T;
         }
 
         private static ObservableCollection<IDraggable> GetParent( IDraggable draggable, ObservableCollection<IDraggable> parent )

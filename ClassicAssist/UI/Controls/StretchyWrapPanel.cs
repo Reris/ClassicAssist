@@ -1,7 +1,8 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows;
-using System.Windows.Controls;
+using System;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Layout;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.Controls
 {
@@ -10,35 +11,32 @@ namespace ClassicAssist.UI.Controls
      */
     public class StretchyWrapPanel : Panel
     {
-        public static readonly DependencyProperty ItemWidthProperty = DependencyProperty.Register( nameof( ItemWidth ),
-            typeof( double ), typeof( StretchyWrapPanel ),
-            new FrameworkPropertyMetadata( double.NaN, FrameworkPropertyMetadataOptions.AffectsMeasure ) );
+        public static readonly Avalonia.StyledProperty<double> ItemWidthProperty =
+        AvaloniaCompat.RegisterCompat<StretchyWrapPanel, double>(nameof( ItemWidth ), double.NaN);
 
-        public static readonly DependencyProperty ItemHeightProperty =
-            DependencyProperty.Register( nameof( ItemHeight ), typeof( double ), typeof( StretchyWrapPanel ),
-                new FrameworkPropertyMetadata( double.NaN, FrameworkPropertyMetadataOptions.AffectsMeasure ) );
+        public static readonly Avalonia.StyledProperty<double> ItemHeightProperty =
+        AvaloniaCompat.RegisterCompat<StretchyWrapPanel, double>(nameof( ItemHeight ), double.NaN);
 
-        public static readonly DependencyProperty OrientationProperty =
-            StackPanel.OrientationProperty.AddOwner( typeof( StretchyWrapPanel ),
-                new FrameworkPropertyMetadata( Orientation.Horizontal, FrameworkPropertyMetadataOptions.AffectsMeasure,
-                    OnOrientationChanged ) );
+        public static readonly Avalonia.StyledProperty<Orientation> OrientationProperty =
+            AvaloniaProperty.Register<StretchyWrapPanel, Orientation>(nameof( Orientation ), Orientation.Horizontal);
 
-        public static readonly DependencyProperty StretchProportionallyProperty =
-            DependencyProperty.Register( nameof( StretchProportionally ), typeof( bool ), typeof( StretchyWrapPanel ),
-                new PropertyMetadata( true, OnStretchProportionallyChanged ) );
+        public static readonly Avalonia.StyledProperty<bool> StretchProportionallyProperty =
+        AvaloniaCompat.RegisterCompat<StretchyWrapPanel, bool>(nameof( StretchProportionally ), true);
 
-        private Orientation _orientation = Orientation.Horizontal;
+        static StretchyWrapPanel()
+        {
+            AffectsMeasure<StretchyWrapPanel>( ItemWidthProperty );
+            AffectsMeasure<StretchyWrapPanel>( ItemHeightProperty );
+            AffectsMeasure<StretchyWrapPanel>( OrientationProperty );
+            AffectsArrange<StretchyWrapPanel>( StretchProportionallyProperty );
+        }
 
-        private bool _stretchProportionally = true;
-
-        [TypeConverter( typeof( LengthConverter ) )]
         public double ItemHeight
         {
             get => (double) GetValue( ItemHeightProperty );
             set => SetValue( ItemHeightProperty, value );
         }
 
-        [TypeConverter( typeof( LengthConverter ) )]
         public double ItemWidth
         {
             get => (double) GetValue( ItemWidthProperty );
@@ -47,24 +45,14 @@ namespace ClassicAssist.UI.Controls
 
         public Orientation Orientation
         {
-            get => _orientation;
+            get => (Orientation) GetValue( OrientationProperty );
             set => SetValue( OrientationProperty, value );
         }
 
         public bool StretchProportionally
         {
-            get => _stretchProportionally;
+            get => (bool) GetValue( StretchProportionallyProperty );
             set => SetValue( StretchProportionallyProperty, value );
-        }
-
-        private static void OnOrientationChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
-        {
-            ( (StretchyWrapPanel) d )._orientation = (Orientation) e.NewValue;
-        }
-
-        private static void OnStretchProportionallyChanged( DependencyObject o, DependencyPropertyChangedEventArgs e )
-        {
-            ( (StretchyWrapPanel) o )._stretchProportionally = (bool) e.NewValue;
         }
 
         protected override Size MeasureOverride( Size constraint )
@@ -80,18 +68,18 @@ namespace ClassicAssist.UI.Controls
             Size childConstraint = new Size( itemWidthSet ? itemWidth : constraint.Width,
                 itemHeightSet ? itemHeight : constraint.Height );
 
-            UIElementCollection children = InternalChildren;
+            Avalonia.Controls.Controls children = Children;
 
             for ( int i = 0, count = children.Count; i < count; i++ )
             {
-                UIElement child = children[i];
+                Control child = children[i];
 
                 if ( child == null )
                 {
                     continue;
                 }
 
-                // Flow passes its own constrint to children
+                // Flow passes its own constraint to children
                 child.Measure( childConstraint );
 
                 // This is the size of the child in UV space
@@ -107,7 +95,7 @@ namespace ClassicAssist.UI.Controls
 
                     if ( sz.U > uvConstraint.U )
                     {
-                        // The element is wider then the constrint - give it a separate line             
+                        // The element is wider than the constraint - give it a separate line
                         panelSize.U = Math.Max( sz.U, panelSize.U );
                         panelSize.V += sz.V;
                         curLineSize = new UVSize( Orientation );
@@ -142,11 +130,11 @@ namespace ClassicAssist.UI.Controls
             bool itemHeightSet = !double.IsNaN( itemHeight );
             bool useItemU = Orientation == Orientation.Horizontal ? itemWidthSet : itemHeightSet;
 
-            UIElementCollection children = InternalChildren;
+            Avalonia.Controls.Controls children = Children;
 
             for ( int i = 0, count = children.Count; i < count; i++ )
             {
-                UIElement child = children[i];
+                Control child = children[i];
 
                 if ( child == null )
                 {
@@ -174,8 +162,8 @@ namespace ClassicAssist.UI.Controls
 
                     if ( sz.U > uvFinalSize.U )
                     {
-                        // The element is wider then the constraint - give it a separate line     
-                        // Switch to next line which only contain one element
+                        // The element is wider than the constraint - give it a separate line
+                        // Switch to next line which only contains one element
                         if ( !useItemU && StretchProportionally )
                         {
                             ArrangeLineProportionally( accumulatedV, sz.V, i, ++i, uvFinalSize.Width );
@@ -221,7 +209,7 @@ namespace ClassicAssist.UI.Controls
         {
             double u = 0d;
             bool horizontal = Orientation == Orientation.Horizontal;
-            UIElementCollection children = InternalChildren;
+            Avalonia.Controls.Controls children = Children;
 
             double total = 0d;
 
@@ -234,7 +222,7 @@ namespace ClassicAssist.UI.Controls
 
             for ( int i = start; i < end; i++ )
             {
-                UIElement child = children[i];
+                Control child = children[i];
 
                 if ( child != null )
                 {
@@ -251,11 +239,11 @@ namespace ClassicAssist.UI.Controls
         {
             double u = 0d;
             bool horizontal = Orientation == Orientation.Horizontal;
-            UIElementCollection children = InternalChildren;
+            Avalonia.Controls.Controls children = Children;
 
             for ( int i = start; i < end; i++ )
             {
-                UIElement child = children[i];
+                Control child = children[i];
 
                 if ( child != null )
                 {

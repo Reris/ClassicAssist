@@ -1,46 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
+
+
+
 using System.IO;
-using System.Runtime.InteropServices;
 using Assistant;
+using ClassicAssist.Misc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SkiaSharp;
+using static ClassicAssist.Misc.NativeMethods;
 
 namespace ClassicAssist.Mcp
 {
     public static class McpSnapshotTools
     {
-        private const int SRCCOPY = 0x00CC0020;
         private const int SM_CXSCREEN = 0;
         private const int SM_CYSCREEN = 1;
-
-        [DllImport( "user32.dll" )]
-        private static extern IntPtr GetDC( IntPtr hWnd );
-
-        [DllImport( "user32.dll" )]
-        private static extern int ReleaseDC( IntPtr hWnd, IntPtr hDC );
-
-        [DllImport( "user32.dll" )]
-        private static extern bool GetClientRect( IntPtr hWnd, out RECT lpRect );
-
-        [DllImport( "user32.dll" )]
-        private static extern int GetSystemMetrics( int nIndex );
-
-        [DllImport( "gdi32.dll" )]
-        private static extern bool BitBlt( IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight,
-            IntPtr hdcSrc, int nXSrc, int nYSrc, int dwRop );
-
-        [StructLayout( LayoutKind.Sequential )]
-        private struct RECT
-        {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
-        }
 
         public static IReadOnlyList<McpTool> GetTools()
         {
@@ -94,7 +70,7 @@ namespace ClassicAssist.Mcp
 
         private static CallToolResult GetSnapshot( bool fullscreen, int? maxWidth, string format )
         {
-            ImageFormat imageFormat;
+            SKEncodedImageFormat imageFormat;
             string mimeType;
             string formatName;
 
@@ -102,12 +78,12 @@ namespace ClassicAssist.Mcp
             {
                 case "jpeg":
                 case "jpg":
-                    imageFormat = ImageFormat.Jpeg;
+                    imageFormat = SKEncodedImageFormat.Jpeg;
                     mimeType = "image/jpeg";
                     formatName = "jpeg";
                     break;
                 default:
-                    imageFormat = ImageFormat.Png;
+                    imageFormat = SKEncodedImageFormat.Png;
                     mimeType = "image/png";
                     formatName = "png";
                     break;
@@ -117,16 +93,15 @@ namespace ClassicAssist.Mcp
             int width;
             int height;
 
-            using ( Bitmap bitmap = Capture( fullscreen, maxWidth ) )
+            using ( SKBitmap bitmap = Capture( fullscreen, maxWidth ) )
             {
                 // Report the returned (possibly downscaled) dimensions, not the original capture size
                 width = bitmap.Width;
                 height = bitmap.Height;
 
-                using ( MemoryStream stream = new MemoryStream() )
+                using ( SKData data = bitmap.Encode( imageFormat, 100 ) )
                 {
-                    bitmap.Save( stream, imageFormat );
-                    bytes = stream.ToArray();
+                    bytes = data.ToArray();
                 }
             }
 
@@ -152,17 +127,12 @@ namespace ClassicAssist.Mcp
             };
         }
 
-        private static Bitmap Capture( bool fullscreen, int? maxWidth )
+        private static SKBitmap Capture( bool fullscreen, int? maxWidth )
         {
-            IntPtr dcOwner;
-            IntPtr sourceDC;
-            int width;
-            int height;
+            int x = 0, y = 0, width, height;
 
             if ( fullscreen )
             {
-                dcOwner = IntPtr.Zero;
-                sourceDC = GetDC( IntPtr.Zero );
                 width = GetSystemMetrics( SM_CXSCREEN );
                 height = GetSystemMetrics( SM_CYSCREEN );
             }
@@ -175,73 +145,55 @@ namespace ClassicAssist.Mcp
                     throw new InvalidOperationException( "Game window handle is not available." );
                 }
 
-                dcOwner = window;
                 GetClientRect( window, out RECT rect );
                 width = rect.Right - rect.Left;
                 height = rect.Bottom - rect.Top;
-                sourceDC = GetDC( window );
+
+                POINT origin = default;
+
+                if ( !ClientToScreen( window, ref origin ) )
+                {
+                    throw new InvalidOperationException( "Unable to determine game window position." );
+                }
+
+                x = origin.X;
+                y = origin.Y;
             }
 
-            try
+            if ( width <= 0 || height <= 0 )
             {
-                if ( width <= 0 || height <= 0 )
-                {
-                    throw new InvalidOperationException( "Captured region is empty." );
-                }
-
-                // 24bpp so the PNG has no alpha channel (BitBlt leaves alpha undefined, which would
-                // otherwise produce a transparent/black image).
-                Bitmap bitmap = new Bitmap( width, height, PixelFormat.Format24bppRgb );
-
-                try
-                {
-                    using ( Graphics graphics = Graphics.FromImage( bitmap ) )
-                    {
-                        IntPtr destinationDC = graphics.GetHdc();
-
-                        try
-                        {
-                            BitBlt( destinationDC, 0, 0, width, height, sourceDC, 0, 0, SRCCOPY );
-                        }
-                        finally
-                        {
-                            graphics.ReleaseHdc( destinationDC );
-                        }
-                    }
-
-                    if ( maxWidth != null && maxWidth.Value > 0 && width > maxWidth.Value )
-                    {
-                        Bitmap resized = Resize( bitmap, maxWidth.Value );
-                        bitmap.Dispose();
-
-                        return resized;
-                    }
-
-                    return bitmap;
-                }
-                catch
-                {
-                    bitmap.Dispose();
-                    throw;
-                }
+                throw new InvalidOperationException( "Captured region is empty." );
             }
-            finally
+
+            SKBitmap bitmap = ScreenCapture.CaptureRectangle( x, y, width, height );
+
+            if ( bitmap == null )
             {
-                ReleaseDC( dcOwner, sourceDC );
+                throw new InvalidOperationException( "Screen capture is not supported on this platform." );
             }
+
+            if ( maxWidth != null && maxWidth.Value > 0 && width > maxWidth.Value )
+            {
+                using ( bitmap )
+                {
+                    return Resize( bitmap, maxWidth.Value );
+                }
+            }
+
+            return bitmap;
         }
 
-        private static Bitmap Resize( Bitmap source, int maxWidth )
+        private static SKBitmap Resize( SKBitmap source, int maxWidth )
         {
             int width = maxWidth;
             int height = Math.Max( 1, (int) Math.Round( source.Height * ( width / (double) source.Width ) ) );
 
-            Bitmap resized = new Bitmap( width, height, PixelFormat.Format24bppRgb );
+            SKBitmap resized = new SKBitmap( width, height );
 
-            using ( Graphics graphics = Graphics.FromImage( resized ) )
+            using ( SKCanvas canvas = new SKCanvas( resized ) )
+            using ( SKPaint paint = new SKPaint { FilterQuality = SKFilterQuality.High } )
             {
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.DrawImage( source, 0, 0, width, height );
+                canvas.DrawBitmap( source, new SKRect( 0, 0, width, height ), paint );
             }
 
             return resized;

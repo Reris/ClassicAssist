@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) $CURRENT_YEAR$ Reetus
 //
@@ -16,9 +16,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.VisualTree;
 
 namespace ClassicAssist.Controls
 {
@@ -32,7 +36,7 @@ namespace ClassicAssist.Controls
             Loaded += OnLoaded;
         }
 
-        public List<UIElement> Items { get; set; } = new List<UIElement>();
+        public List<Control> Items { get; set; } = new List<Control>();
 
         private void OnSizeChanged( object sender, SizeChangedEventArgs e )
         {
@@ -49,9 +53,9 @@ namespace ClassicAssist.Controls
         {
             double minWidth = MinWidth;
 
-            foreach ( UIElement uiElement in Items )
+            foreach ( Control uiElement in Items )
             {
-                uiElement.Measure( new Size( ActualWidth, ActualHeight ) );
+                uiElement.Measure( new Size( Bounds.Width, Bounds.Height ) );
 
                 if ( uiElement.DesiredSize.Width > MinWidth )
                 {
@@ -69,19 +73,19 @@ namespace ClassicAssist.Controls
 
             UpdateLayout();
 
-            double availableHeight = ActualHeight;
-            double availableWidth = ActualWidth;
+            double availableHeight = Bounds.Height;
+            double availableWidth = Bounds.Width;
 
             double currentHeight = 0;
 
             int columns = 1;
             bool wontFit = false;
 
-            HashSet<UIElement> items = Items.ToHashSet();
+            HashSet<Control> items = Items.ToHashSet();
 
             Dictionary<int, Size> measuredSizes = new Dictionary<int, Size>( items.Count );
 
-            foreach ( UIElement uiElement in items )
+            foreach ( Control uiElement in items )
             {
                 int hash = RuntimeHelpers.GetHashCode( uiElement );
 
@@ -106,7 +110,7 @@ namespace ClassicAssist.Controls
                 currentHeight += (int) uiElement.DesiredSize.Height;
             }
 
-            availableHeight = ActualHeight;
+            availableHeight = Bounds.Height;
 
             if ( wontFit )
             {
@@ -140,7 +144,7 @@ namespace ClassicAssist.Controls
 
                 int row = 0;
 
-                foreach ( UIElement uiElement in items.ToHashSet() )
+                foreach ( Control uiElement in items.ToHashSet() )
                 {
                     int hash = RuntimeHelpers.GetHashCode( uiElement );
 
@@ -149,7 +153,7 @@ namespace ClassicAssist.Controls
                         continue;
                     }
 
-                    if ( uiElement is FrameworkElement frameworkElement )
+                    if ( uiElement is Control frameworkElement )
                     {
                         if ( i + 1 < columns )
                         {
@@ -167,7 +171,7 @@ namespace ClassicAssist.Controls
 
                     currentHeight += measuredSizes[hash].Height;
 
-                    DependencyObject parent = VisualTreeHelper.GetParent( uiElement );
+                    AvaloniaObject parent = uiElement.GetVisualParent() as AvaloniaObject;
 
                     if ( parent is Panel panel )
                     {

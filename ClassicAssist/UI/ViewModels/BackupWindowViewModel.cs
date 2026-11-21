@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -25,7 +25,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Threading;
+using Avalonia.Threading;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Data.Backup;
@@ -45,12 +45,12 @@ namespace ClassicAssist.UI.ViewModels
 
         public BackupWindowViewModel()
         {
-            _dispatcher = Engine.Dispatcher ?? Dispatcher.CurrentDispatcher;
+            _dispatcher = Engine.Dispatcher ?? Avalonia.Threading.Dispatcher.UIThread;
         }
 
         public BackupWindowViewModel( BackupOptions options )
         {
-            _dispatcher = Engine.Dispatcher ?? Dispatcher.CurrentDispatcher;
+            _dispatcher = Engine.Dispatcher ?? Avalonia.Threading.Dispatcher.UIThread;
             _options = options;
 
             Task.Run( async () =>

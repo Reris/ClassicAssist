@@ -1,8 +1,11 @@
-﻿using System;
-using System.Diagnostics;
+using System;
 using System.IO;
 using System.Threading;
-using System.Windows;
+
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Markup.Xaml;
+
 using ClassicAssist.Shared;
 using ClassicAssist.Updater.Properties;
 using CommandLine;
@@ -14,14 +17,26 @@ namespace ClassicAssist.Updater
     /// <summary>
     ///     Interaction logic for App.xaml
     /// </summary>
-    public partial class App
+    public partial class App : Application
     {
         public static CommandLineOptions CurrentOptions { get; set; }
 
         public static UpdaterSettings UpdaterSettings { get; set; }
 
-        private void Application_Startup( object sender, StartupEventArgs e )
+        public override void Initialize()
         {
+            AvaloniaXamlLoader.Load( this );
+        }
+
+        public override void OnFrameworkInitializationCompleted()
+        {
+            string[] args = Array.Empty<string>();
+
+            if ( ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop )
+            {
+                args = desktop.Args ?? args;
+            }
+
             if ( !string.IsNullOrEmpty( Settings.Default.ExceptionlessKey ) )
             {
                 ExceptionlessClient.Default.Configuration.DefaultData.Add( "Locale",
@@ -29,7 +44,7 @@ namespace ClassicAssist.Updater
                 ExceptionlessClient.Default.Startup( Settings.Default.ExceptionlessKey );
             }
 
-            Parser.Default.ParseArguments<CommandLineOptions>( e.Args ).WithParsed( o => CurrentOptions = o );
+            Parser.Default.ParseArguments<CommandLineOptions>( args ).WithParsed( o => CurrentOptions = o );
 
             if ( string.IsNullOrEmpty( CurrentOptions.Path ) )
             {
@@ -37,24 +52,33 @@ namespace ClassicAssist.Updater
             }
 
             UpdaterSettings = UpdaterSettings.Load( CurrentOptions.Path ?? Environment.CurrentDirectory );
-            Exit += ( s, ea ) =>
-                UpdaterSettings.Save( UpdaterSettings, CurrentOptions.Path ?? Environment.CurrentDirectory );
 
-            if ( CurrentOptions.CurrentVersion != null )
+            if ( ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime )
             {
-                return;
+                desktopLifetime.ShutdownRequested += ( s, ea ) =>
+                    UpdaterSettings.Save( UpdaterSettings, CurrentOptions.Path ?? Environment.CurrentDirectory );
+
+                if ( CurrentOptions.CurrentVersion != null )
+                {
+                    desktopLifetime.Shutdown();
+                    return;
+                }
+
+                string dllPath = IOPath.Combine( CurrentOptions.Path, "ClassicAssist.dll" );
+
+                try
+                {
+                    CurrentOptions.CurrentVersion = VersionHelpers.GetProductVersion( dllPath ).ToString();
+                }
+                catch ( Exception )
+                {
+                    CurrentOptions.Force = true;
+                }
+
+                desktopLifetime.MainWindow = new MainWindow();
             }
 
-            string dllPath = IOPath.Combine( CurrentOptions.Path, "ClassicAssist.dll" );
-
-            try
-            {
-                CurrentOptions.CurrentVersion = VersionHelpers.GetProductVersion( dllPath ).ToString();
-            }
-            catch ( Exception )
-            {
-                CurrentOptions.Force = true;
-            }
+            base.OnFrameworkInitializationCompleted();
         }
     }
 }

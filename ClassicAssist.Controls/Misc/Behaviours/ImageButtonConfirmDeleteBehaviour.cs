@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -15,12 +15,16 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Threading;
+using Avalonia.Xaml.Interactivity;
+using Brush = Avalonia.Media.Brush;
+using Image = Avalonia.Controls.Image;
 using System.Windows.Input;
-using System.Windows.Media;
-using Microsoft.Xaml.Behaviors;
-using Brush = System.Windows.Media.Brush;
-using Image = System.Windows.Controls.Image;
 
 namespace ClassicAssist.Controls.Misc.Behaviours
 {
@@ -32,7 +36,7 @@ namespace ClassicAssist.Controls.Misc.Behaviours
         private DrawingImage _clonedDrawingImage;
 
         private bool _isPending;
-        private Brush _originalBrush;
+        private IBrush _originalBrush;
 
         protected override void OnAttached()
         {
@@ -98,9 +102,10 @@ namespace ClassicAssist.Controls.Misc.Behaviours
                 return;
             }
 
+            // Avalonia brushes are immutable, so the reference can be stored directly.
             if ( _originalBrush == null )
             {
-                _originalBrush = group.Children.OfType<GeometryDrawing>().FirstOrDefault( g => g.Brush != null )?.Brush.Clone();
+                _originalBrush = group.Children.OfType<GeometryDrawing>().FirstOrDefault( g => g.Brush != null )?.Brush;
             }
         }
 
@@ -121,11 +126,50 @@ namespace ClassicAssist.Controls.Misc.Behaviours
                 return;
             }
 
-            _clonedDrawingImage = original.CloneCurrentValue();
-            img.Source = _clonedDrawingImage;
+            // Avalonia has no CloneCurrentValue; deep-copy the drawing tree so recoloring the
+            // pending state does not mutate the shared DrawingImage resource.
+            if ( original.Drawing is DrawingGroup sourceGroup )
+            {
+                _clonedDrawingImage = new DrawingImage { Drawing = CloneDrawingGroup( sourceGroup ) };
+                img.Source = _clonedDrawingImage;
+            }
         }
 
-        private void SetDrawingImageColor( Brush brush )
+        private static DrawingGroup CloneDrawingGroup( DrawingGroup group )
+        {
+            DrawingGroup clone = new DrawingGroup();
+
+            foreach ( Drawing child in group.Children )
+            {
+                switch ( child )
+                {
+                    case DrawingGroup childGroup:
+                        clone.Children.Add( CloneDrawingGroup( childGroup ) );
+                        break;
+                    case GeometryDrawing geometryDrawing:
+                        clone.Children.Add( new GeometryDrawing
+                        {
+                            Geometry = geometryDrawing.Geometry,
+                            Brush = geometryDrawing.Brush,
+                            Pen = geometryDrawing.Pen
+                        } );
+                        break;
+                    case ImageDrawing imageDrawing:
+                        clone.Children.Add( new ImageDrawing { ImageSource = imageDrawing.ImageSource, Rect = imageDrawing.Rect } );
+                        break;
+                    case GlyphRunDrawing glyphRunDrawing:
+                        clone.Children.Add( new GlyphRunDrawing { Foreground = glyphRunDrawing.Foreground, GlyphRun = glyphRunDrawing.GlyphRun } );
+                        break;
+                    default:
+                        clone.Children.Add( child );
+                        break;
+                }
+            }
+
+            return clone;
+        }
+
+        private void SetDrawingImageColor( IBrush brush )
         {
             if ( !( AssociatedObject.Content is Image img ) )
             {
@@ -150,7 +194,7 @@ namespace ClassicAssist.Controls.Misc.Behaviours
 
         private void Reset()
         {
-            Dispatcher.Invoke( () =>
+            Dispatcher.UIThread.Post( () =>
             {
                 if ( _originalBrush == null || _clonedDrawingImage == null )
                 {

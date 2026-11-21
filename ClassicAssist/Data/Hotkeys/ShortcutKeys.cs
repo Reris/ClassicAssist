@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using System.Windows.Forms;
-using System.Windows.Input;
+using System.Linq;
+
+using Avalonia.Input;
 using Newtonsoft.Json.Linq;
 using static ClassicAssist.Misc.SDLKeys;
 
@@ -82,10 +82,9 @@ namespace ClassicAssist.Data.Hotkeys
         public ModKey Modifier { get; set; } = ModKey.None;
         public MouseOptions Mouse { get; set; } = MouseOptions.None;
 
-        public Keys[] ToArray()
+        public Key[] ToArray()
         {
-            Keys key = (Keys) KeyInterop.VirtualKeyFromKey( Key );
-            return Modifier.ToKeysList().Append( key ).ToArray();
+            return Modifier.ToKeysList().Append( Key ).ToArray();
         }
 
         public override string ToString()

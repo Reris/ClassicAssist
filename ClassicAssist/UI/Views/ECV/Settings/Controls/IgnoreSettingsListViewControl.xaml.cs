@@ -1,4 +1,5 @@
-﻿// Copyright (C) 2024 Reetus
+﻿using Avalonia.Controls;
+// Copyright (C) 2024 Reetus
 //  
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,7 +14,7 @@ namespace ClassicAssist.UI.Views.ECV.Settings.Controls
     /// <summary>
     ///     Interaction logic for IgnoreSettingsControl.xaml
     /// </summary>
-    public partial class IgnoreSettingsControl
+    public partial class IgnoreSettingsControl : UserControl
     {
         public IgnoreSettingsControl()
         {

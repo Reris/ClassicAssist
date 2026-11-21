@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2026 Reetus
 // 
@@ -28,10 +28,14 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Data;
-using System.Windows.Input;
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Collections;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Data.Autoloot;
@@ -40,6 +44,7 @@ using ClassicAssist.Data.Misc;
 using ClassicAssist.Misc;
 using ClassicAssist.Shared.Resources;
 using ClassicAssist.Shared.UI;
+using ClassicAssist.Shared.UI.Compat;
 using ClassicAssist.UI.Models;
 using ClassicAssist.UI.Views;
 using ClassicAssist.UI.Views.ECV;
@@ -53,6 +58,8 @@ using ClassicAssist.UO.Network.Packets;
 using ClassicAssist.UO.Objects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Windows.Input;
+using ItemCollection = ClassicAssist.UO.Objects.ItemCollection;
 
 namespace ClassicAssist.UI.ViewModels
 {
@@ -115,7 +122,7 @@ namespace ClassicAssist.UI.ViewModels
         public EntityCollectionViewerViewModel()
         {
 #if DEBUG
-            if ( DesignerProperties.GetIsInDesignMode( new DependencyObject() ) )
+            if ( Design.IsDesignMode )
             {
                 Environment.CurrentDirectory = @"C:\Users\johns\Documents\UO\ClassicAssist\Output\net48";
                 const string uoFolder = @"C:\Users\johns\Documents\UO\Ultima Online Classic";
@@ -273,7 +280,7 @@ namespace ClassicAssist.UI.ViewModels
 
         public ICommand ContextUseItemCommand => _contextUseItemCommand ?? ( _contextUseItemCommand = new RelayCommandAsync( ContextUseItem, o => SelectedItems != null ) );
 
-        public static ImageSource PadlockIcon { get; } = Properties.Resources.padlock.ToImageSource();
+        public static IImage PadlockIcon { get; } = Properties.Resources.padlock.ToImageSource();
 
         public bool SelectedItemsAllLocked => SelectedItems.Count > 0 && SelectedItems.All( e => e.IsLocked );
 
@@ -417,7 +424,7 @@ namespace ClassicAssist.UI.ViewModels
                 stringBuilder.AppendLine();
             }
 
-            Clipboard.SetText( stringBuilder.ToString() );
+            ClipboardHelper.SetText( stringBuilder.ToString() );
         }
 
         private void ContextTargetOwner( object obj )
@@ -749,11 +756,11 @@ namespace ClassicAssist.UI.ViewModels
             }, Strings.Open_container );
         }
 
-        private void Configure( object obj )
+        private async void Configure( object obj )
         {
             EntityCollectionViewerSettingsWindow window = new EntityCollectionViewerSettingsWindow { Topmost = Options.AlwaysOnTop, Options = Options };
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             SaveOptions( Options );
         }
@@ -992,7 +999,7 @@ namespace ClassicAssist.UI.ViewModels
 
             // BeginInvoke, not Invoke - blocking the incoming packet thread on the UI thread deadlocks whenever
             // the UI thread is itself waiting on a packet (e.g. Refresh -> WaitForContainerContentsUse).
-            _dispatcher.BeginInvoke( new Action( () =>
+            _dispatcher.Post( () =>
             {
                 EntityCollectionData ecd = Entities.FirstOrDefault( e => e.Entity.Serial == item.Serial );
 
@@ -1043,7 +1050,7 @@ namespace ClassicAssist.UI.ViewModels
                         }
                     }
                 }
-            } ) );
+            } );
         }
 
         private void OnCollectionChanged( int totalcount, bool added, Item[] entities )
@@ -1063,7 +1070,7 @@ namespace ClassicAssist.UI.ViewModels
             else
             {
                 // Packet/worker threads marshal asynchronously so packet processing never waits on the UI thread.
-                _dispatcher.BeginInvoke( new Action( OnApply ) );
+                _dispatcher.Post( OnApply );
             }
         }
 
@@ -1870,7 +1877,7 @@ namespace ClassicAssist.UI.ViewModels
 
             void OnApply()
             {
-                ICollectionView view = CollectionViewSource.GetDefaultView( _entities );
+                DataGridCollectionView view = CollectionViewSource.GetDefaultView( _entities );
 
                 if ( view == null )
                 {
@@ -1878,7 +1885,7 @@ namespace ClassicAssist.UI.ViewModels
                 }
 
                 view.Filter = Options != null && Options.HideLockedItems
-                    ? (Predicate<object>) ( o => !( o is EntityCollectionData ecd && ecd.IsLocked ) )
+                    ? (Func<object, bool>) ( o => !( o is EntityCollectionData ecd && ecd.IsLocked ) )
                     : null;
             }
 

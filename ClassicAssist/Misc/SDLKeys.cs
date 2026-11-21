@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
-using System.Windows.Input;
+
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data.Hotkeys;
 
@@ -821,11 +821,11 @@ namespace ClassicAssist.Misc
                 }
             };
 
-        public static IEnumerable<Keys> ToKeysList( this ModKey flagsEnumValue )
+        public static IEnumerable<Key> ToKeysList( this ModKey flagsEnumValue )
         {
-            Keys ToKey( ModKey keymod )
+            Key ToKey( ModKey keymod )
             {
-                return Keys.None;
+                return Key.None;
             }
 
             return Enum.GetValues( typeof( ModKey ) ).Cast<ModKey>().Where( e => flagsEnumValue.HasFlag( e ) )

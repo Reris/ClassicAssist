@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2023 Reetus
 // 
@@ -13,30 +13,33 @@
 #endregion
 
 using System.Collections;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Controls.Primitives;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.Controls.Headered
 {
     public class HorizontalHeaderedComboBox : HorizontalHeaderedContentControl
     {
-        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
-            nameof( SelectedItem ), typeof( object ), typeof( HorizontalHeaderedComboBox ),
-            new FrameworkPropertyMetadata( default, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<object> SelectedItemProperty =
+        AvaloniaCompat.RegisterCompat<HorizontalHeaderedComboBox, object>(nameof( SelectedItem ), default, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
-        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register(
-            nameof( ItemsSource ), typeof( IEnumerable ), typeof( HorizontalHeaderedComboBox ),
-            new FrameworkPropertyMetadata( default( IEnumerable ) ) );
+        public static readonly Avalonia.StyledProperty<IEnumerable> ItemsSourceProperty =
+        AvaloniaCompat.RegisterCompat<HorizontalHeaderedComboBox, IEnumerable>(nameof( ItemsSource ), default( IEnumerable ));
 
         public HorizontalHeaderedComboBox()
         {
             ComboBox comboBox = new ComboBox();
             Binding binding = new Binding( "SelectedItem" ) { Source = this, Mode = BindingMode.TwoWay };
             Binding itemsSourceBinding = new Binding( "ItemsSource" ) { Source = this };
-            comboBox.SetBinding( ItemsControl.ItemsSourceProperty, itemsSourceBinding );
-            comboBox.SetBinding( Selector.SelectedItemProperty, binding );
+            comboBox[!ItemsControl.ItemsSourceProperty] = itemsSourceBinding;
+            comboBox[!SelectingItemsControl.SelectedItemProperty] = binding;
             Content = comboBox;
         }
 

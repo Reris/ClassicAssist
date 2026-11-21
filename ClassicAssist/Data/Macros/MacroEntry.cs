@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -23,8 +23,12 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Windows;
-using System.Windows.Threading;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Threading;
 using ClassicAssist.Controls.DraggableTreeView;
 using ClassicAssist.Data.Hotkeys;
 using ClassicAssist.Misc;
@@ -35,6 +39,7 @@ using Microsoft.Scripting;
 using Microsoft.Scripting.Runtime;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ClassicAssist.Shared.UI;
 
 namespace ClassicAssist.Data.Macros
 {
@@ -64,9 +69,13 @@ namespace ClassicAssist.Data.Macros
         private int _pausedLinedNumber;
         private Version _languageVersion;
 
+        public MacroEntry() : this( null )
+        {
+        }
+
         public MacroEntry( JToken token = null )
         {
-            _dispatcher = Dispatcher.CurrentDispatcher;
+            _dispatcher = Avalonia.Threading.Dispatcher.UIThread;
             _macroInvoker.ExceptionEvent += OnExceptionEvent;
             _macroInvoker.StartedEvent += OnStartedEvent;
             _macroInvoker.StoppedEvent += OnStoppedEvent;
@@ -397,13 +406,13 @@ namespace ClassicAssist.Data.Macros
             // notification lands after the new run started.
             Thread startedThread = Thread.CurrentThread;
 
-            _dispatcher.BeginInvoke( (Action) ( () =>
+            _dispatcher.Post( () =>
             {
                 if ( ReferenceEquals( _macroInvoker.Thread, startedThread ) )
                 {
                     IsRunning = true;
                 }
-            } ) );
+            } );
         }
 
         private void OnStoppedEvent()
@@ -420,7 +429,7 @@ namespace ClassicAssist.Data.Macros
             // IsRunning - otherwise the macro keeps running but shows as stopped.
             Thread stoppingThread = Thread.CurrentThread;
 
-            _dispatcher.BeginInvoke( (Action) ( () =>
+            _dispatcher.Post( () =>
             {
                 if ( !ReferenceEquals( _macroInvoker.Thread, stoppingThread ) )
                 {
@@ -433,7 +442,7 @@ namespace ClassicAssist.Data.Macros
                 {
                     IsPaused = false;
                 }
-            } ) );
+            } );
 
             if ( IsBackground )
             {
@@ -460,7 +469,7 @@ namespace ClassicAssist.Data.Macros
 
             if ( exists )
             {
-                MessageBox.Show( Strings.Macro_name_must_be_unique_, Strings.Error );
+                MessageBoxHelper.Show( Strings.Macro_name_must_be_unique_, Strings.Error );
                 return;
             }
 
@@ -492,20 +501,20 @@ namespace ClassicAssist.Data.Macros
 
                 _macroInvoker.Stop();
 
-                _dispatcher.BeginInvoke( (Action) ( () =>
+                _dispatcher.Post( () =>
                 {
                     // Don't clear running state if a restart has already swapped in a new run.
                     if ( ReferenceEquals( _macroInvoker.Thread, stoppingThread ) )
                     {
                         IsRunning = false;
                     }
-                } ) );
+                } );
             }
         }
 
         private void OnExceptionEvent( Exception exception )
         {
-            _dispatcher.BeginInvoke( (Action) ( () => { LastException = exception; } ) );
+            _dispatcher.Post( () => { LastException = exception; } );
 
             UO.Commands.SystemMessage( string.Format( Strings.Macro_error___0_, exception.Message ) );
 

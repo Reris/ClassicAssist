@@ -1,26 +1,20 @@
-﻿using System.Windows;
+using Avalonia;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.Misc
 {
-    public class BindingProxy : Freezable
+    /// <summary>
+    ///     Binding proxy for accessing DataContext from outside the visual tree.
+    /// </summary>
+    public class BindingProxy : AvaloniaObject
     {
-        // Using a DependencyProperty as the backing store for Data.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty DataProperty = DependencyProperty.Register( "Data", typeof( object ),
-            typeof( BindingProxy ), new UIPropertyMetadata( null ) );
+        public static readonly Avalonia.StyledProperty<object> DataProperty =
+        AvaloniaCompat.RegisterCompat<BindingProxy, object>("Data", null);
 
         public object Data
         {
             get => GetValue( DataProperty );
             set => SetValue( DataProperty, value );
         }
-
-        #region Overrides of Freezable
-
-        protected override Freezable CreateInstanceCore()
-        {
-            return new BindingProxy();
-        }
-
-        #endregion
     }
 }

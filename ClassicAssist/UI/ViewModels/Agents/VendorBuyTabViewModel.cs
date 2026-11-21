@@ -1,10 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Windows.Media.Media3D;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Data.Macros.Commands;
@@ -17,6 +16,7 @@ using ClassicAssist.UO.Network;
 using ClassicAssist.UO.Objects;
 using Newtonsoft.Json.Linq;
 using UOC = ClassicAssist.UO.Commands;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels.Agents
 {

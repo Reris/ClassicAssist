@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -18,17 +18,20 @@
 #endregion
 
 using System.Collections.Specialized;
-using System.Windows;
-using System.Windows.Controls;
-using Microsoft.Xaml.Behaviors;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Xaml.Interactivity;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.Shared.UI.Behaviours
 {
     public class ItemsControlAutoScrollBehaviour : Behavior<ItemsControl>
     {
-        public static readonly DependencyProperty ScrollViewerProperty = DependencyProperty.Register( "ScrollViewer",
-            typeof( ScrollViewer ), typeof( ItemsControlAutoScrollBehaviour ),
-            new PropertyMetadata( default( ScrollViewer ) ) );
+        public static readonly Avalonia.StyledProperty<ScrollViewer> ScrollViewerProperty =
+        AvaloniaCompat.RegisterCompat<ItemsControlAutoScrollBehaviour, ScrollViewer>("ScrollViewer", default( ScrollViewer ));
 
         private INotifyCollectionChanged _incc;
 

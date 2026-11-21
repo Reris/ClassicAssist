@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -18,9 +18,10 @@
 #endregion
 
 using System.Collections.ObjectModel;
-using System.Windows.Input;
+using Avalonia.Input;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UO.Network;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels.Debug
 {

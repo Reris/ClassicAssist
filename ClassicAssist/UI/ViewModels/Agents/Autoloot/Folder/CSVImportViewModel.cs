@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2024 Reetus
 // 
@@ -18,8 +18,11 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data.Autoloot;
 using ClassicAssist.Shared.Resources;
@@ -27,6 +30,7 @@ using ClassicAssist.Shared.UI;
 using CsvHelper;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels.Agents.Autoloot.Folder
 {
@@ -77,13 +81,13 @@ namespace ClassicAssist.UI.ViewModels.Agents.Autoloot.Folder
 
         public ICommand SetImportCommand => _setImportCommand ?? ( _setImportCommand = new RelayCommand( SetImport ) );
 
-        private void SelectFile( object obj )
+        private async void SelectFile( object obj )
         {
-            OpenFileDialog ofd = new OpenFileDialog { Filter = "CSV files (*.csv)|*.csv" };
+            string[] files = await DialogHelper.ShowOpenFileDialogAsync( filter: "CSV files (*.csv)|*.csv" );
 
-            if ( ofd.ShowDialog() == true )
+            if ( files.Length > 0 )
             {
-                LoadFile( ofd.FileName );
+                LoadFile( files[0] );
             }
         }
 
@@ -189,7 +193,7 @@ namespace ClassicAssist.UI.ViewModels.Agents.Autoloot.Folder
             }
             catch ( Exception )
             {
-                MessageBox.Show( Strings.Error_loading_file__ensure_it_isn_t_currently_in_use, Strings.Error );
+                MessageBoxHelper.Show( Strings.Error_loading_file__ensure_it_isn_t_currently_in_use, Strings.Error );
             }
         }
 

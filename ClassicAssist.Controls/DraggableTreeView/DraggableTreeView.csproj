@@ -1,11 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0;net45</TargetFrameworks>
-    <UseWPF>true</UseWPF>
+    <TargetFrameworks>net11.0</TargetFrameworks>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
     <Authors>Reetus</Authors>
     <PackageProjectUrl>https://github.com/Reetus/DraggableTreeView</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Reetus/DraggableTreeView</RepositoryUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.23" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.3.0.6" />
+  </ItemGroup>
 
 </Project>

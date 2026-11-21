@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2020 Reetus
 // 
@@ -18,7 +18,8 @@
 #endregion
 
 using System;
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Media;
 
 namespace ClassicAssist.Data.Chat
 {

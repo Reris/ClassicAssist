@@ -1,12 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Threading;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Threading;
 using Assistant;
 using ClassicAssist.Misc;
 using ClassicAssist.Shared.Resources;
@@ -18,6 +21,8 @@ using ClassicAssist.UO;
 using ClassicAssist.UO.Data;
 using ClassicAssist.UO.Objects;
 using Microsoft.Scripting.Utils;
+using System.Windows.Input;
+using ItemCollection = ClassicAssist.UO.Objects.ItemCollection;
 
 namespace ClassicAssist.UI.ViewModels
 {
@@ -339,7 +344,7 @@ namespace ClassicAssist.UI.ViewModels
         {
             try
             {
-                Clipboard.SetText( _selectedItem.Value );
+                ClipboardHelper.SetText( _selectedItem.Value );
             }
             catch ( Exception )
             {
@@ -427,11 +432,11 @@ namespace ClassicAssist.UI.ViewModels
 
         private static void ShowProperties( IEnumerable<Property> properties )
         {
-            _ = Engine.Dispatcher.BeginInvoke( (Action) ( () =>
+            Engine.Dispatcher.Post( () =>
             {
                 DebugWindow window = new DebugWindow( typeof(DebugPropertiesViewModel), properties ) { Topmost = true };
                 window.Show();
-            } ) );
+            } );
         }
 
         private static void InspectObject( int serial )

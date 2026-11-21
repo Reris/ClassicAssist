@@ -1,9 +1,11 @@
 using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using ClassicAssist.Data.Hotkeys;
 using static ClassicAssist.Misc.SDLKeys;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.Controls
 {
@@ -13,26 +15,22 @@ namespace ClassicAssist.UI.Controls
     /// </summary>
     public class TextBoxKey : TextBox
     {
-        public static readonly DependencyProperty ShortcutProperty = DependencyProperty.Register( nameof( Shortcut ),
-            typeof( ShortcutKeys ), typeof( TextBoxKey ),
-            new FrameworkPropertyMetadata( default( ShortcutKeys ),
-                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnShortcutChanged ) );
+        public static readonly Avalonia.StyledProperty<ShortcutKeys> ShortcutProperty =
+        AvaloniaCompat.RegisterCompat<TextBoxKey, ShortcutKeys>(nameof( Shortcut ), default( ShortcutKeys ), defaultBindingMode: Avalonia.Data.BindingMode.TwoWay, onChanged: OnShortcutChanged);
 
-        private readonly Key[] _modifiers =
+        private readonly KeyModifiers[] _modifierKeys =
         {
-            Key.LeftCtrl, Key.RightCtrl, Key.LeftShift, Key.RightShift, Key.LeftAlt, Key.RightAlt
+            KeyModifiers.Control, KeyModifiers.Shift, KeyModifiers.Alt, KeyModifiers.Meta
         };
 
         public TextBoxKey()
         {
             IsReadOnly = true;
-            IsReadOnlyCaretVisible = false;
             IsUndoEnabled = false;
 
-            // WPF implicit styles only match the exact type, so a TextBox subclass does not inherit
-            // the theme's implicit { x:Type TextBox } style. Resolve it explicitly so we keep the
-            // dark theme wherever DarkTheme.xaml is in scope.
-            SetResourceReference( StyleProperty, typeof( TextBox ) );
+            AddHandler( KeyDownEvent, OnPreviewKeyDownHandler, RoutingStrategies.Tunnel );
+            AddHandler( PointerPressedEvent, OnPreviewMouseDownHandler, RoutingStrategies.Tunnel );
+            AddHandler( PointerWheelChangedEvent, OnMouseWheelHandler, RoutingStrategies.Tunnel );
         }
 
         public Key Key { get; private set; }
@@ -44,7 +42,7 @@ namespace ClassicAssist.UI.Controls
             set => SetValue( ShortcutProperty, value );
         }
 
-        private static void OnShortcutChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void OnShortcutChanged( AvaloniaObject d, AvaloniaPropertyChangedEventArgs e )
         {
             if ( d is TextBoxKey textBoxKey )
             {
@@ -52,73 +50,83 @@ namespace ClassicAssist.UI.Controls
             }
         }
 
-        private ModKey CheckModifiers()
+        private ModKey CheckModifiers( KeyModifiers keyModifiers )
         {
-            return KeymodFromKeyList( _modifiers.Where( Keyboard.IsKeyDown ) );
-        }
+            ModKey keymod = ModKey.None;
 
-        private bool IsModifier( Key key )
-        {
-            return _modifiers.Any( k => key == k );
-        }
-
-        protected override void OnPreviewKeyDown( KeyEventArgs e )
-        {
-            e.Handled = true;
-            Key key = e.Key;
-
-            if ( key == Key.System )
+            if ( keyModifiers.HasFlag( KeyModifiers.Control ) )
             {
-                key = e.SystemKey;
+                keymod |= ModKey.LeftCtrl;
             }
 
-            if ( IsModifier( key ) )
+            if ( keyModifiers.HasFlag( KeyModifiers.Shift ) )
+            {
+                keymod |= ModKey.LeftShift;
+            }
+
+            if ( keyModifiers.HasFlag( KeyModifiers.Alt ) )
+            {
+                keymod |= ModKey.LeftAlt;
+            }
+
+            if ( keyModifiers.HasFlag( KeyModifiers.Meta ) )
+            {
+                keymod |= ModKey.RightCtrl;
+            }
+
+            return keymod;
+        }
+
+        private void OnPreviewKeyDownHandler( object sender, KeyEventArgs e )
+        {
+            e.Handled = true;
+
+            Key key = e.Key;
+
+            if ( key == Key.LeftCtrl || key == Key.RightCtrl || key == Key.LeftShift || key == Key.RightShift ||
+                 key == Key.LWin || key == Key.RWin || key == Key.LeftAlt || key == Key.RightAlt )
             {
                 return;
             }
 
-            Modifier = CheckModifiers();
-
-            // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
-            switch ( key )
-            {
-                case Key.DeadCharProcessed:
-                    key = e.DeadCharProcessedKey;
-                    break;
-                case Key.ImeProcessed:
-                    key = e.ImeProcessedKey;
-                    break;
-                case Key.System:
-                    key = e.SystemKey;
-                    break;
-            }
+            Modifier = CheckModifiers( e.KeyModifiers );
 
             Key = key;
 
             Shortcut = new ShortcutKeys { Modifier = Modifier, Key = Key };
         }
 
-        protected override void OnPreviewMouseDown( MouseButtonEventArgs e )
+        private void OnPreviewMouseDownHandler( object sender, PointerPressedEventArgs e )
         {
-            if ( e.ChangedButton == MouseButton.Left || e.ChangedButton == MouseButton.Right )
+            PointerUpdateKind button = e.GetCurrentPoint( this ).Properties.PointerUpdateKind;
+
+            if ( button == PointerUpdateKind.LeftButtonPressed || button == PointerUpdateKind.RightButtonPressed )
             {
                 return;
             }
 
             e.Handled = true;
 
-            Modifier = CheckModifiers();
+            Modifier = CheckModifiers( e.KeyModifiers );
 
-            Shortcut = new ShortcutKeys { Modifier = Modifier, Mouse = (MouseOptions) e.ChangedButton };
+            MouseOptions mouseOption = button switch
+            {
+                PointerUpdateKind.MiddleButtonPressed => MouseOptions.MiddleButton,
+                PointerUpdateKind.XButton1Pressed => MouseOptions.XButton1,
+                PointerUpdateKind.XButton2Pressed => MouseOptions.XButton2,
+                _ => MouseOptions.None
+            };
+
+            Shortcut = new ShortcutKeys { Modifier = Modifier, Mouse = mouseOption };
         }
 
-        protected override void OnMouseWheel( MouseWheelEventArgs e )
+        private void OnMouseWheelHandler( object sender, PointerWheelEventArgs e )
         {
             e.Handled = true;
 
-            Modifier = CheckModifiers();
+            Modifier = CheckModifiers( e.KeyModifiers );
 
-            Shortcut = e.Delta < 0
+            Shortcut = e.Delta.Y < 0
                 ? new ShortcutKeys { Mouse = MouseOptions.MouseWheelDown, Modifier = Modifier }
                 : new ShortcutKeys { Mouse = MouseOptions.MouseWheelUp, Modifier = Modifier };
         }

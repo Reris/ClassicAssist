@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -18,10 +18,14 @@
 #endregion
 
 using System;
-using System.Windows;
-using System.Windows.Controls;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Xaml.Interactivity;
+using ClassicAssist.Shared.UI.Compat;
 using System.Windows.Input;
-using Microsoft.Xaml.Behaviors;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
@@ -34,11 +38,11 @@ namespace ClassicAssist.UI.Misc.Behaviours
 
     public class WindowCommandBehaviour : Behavior<Button>
     {
-        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register( nameof( Command ), typeof( WindowCommand ), typeof( WindowCommandBehaviour ),
-            new FrameworkPropertyMetadata( WindowCommand.Close ) );
+        public static readonly Avalonia.StyledProperty<WindowCommand> CommandProperty =
+        AvaloniaCompat.RegisterCompat<WindowCommandBehaviour, WindowCommand>(nameof( Command ), WindowCommand.Close);
 
-        public static readonly DependencyProperty MinimizeCommandProperty = DependencyProperty.Register( nameof( MinimizeCommand ), typeof( ICommand ),
-            typeof( WindowCommandBehaviour ), new FrameworkPropertyMetadata( null ) );
+        public static readonly Avalonia.StyledProperty<ICommand> MinimizeCommandProperty =
+        AvaloniaCompat.RegisterCompat<WindowCommandBehaviour, ICommand>(nameof( MinimizeCommand ), null);
 
         public WindowCommand Command
         {
@@ -61,12 +65,12 @@ namespace ClassicAssist.UI.Misc.Behaviours
 
         private void OnClick( object sender, RoutedEventArgs e )
         {
-            if ( !( sender is UIElement element ) )
+            if ( !( sender is Visual visual ) )
             {
                 return;
             }
 
-            Window window = Window.GetWindow( element );
+            Window window = TopLevel.GetTopLevel( visual ) as Window;
 
             if ( window == null )
             {

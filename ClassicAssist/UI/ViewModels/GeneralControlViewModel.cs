@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Windows.Threading;
+using Avalonia.Input;
+using Avalonia.Threading;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Data.Filters;
@@ -17,6 +17,7 @@ using ClassicAssist.UI.Views;
 using ClassicAssist.UI.Views.General;
 using ClassicAssist.UO;
 using Newtonsoft.Json.Linq;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels
 {
@@ -248,7 +249,7 @@ namespace ClassicAssist.UI.ViewModels
         {
             AutologinConfigureWindow window = new AutologinConfigureWindow();
 
-            window.ShowDialog();
+            window.ShowDialogCompat();
         }
 
         private static void BackupSettings( object obj )
@@ -267,10 +268,10 @@ namespace ClassicAssist.UI.ViewModels
             dispatcher.Invoke( ShowBackupSettingsWindow );
         }
 
-        private static void ShowBackupSettingsWindow()
+        private static async void ShowBackupSettingsWindow()
         {
             BackupSettingsWindow window = new BackupSettingsWindow();
-            window.ShowDialog();
+            await window.ShowDialogAsync();
         }
 
         private void OnSavedPasswordsChangedEvent( object sender, EventArgs e )
@@ -388,7 +389,7 @@ namespace ClassicAssist.UI.ViewModels
         {
             NewProfileWindow window = new NewProfileWindow();
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( window.DataContext is NewProfileViewModel vm && !string.IsNullOrEmpty( vm.FileName ) )
             {

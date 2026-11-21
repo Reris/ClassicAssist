@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2026 Reetus
 // 
@@ -15,8 +15,9 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
+using Avalonia.Input;
 using ClassicAssist.Launcher.Annotations;
+using ClassicAssist.Shared.UI;
 using Newtonsoft.Json;
 
 namespace ClassicAssist.Launcher

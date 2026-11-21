@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -22,24 +22,28 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UI.Views.ECV.Settings.Models;
 using ClassicAssist.UO;
 using ClassicAssist.UO.Network.Packets;
 using ClassicAssist.UO.Objects;
+using ClassicAssist.Shared.UI.Compat;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views.ECV.Settings
 {
     /// <summary>
     ///     Interaction logic for ContainerSetsSettingControl.xaml
     /// </summary>
-    public partial class ContainerSetsSettingsControl : INotifyPropertyChanged
-    {
-        public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register( nameof( Items ), typeof( ObservableCollection<ContainerSet> ),
-            typeof( ContainerSetsSettingsControl ), new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+    public partial class ContainerSetsSettingsControl : UserControl, INotifyPropertyChanged
+    {        public static readonly Avalonia.StyledProperty<ObservableCollection<ContainerSet>> ItemsProperty =
+        AvaloniaCompat.RegisterCompat<ContainerSetsSettingsControl, ObservableCollection<ContainerSet>>(nameof( Items ), null, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
         private ICommand _addItemCommand;
 

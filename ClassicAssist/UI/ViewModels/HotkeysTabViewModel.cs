@@ -1,10 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Data;
 using ClassicAssist.Data.Hotkeys;
 using ClassicAssist.Data.Hotkeys.Commands;
@@ -15,6 +18,7 @@ using ClassicAssist.Shared.UI;
 using ClassicAssist.UI.Views.Hotkeys;
 using Newtonsoft.Json.Linq;
 using Sentry;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels
 {
@@ -552,7 +556,7 @@ namespace ClassicAssist.UI.ViewModels
             } );
         }
 
-        private void CheckOverwriteHotkey( HotkeyEntry selectedItem, ShortcutKeys hotkey )
+        private async void CheckOverwriteHotkey( HotkeyEntry selectedItem, ShortcutKeys hotkey )
         {
             HotkeyEntry conflict = null;
 
@@ -570,7 +574,7 @@ namespace ClassicAssist.UI.ViewModels
             if ( conflict != null && !ReferenceEquals( selectedItem, conflict ) )
             {
                 MessageBoxResult result =
-                    MessageBox.Show( string.Format( Strings.Overwrite_existing_hotkey___0____, conflict ),
+                    await MessageBoxHelper.ShowAsync( string.Format( Strings.Overwrite_existing_hotkey___0____, conflict ),
                         Strings.Warning, MessageBoxButton.YesNo );
 
                 if ( result == MessageBoxResult.No )
@@ -625,7 +629,7 @@ namespace ClassicAssist.UI.ViewModels
 
             HotkeyOptionsWindow window = new HotkeyOptionsWindow( hotkeyCommand );
 
-            window.ShowDialog();
+            window.ShowDialogCompat();
         }
     }
 }

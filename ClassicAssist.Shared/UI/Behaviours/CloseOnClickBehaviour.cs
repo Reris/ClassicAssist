@@ -1,6 +1,10 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using Microsoft.Xaml.Behaviors;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.VisualTree;
+using Avalonia.Xaml.Interactivity;
 
 namespace ClassicAssist.Shared.UI.Behaviours
 {
@@ -25,7 +29,7 @@ namespace ClassicAssist.Shared.UI.Behaviours
                 return;
             }
 
-            Window window = Window.GetWindow( button );
+            Window window = button.GetVisualRoot() as Window;
 
             window?.Close();
         }

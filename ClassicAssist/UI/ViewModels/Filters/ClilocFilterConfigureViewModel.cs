@@ -1,9 +1,12 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
-using System.Windows.Forms;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+
 using ClassicAssist.Data;
 using ClassicAssist.Data.Filters;
 using ClassicAssist.Shared.UI;
@@ -11,6 +14,8 @@ using ClassicAssist.UI.ViewModels.Autoloot;
 using ClassicAssist.UI.Views;
 using ClassicAssist.UI.Views.Autoloot;
 using ClassicAssist.UO.Data;
+using System.Windows.Input;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.ViewModels.Filters
 {
@@ -68,7 +73,7 @@ namespace ClassicAssist.UI.ViewModels.Filters
             }
         }
 
-        private static void ChooseCliloc( object obj )
+        private static async void ChooseCliloc( object obj )
         {
             if ( !( obj is FilterClilocEntry entry ) )
             {
@@ -78,7 +83,7 @@ namespace ClassicAssist.UI.ViewModels.Filters
             ClilocSelectionViewModel vm = new ClilocSelectionViewModel();
             ClilocSelectionWindow window = new ClilocSelectionWindow { DataContext = vm };
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( vm.DialogResult != DialogResult.OK )
             {
@@ -89,7 +94,7 @@ namespace ClassicAssist.UI.ViewModels.Filters
             entry.Replacement = vm.SelectedCliloc.Value;
         }
 
-        private static void SelectHue( object obj )
+        private static async void SelectHue( object obj )
         {
             if ( !( obj is FilterClilocEntry entry ) )
             {
@@ -98,7 +103,7 @@ namespace ClassicAssist.UI.ViewModels.Filters
 
             SingleHuePickerWindow window = new SingleHuePickerWindow { Topmost = Options.CurrentOptions.AlwaysOnTop, SelectedHue = entry.Hue };
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( window.SelectedHue == -1 )
             {
@@ -147,7 +152,7 @@ namespace ClassicAssist.UI.ViewModels.Filters
             set => SetProperty( ref _hue, value );
         }
 
-        public string Original => DesignerProperties.GetIsInDesignMode( new DependencyObject() ) ? Replacement : UO.Data.Cliloc.GetProperty( Cliloc );
+        public string Original => Design.IsDesignMode ? Replacement : UO.Data.Cliloc.GetProperty( Cliloc );
 
         public string Replacement
         {

@@ -1,39 +1,18 @@
-﻿<UserControl x:Class="ClassicAssist.UI.Views.HotkeysTabControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels"
-             xmlns:controls="clr-namespace:ClassicAssist.UI.Controls"
-             xmlns:local="clr-namespace:ClassicAssist.Data.Hotkeys"
-             xmlns:misc="clr-namespace:ClassicAssist.Misc"
-             xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared"
-             xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters"
-             xmlns:sharedControls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls"
-             xmlns:commands="clr-namespace:ClassicAssist.Data.Hotkeys.Commands"
-             xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared"
-             mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="500">
+﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:controls="clr-namespace:ClassicAssist.UI.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:misc="clr-namespace:ClassicAssist.Misc" xmlns:sharedControls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.HotkeysTabControl" mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="500" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:local="clr-namespace:ClassicAssist.Data.Hotkeys" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:commands="clr-namespace:ClassicAssist.Data.Hotkeys.Commands" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <valueConverters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <misc:BindingProxy x:Key="Proxy" Data="{Binding}" />
+            <!-- MIGRATION: CollectionViewSource removed - group in ViewModel instead -->
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
+        <!-- MIGRATION: style for WPF-only type 'GridViewColumnHeader' removed -->
+    </UserControl.Styles>
     <UserControl.DataContext>
         <viewModels:HotkeysTabViewModel />
     </UserControl.DataContext>
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <shared:SharedResourceDictionary Source="../../Resources/DarkTheme.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <valueConverters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-            <CollectionViewSource x:Key='src' Source="{Binding FilterItems}">
-                <CollectionViewSource.GroupDescriptions>
-                    <PropertyGroupDescription PropertyName="Name" />
-                </CollectionViewSource.GroupDescriptions>
-            </CollectionViewSource>
-            <misc:BindingProxy x:Key="Proxy" Data="{Binding}" />
-            <Style TargetType="{x:Type GridViewColumnHeader}">
-                <Setter Property="Visibility" Value="Collapsed" />
-            </Style>
-        </ResourceDictionary>
-    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -45,62 +24,17 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <sharedControls:FilterControl Grid.Row="0" FilterText="{Binding FilterText}" Margin="5,10,5,0" />
-            <ListView Grid.Row="1" ItemsSource="{Binding Source={StaticResource src}}" Margin="5"
-                      PreviewMouseWheel="UIElement_OnPreviewMouseWheel"
-                      VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-                      VirtualizingPanel.ScrollUnit="Pixel"
-                      VirtualizingPanel.VirtualizationMode="Recycling">
-                <ListView.GroupStyle>
-                    <GroupStyle>
-                        <GroupStyle.ContainerStyle>
-                            <Style TargetType="{x:Type GroupItem}">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type GroupItem}">
-                                            <Expander IsExpanded="{Binding Items/IsExpanded}" BorderThickness="0,0,0,0"
-                                                      Margin="5,2">
-                                                <Expander.Header>
-                                                    <TextBlock Text="{Binding Name}"
-                                                               Foreground="{StaticResource ThemeForegroundBrush}"
-                                                               d:DataContext="{d:DesignInstance {x:Type local:HotkeyEntry}}"
-                                                               Margin="5,0,0,0" />
-                                                </Expander.Header>
-                                                <Expander.Content>
-                                                    <ListBox ItemsSource="{Binding Items/Children}" BorderThickness="0"
-                                                             Margin="40,0,0,0"
-                                                             VirtualizingStackPanel.VirtualizationMode="Recycling"
-                                                             SelectedItem="{Binding Path=Data.(viewModels:HotkeysTabViewModel.SelectedItem), Source={StaticResource Proxy}}">
-                                                        <ListBox.ItemTemplate>
-                                                            <DataTemplate DataType="commands:HotkeyCommand">
-                                                                <StackPanel Orientation="Horizontal">
-                                                                    <Image Source="{Binding Image}" Stretch="Uniform"
-                                                                           Margin="0,0,5,0" />
-                                                                    <TextBlock Text="{Binding}"
-                                                                               Foreground="{DynamicResource ThemeForegroundBrush}"
-                                                                               ToolTip="{Binding Tooltip}"
-                                                                               VerticalAlignment="Center" />
-                                                                </StackPanel>
-                                                            </DataTemplate>
-                                                        </ListBox.ItemTemplate>
-                                                    </ListBox>
-                                                </Expander.Content>
-                                            </Expander>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </GroupStyle.ContainerStyle>
-                    </GroupStyle>
-                </ListView.GroupStyle>
-            </ListView>
+            <ListBox Grid.Row="1" Margin="5" ItemsSource="{Binding Source={DynamicResource src}}" PointerWheelChanged="UIElement_OnPreviewMouseWheel">
+                <!-- MIGRATION: GroupStyle removed - restructure grouping manually -->
+            </ListBox>
         </Grid>
         <GroupBox Grid.Column="1" Header="{x:Static resources:Strings.Hotkeys}" Margin="0, 10, 5, 5">
             <Grid>
-                <Grid.Resources>
-                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                <Grid.Styles>
+                    <Style Selector="Button">
                         <Setter Property="Padding" Value="4" />
                     </Style>
-                </Grid.Resources>
+                </Grid.Styles>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -109,30 +43,27 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <controls:TextBoxKey x:Name="textBoxKey"
-                                     Shortcut="{Binding Hotkey}" Grid.Row="0"
-                                     Margin="10">
-                    <controls:TextBoxKey.Style>
-                        <Style TargetType="controls:TextBoxKey" BasedOn="{StaticResource {x:Type TextBox}}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=SelectedItem.IsCategory}" Value="True">
-                                    <Setter Property="IsEnabled" Value="False" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Path=SelectedItem.(local:HotkeyEntry.Hotkey)}"
-                                             Value="{x:Null}">
-                                    <Setter Property="IsEnabled" Value="False" />
-                                </DataTrigger>
-                            </Style.Triggers>
+                <controls:TextBoxKey x:Name="textBoxKey" Shortcut="{Binding Hotkey}" Grid.Row="0" Margin="10">
+                    <controls:TextBoxKey.Styles>
+                        <Style Selector="controls|TextBoxKey">
+                            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Path=SelectedItem.IsCategory}" />
+                            <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Path=SelectedItem.(local:HotkeyEntry.Hotkey)}" />
+                            <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
+                            <Style Selector="^.ca-dt1">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </Style>
+                            <Style Selector="^.ca-dt2">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </Style>
                         </Style>
-                    </controls:TextBoxKey.Style>
+                    </controls:TextBoxKey.Styles>
                 </controls:TextBoxKey>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Button Content="{x:Static resources:Strings.Clear}" Margin="10,0,10,5"
-                            Command="{Binding ClearHotkeyCommand}" CommandParameter="{Binding SelectedItem}"
-                            Grid.Column="0" IsEnabled="{Binding IsEnabled, ElementName=textBoxKey}" />
+                    <Button Content="{x:Static resources:Strings.Clear}" Margin="10,0,10,5" Command="{Binding ClearHotkeyCommand}" CommandParameter="{Binding SelectedItem}" Grid.Column="0" IsEnabled="{Binding IsEnabled, ElementName=textBoxKey}" />
                 </Grid>
                 <Grid Grid.Row="2">
                     <Grid.RowDefinitions>
@@ -140,41 +71,29 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <CheckBox Content="{x:Static resources:Strings.Pass_to_UO}" Margin="10,0,10,5"
-                              IsChecked="{Binding Path=SelectedItem.(local:HotkeyEntry.PassToUO), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                              Grid.Row="0" IsEnabled="{Binding IsEnabled, ElementName=textBoxKey}" />
-                    <CheckBox Content="{x:Static resources:Strings.Undisableable}" Margin="10,0,10,5"
-                              IsChecked="{Binding Path=SelectedItem.(local:HotkeyEntry.Disableable), Converter={StaticResource InverseBooleanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                              Grid.Row="1" IsEnabled="{Binding IsEnabled, ElementName=textBoxKey}" />
-                    <CheckBox Content="{x:Static resources:Strings.Global}" Margin="10,0,10,5"
-                              IsChecked="{Binding Path=SelectedItem.(local:HotkeyEntry.IsGlobal)}"
-                              Grid.Row="2">
-                        <CheckBox.Style>
-                            <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+                    <CheckBox Content="{x:Static resources:Strings.Pass_to_UO}" Margin="10,0,10,5" IsChecked="{Binding Path=SelectedItem.(local:HotkeyEntry.PassToUO), Mode=TwoWay}" Grid.Row="0" IsEnabled="{Binding IsEnabled, ElementName=textBoxKey}" />
+                    <CheckBox Content="{x:Static resources:Strings.Undisableable}" Margin="10,0,10,5" IsChecked="{Binding Path=SelectedItem.(local:HotkeyEntry.Disableable), Converter={StaticResource InverseBooleanConverter}, Mode=TwoWay}" Grid.Row="1" IsEnabled="{Binding IsEnabled, ElementName=textBoxKey}" />
+                    <CheckBox Content="{x:Static resources:Strings.Global}" Margin="10,0,10,5" IsChecked="{Binding Path=SelectedItem.(local:HotkeyEntry.IsGlobal)}" Grid.Row="2">
+                        <CheckBox.Styles>
+                            <Style Selector="CheckBox">
                                 <Setter Property="IsEnabled" Value="{Binding IsEnabled, ElementName=textBoxKey}" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedItem.CanGlobal}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False" />
-                                    </DataTrigger>
-                                </Style.Triggers>
+                                <Setter Property="ca:TriggerCondition.Bind" Value="{Binding SelectedItem.CanGlobal}" />
+                                <Setter Property="ca:TriggerCondition.Value" Value="False" />
+                                <Style Selector="^.ca-dt3">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </Style>
                             </Style>
-                        </CheckBox.Style>
+                        </CheckBox.Styles>
                     </CheckBox>
                 </Grid>
                 <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Button Content="{x:Static resources:Strings.Execute}" Margin="10,0,10,5"
-                            Command="{Binding ExecuteCommand}" CommandParameter="{Binding SelectedItem}"
-                            Grid.Column="0" IsEnabled="{Binding IsEnabled, ElementName=textBoxKey}" />
+                    <Button Content="{x:Static resources:Strings.Execute}" Margin="10,0,10,5" Command="{Binding ExecuteCommand}" CommandParameter="{Binding SelectedItem}" Grid.Column="0" IsEnabled="{Binding IsEnabled, ElementName=textBoxKey}" />
                 </Grid>
-                <Button Grid.Row="4" Margin="10,0,10,5" Content="{x:Static resources:Strings.Create_Macro_Button}"
-                        Command="{Binding CreateMacroButtonCommand}"
-                        IsEnabled="{Binding IsEnabled, ElementName=textBoxKey}" />
-                <Button Grid.Row="5" Margin="10,0,10,5" Content="{x:Static resources:Strings.Options}"
-                        IsEnabled="{Binding SelectedItem.Configurable}" Command="{Binding ConfigureHotkeyCommand}"
-                        CommandParameter="{Binding SelectedItem}" />
+                <Button Grid.Row="4" Margin="10,0,10,5" Content="{x:Static resources:Strings.Create_Macro_Button}" Command="{Binding CreateMacroButtonCommand}" IsEnabled="{Binding IsEnabled, ElementName=textBoxKey}" />
+                <Button Grid.Row="5" Margin="10,0,10,5" Content="{x:Static resources:Strings.Options}" IsEnabled="{Binding SelectedItem.Configurable}" Command="{Binding ConfigureHotkeyCommand}" CommandParameter="{Binding SelectedItem}" />
             </Grid>
         </GroupBox>
     </Grid>

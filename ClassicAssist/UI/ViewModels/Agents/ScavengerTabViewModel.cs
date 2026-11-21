@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Input;
+
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Data.Scavenger;
@@ -21,6 +21,8 @@ using ClassicAssist.UO.Objects;
 using Microsoft.Scripting.Utils;
 using Newtonsoft.Json.Linq;
 using UOC = ClassicAssist.UO.Commands;
+using System.Windows.Input;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.ViewModels.Agents
 {
@@ -232,13 +234,13 @@ namespace ClassicAssist.UI.ViewModels.Agents
             }
         }
 
-        private void OpenClilocFilter( object obj )
+        private async void OpenClilocFilter( object obj )
         {
             ScavengerClilocFilterViewModel vm = new ScavengerClilocFilterViewModel( FilterEnabled, Filters );
 
             ScavengerClilocFilterWindow window = new ScavengerClilocFilterWindow { DataContext = vm };
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( vm.DialogResult != DialogResult.OK )
             {

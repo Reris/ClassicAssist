@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2024 Reetus
 // 
@@ -13,16 +13,17 @@
 #endregion
 
 using System.Collections.ObjectModel;
-using System.Windows.Input;
-using System.Windows.Threading;
+using Avalonia.Input;
+using Avalonia.Threading;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UI.Views.ECV.Settings.Models;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views.ECV.Settings
 {
     public class OpenContainersSettingsViewModel : SetPropertyNotifyChanged
     {
-        private readonly Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
+        private readonly Dispatcher _dispatcher = Avalonia.Threading.Dispatcher.UIThread;
         private ICommand _addEntryCommand;
         private ObservableCollection<CombineStacksOpenContainersIgnoreEntry> _items = new ObservableCollection<CombineStacksOpenContainersIgnoreEntry>();
         private ICommand _removeEntryCommand;

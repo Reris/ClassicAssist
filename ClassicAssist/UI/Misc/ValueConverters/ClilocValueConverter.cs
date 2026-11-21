@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) $CURRENT_YEAR$ Reetus
 // 
@@ -14,7 +14,8 @@
 
 using System;
 using System.Globalization;
-using System.Windows.Data;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using ClassicAssist.UO.Data;
 
 namespace ClassicAssist.UI.Misc.ValueConverters

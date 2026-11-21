@@ -1,9 +1,13 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Net.Sockets;
 using System.Reflection;
-using System.Windows;
-using Microsoft.Xaml.Behaviors;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Xaml.Interactivity;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Shared;

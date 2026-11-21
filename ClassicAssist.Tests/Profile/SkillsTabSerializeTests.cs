@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) $CURRENT_YEAR$ Reetus
 // 
@@ -13,7 +13,7 @@
 #endregion
 
 using System.Linq;
-using System.Windows.Input;
+using Avalonia.Input;
 using ClassicAssist.Data.Hotkeys;
 using ClassicAssist.Data.Hotkeys.Commands;
 using ClassicAssist.Misc;

@@ -47,10 +47,6 @@ namespace ClassicAssist.Tests.MacroCommands
         [TestMethod]
         public void WillOrganizeLimitAmount()
         {
-            AppDomain appDomain = AppDomain.CreateDomain( "WillOrganizeLimitAmount", AppDomain.CurrentDomain.Evidence,
-                AppDomain.CurrentDomain.SetupInformation );
-
-            appDomain.DoCallBack( () =>
             {
                 Engine.ClientVersion = new Version( 7, 0, 0, 0 );
                 Dictionary<int, int> serialAmount = new Dictionary<int, int>();
@@ -120,16 +116,12 @@ namespace ClassicAssist.Tests.MacroCommands
                 Engine.InternalPacketSentEvent -= OnInternalPacketSentEvent;
                 Engine.Items.Clear();
                 Engine.PacketWaitEntries = null;
-            } );
+                        }
         }
 
         [TestMethod]
         public void WillOrganizeNoLimit()
         {
-            AppDomain appDomain = AppDomain.CreateDomain( "WillOrganizeNoLimit", AppDomain.CurrentDomain.Evidence,
-                AppDomain.CurrentDomain.SetupInformation );
-
-            appDomain.DoCallBack( () =>
             {
                 Engine.ClientVersion = new Version( 7, 0, 0, 0 );
                 Dictionary<int, int> serialAmount = new Dictionary<int, int>();
@@ -198,16 +190,12 @@ namespace ClassicAssist.Tests.MacroCommands
                 Engine.InternalPacketSentEvent -= OnInternalPacketSentEvent;
                 Engine.Items.Clear();
                 Engine.PacketWaitEntries = null;
-            } );
+                        }
         }
 
         [TestMethod]
         public void WillOrganizeNoLimitMultiple()
         {
-            AppDomain appDomain = AppDomain.CreateDomain( "WillOrganizeNoLimitMultiple",
-                AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation );
-
-            appDomain.DoCallBack( () =>
             {
                 Engine.ClientVersion = new Version( 7, 0, 0, 0 );
                 Dictionary<int, int> serialAmount = new Dictionary<int, int>();
@@ -280,7 +268,7 @@ namespace ClassicAssist.Tests.MacroCommands
                 Engine.InternalPacketSentEvent -= OnInternalPacketSentEvent;
                 Engine.Items.Clear();
                 Engine.PacketWaitEntries = null;
-            } );
+                        }
         }
     }
 }

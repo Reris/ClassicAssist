@@ -1,19 +1,22 @@
-﻿using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.Controls
 {
     /// <summary>
     ///     Interaction logic for HeaderTextBox.xaml
     /// </summary>
-    public partial class HeaderTextBox
+    public partial class HeaderTextBox : UserControl
     {
-        public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register( nameof( Header ),
-            typeof( object ), typeof( HeaderTextBox ),
-            new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<object> HeaderProperty =
+        AvaloniaCompat.RegisterCompat<HeaderTextBox, object>(nameof( Header ), null, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
-        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register( nameof( Value ),
-            typeof( object ), typeof( HeaderTextBox ),
-            new FrameworkPropertyMetadata( string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+        public static readonly Avalonia.StyledProperty<object> ValueProperty =
+        AvaloniaCompat.RegisterCompat<HeaderTextBox, object>(nameof( Value ), string.Empty, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
         public HeaderTextBox()
         {

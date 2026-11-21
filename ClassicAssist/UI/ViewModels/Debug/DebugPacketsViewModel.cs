@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Windows.Input;
-using System.Windows.Threading;
+using Avalonia.Input;
+using Avalonia.Threading;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Misc;
@@ -16,6 +16,7 @@ using ClassicAssist.UO.Network.PacketFilter;
 using Microsoft.Scripting.Utils;
 using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels.Debug
 {
@@ -42,7 +43,7 @@ namespace ClassicAssist.UI.ViewModels.Debug
 
         public DebugPacketsViewModel()
         {
-            _dispatcher = Dispatcher.CurrentDispatcher;
+            _dispatcher = Avalonia.Threading.Dispatcher.UIThread;
 
             PacketEntries.Add( new PacketEnabledEntry { Name = Strings.All_Packets, PacketID = -1, Enabled = true } );
 
@@ -185,26 +186,21 @@ namespace ClassicAssist.UI.ViewModels.Debug
             }
         }
 
-        private void ExportLog( object obj )
+        private async void ExportLog( object obj )
         {
             if ( !( obj is IEnumerable<PacketEntry> items ) )
             {
                 return;
             }
 
-            SaveFileDialog sfd = new SaveFileDialog
-            {
-                InitialDirectory = Engine.StartupPath ?? Environment.CurrentDirectory, Filter = "JSON Packet Log|*.packets.json", FileName = "export.packets.json"
-            };
+            string fileName = await DialogHelper.ShowSaveFileDialogAsync(
+                filter: "JSON Packet Log|*.packets.json", fileName: "export.packets.json",
+                initialDirectory: Engine.StartupPath ?? Environment.CurrentDirectory );
 
-            bool? result = sfd.ShowDialog();
-
-            if ( !result.HasValue || !result.Value || string.IsNullOrEmpty( sfd.FileName ) )
+            if ( string.IsNullOrEmpty( fileName ) )
             {
                 return;
             }
-
-            string fileName = sfd.FileName;
 
             JArray jArray = new JArray();
 

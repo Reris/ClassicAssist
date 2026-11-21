@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2024 Reetus
 // 
@@ -12,17 +12,21 @@
 
 #endregion
 
-using System.Windows;
-using System.Windows.Controls;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Misc;
-using Microsoft.Xaml.Behaviors;
+using Avalonia.Xaml.Interactivity;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.Views.ECV.Settings.Misc
 {
     public class SetBindingProxyBehaviour : Behavior<UserControl>
     {
-        public static readonly DependencyProperty ProxyProperty =
-            DependencyProperty.Register( nameof( Proxy ), typeof( BindingProxy ), typeof( SetBindingProxyBehaviour ), new PropertyMetadata( null ) );
+        public static readonly Avalonia.StyledProperty<BindingProxy> ProxyProperty =
+        AvaloniaCompat.RegisterCompat<SetBindingProxyBehaviour, BindingProxy>(nameof( Proxy ), null);
 
         public BindingProxy Proxy
         {

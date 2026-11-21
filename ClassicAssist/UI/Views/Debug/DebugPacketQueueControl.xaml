@@ -1,23 +1,8 @@
-﻿<UserControl x:Class="ClassicAssist.UI.Views.Debug.DebugPacketQueueControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared"
-             xmlns:debug="clr-namespace:ClassicAssist.UI.ViewModels.Debug"
-             xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared"
-             xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls"
-             xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared"
-             mc:Ignorable="d" d:DesignHeight="400" d:DesignWidth="550">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <shared:SharedResourceDictionary Source="../../../Resources/DarkTheme.xaml" />
-                <ResourceDictionary Source="../Debug/Styles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
+﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:debug="clr-namespace:ClassicAssist.UI.ViewModels.Debug" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.Debug.DebugPacketQueueControl" mc:Ignorable="d" d:DesignHeight="400" d:DesignWidth="550" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+    <UserControl.Styles>
+        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
+        <StyleInclude Source="avares://ClassicAssist/UI/Views/Debug/Styles.xaml" />
+    </UserControl.Styles>
     <UserControl.DataContext>
         <debug:DebugPacketQueueViewModel />
     </UserControl.DataContext>
@@ -27,21 +12,19 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ToolBar Grid.Row="0">
-            <controls:ImageButton Command="{Binding ClearCommand}" ImageSource="{StaticResource RemoveIcon}"
-                                  ToolTip="{x:Static resources:Strings.Clear_All}" />
+        <StackPanel Grid.Row="0">
+            <controls:ImageButton Command="{Binding ClearCommand}" ImageSource="{DynamicResource RemoveIcon}" ToolTip.Tip="{x:Static resources:Strings.Clear_All}" />
             <TextBlock Text="Threshold:" VerticalAlignment="Center" Margin="0,0,10,0" />
-            <TextBox Text="{Binding Threshold}" Width="100" Style="{StaticResource {x:Type TextBox}}" />
-        </ToolBar>
+            <TextBox Text="{Binding Threshold}" Width="100" />
+        </StackPanel>
         <Border BorderThickness="1" BorderBrush="{DynamicResource ThemeBorderBrush}" Grid.Row="1">
             <ListBox ItemsSource="{Binding Items}">
-                <i:Interaction.Behaviors>
+                <Interaction.Behaviors>
                     <behaviours:ItemsControlAutoScrollBehaviour />
-                </i:Interaction.Behaviors>
+                </Interaction.Behaviors>
                 <ListBox.Template>
                     <ControlTemplate>
-                        <ScrollViewer VirtualizingStackPanel.IsVirtualizing="True"
-                                      VirtualizingStackPanel.VirtualizationMode="Recycling">
+                        <ScrollViewer>
                             <ItemsPresenter />
                         </ScrollViewer>
                     </ControlTemplate>
@@ -52,9 +35,9 @@
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
-                    <ItemContainerTemplate>
+                    <DataTemplate>
                         <TextBlock Text="{Binding}" />
-                    </ItemContainerTemplate>
+                    </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
         </Border>

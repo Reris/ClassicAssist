@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
 // 
@@ -19,8 +19,13 @@
 
 using System;
 using System.Globalization;
-using System.Windows;
-using System.Windows.Data;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using ClassicAssist.Controls.DraggableTreeView;
 
 namespace ClassicAssist.UI.Misc.ValueConverters
@@ -29,7 +34,7 @@ namespace ClassicAssist.UI.Misc.ValueConverters
     {
         public object Convert( object value, Type targetType, object parameter, CultureInfo culture )
         {
-            return value is IDraggableGroup ? Visibility.Visible : Visibility.Collapsed;
+            return value is IDraggableGroup ? true : false;
         }
 
         public object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )

@@ -1,25 +1,16 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary>
-            <Style TargetType="{x:Type Button}" x:Key="ToolbarButtonStyle">
-                <Setter Property="Margin" Value="0,0,5,0" />
-                <Setter Property="Opacity" Value="1" />
-                <Style.Triggers>
-                    <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="Image.Opacity" Value="0.5" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-            <Style TargetType="{x:Type ToggleButton}" x:Key="ToolbarToggleButtonStyle">
-                <Setter Property="Margin" Value="0,0,5,0" />
-                <Setter Property="Opacity" Value="1" />
-                <Style.Triggers>
-                    <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="Image.Opacity" Value="0.5" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-        </ResourceDictionary>
-    </ResourceDictionary.MergedDictionaries>
-</ResourceDictionary>
+﻿<Styles xmlns="https://github.com/avaloniaui" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector="Button.ToolbarButtonStyle">
+        <Setter Property="Margin" Value="0,0,5,0" />
+        <Setter Property="Opacity" Value="1" />
+        <Style Selector="Button.ToolbarButtonStyle:disabled">
+            <Setter Property="Opacity" Value="0.5" />
+        </Style>
+    </Style>
+    <Style Selector="ToggleButton.ToolbarToggleButtonStyle">
+        <Setter Property="Margin" Value="0,0,5,0" />
+        <Setter Property="Opacity" Value="1" />
+        <Style Selector="ToggleButton.ToolbarToggleButtonStyle:disabled">
+            <Setter Property="Opacity" Value="0.5" />
+        </Style>
+    </Style>
+</Styles>

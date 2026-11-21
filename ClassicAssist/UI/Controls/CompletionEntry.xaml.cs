@@ -1,20 +1,23 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Annotations;
 using ClassicAssist.Shared.UI;
-using ICSharpCode.AvalonEdit.Highlighting;
+using AvaloniaEdit.Highlighting;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Controls
 {
     /// <summary>
     ///     Interaction logic for CompletionEntry.xaml
     /// </summary>
-    public partial class CompletionEntry : INotifyPropertyChanged
-    {
-        private ICommand _copyToClipboardCommand;
+    public partial class CompletionEntry : UserControl, INotifyPropertyChanged
+    {        private ICommand _copyToClipboardCommand;
         private string _entryExample;
         private string _entryName;
         private bool _isButtonEnabled;
@@ -96,7 +99,7 @@ namespace ClassicAssist.UI.Controls
 
             try
             {
-                Clipboard.SetText( macro );
+                ClipboardHelper.SetText( macro );
             }
             catch ( Exception )
             {

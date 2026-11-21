@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2021 Reetus
 // 
@@ -18,28 +18,22 @@
 #endregion
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Xaml.Interactivity;
+using ClassicAssist.Shared.UI.Compat;
 using System.Windows.Input;
-using Microsoft.Xaml.Behaviors;
 
 namespace ClassicAssist.Controls.VirtualFolderBrowse
 {
     public class TreeViewExpandedBehaviour : Behavior<TreeView>
     {
-        public static readonly DependencyProperty OnExpandedActionProperty = DependencyProperty.Register(
-            nameof( OnExpandedAction ), typeof( ICommand ), typeof( TreeViewExpandedBehaviour ),
-            new FrameworkPropertyMetadata( default ) );
+        public static readonly Avalonia.StyledProperty<ICommand> OnExpandedActionProperty =
+        AvaloniaCompat.RegisterCompat<TreeViewExpandedBehaviour, ICommand>(nameof( OnExpandedAction ), default);
 
-        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
-            nameof( SelectedItem ), typeof( object ), typeof( TreeViewExpandedBehaviour ),
-            new FrameworkPropertyMetadata( default, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
-
-        private readonly List<TreeViewItem> _list = new List<TreeViewItem>();
+        public static readonly Avalonia.StyledProperty<object> SelectedItemProperty =
+        AvaloniaCompat.RegisterCompat<TreeViewExpandedBehaviour, object>(nameof( SelectedItem ), default, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
         public ICommand OnExpandedAction
         {
@@ -56,61 +50,16 @@ namespace ClassicAssist.Controls.VirtualFolderBrowse
         protected override void OnAttached()
         {
             base.OnAttached();
-            AssociatedObject.Loaded += Loaded;
-            AssociatedObject.ItemContainerGenerator.StatusChanged += StatusChanged;
-            AssociatedObject.SelectedItemChanged += SelectedItemChanged;
+
+            // ExpandedEvent bubbles from nested TreeViewItems up to the TreeView, so a single
+            // handler here covers every level of the hierarchy.
+            AssociatedObject.AddHandler( TreeViewItem.ExpandedEvent, TreeViewItemOnExpanded );
+            AssociatedObject.SelectionChanged += SelectedItemChanged;
         }
 
-        private void SelectedItemChanged( object sender, RoutedPropertyChangedEventArgs<object> e )
+        private void SelectedItemChanged( object sender, SelectionChangedEventArgs e )
         {
             SelectedItem = ( sender as TreeView )?.SelectedItem;
-        }
-
-        private void StatusChanged( object sender, EventArgs e )
-        {
-            if ( !( sender is ItemContainerGenerator container ) )
-            {
-                return;
-            }
-
-            if ( container.Status != GeneratorStatus.ContainersGenerated )
-            {
-                return;
-            }
-
-            AddExpandedListener( container, container.Items.ToList() );
-        }
-
-        private void Loaded( object sender, RoutedEventArgs routedEventArgs )
-        {
-            if ( !( sender is TreeView treeView ) )
-            {
-                return;
-            }
-
-            AddExpandedListener( treeView.ItemContainerGenerator,
-                AssociatedObject.ItemsSource.Cast<object>().ToList() );
-        }
-
-        private void AddExpandedListener( ItemContainerGenerator container, IEnumerable items )
-        {
-            foreach ( object item in items )
-            {
-                if ( !( container.ContainerFromItem( item ) is TreeViewItem treeViewItem ) )
-                {
-                    return;
-                }
-
-                if ( _list.Contains( treeViewItem ) )
-                {
-                    _list.Remove( treeViewItem );
-                }
-
-                treeViewItem.ItemContainerGenerator.StatusChanged += StatusChanged;
-
-                treeViewItem.Expanded += TreeViewItemOnExpanded;
-                _list.Add( treeViewItem );
-            }
         }
 
         private void TreeViewItemOnExpanded( object sender, RoutedEventArgs routedEventArgs )
@@ -120,7 +69,7 @@ namespace ClassicAssist.Controls.VirtualFolderBrowse
                 return;
             }
 
-            OnExpandedAction?.Execute( treeViewItem.Header );
+            OnExpandedAction?.Execute( treeViewItem.Header ?? treeViewItem.DataContext );
 
             routedEventArgs.Handled = true;
         }
@@ -128,9 +77,8 @@ namespace ClassicAssist.Controls.VirtualFolderBrowse
         protected override void OnDetaching()
         {
             base.OnDetaching();
-            AssociatedObject.Loaded -= Loaded;
-            _list.ForEach( item => item.Expanded -= TreeViewItemOnExpanded );
-            _list.Clear();
+            AssociatedObject.RemoveHandler( TreeViewItem.ExpandedEvent, TreeViewItemOnExpanded );
+            AssociatedObject.SelectionChanged -= SelectedItemChanged;
         }
     }
 }

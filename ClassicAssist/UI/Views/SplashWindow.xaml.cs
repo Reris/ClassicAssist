@@ -1,4 +1,4 @@
-﻿// Copyright (C) $CURRENT_YEAR$ Reetus
+// Copyright (C) $CURRENT_YEAR$ Reetus
 //  
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -11,17 +11,18 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Media;
 using ClassicAssist.Misc;
 
+using Avalonia.Controls;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
     ///     Interaction logic for SplashWindow.xaml
     /// </summary>
-    public partial class SplashWindow : INotifyPropertyChanged
-    {
-        public ImageSource Image { get; set; }
+    public partial class SplashWindow : Window, INotifyPropertyChanged
+    {        public IImage Image { get; set; }
 
         public SplashWindow()
         {

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2023 Reetus
 // 
@@ -14,14 +14,16 @@
 
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Input;
+
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data.Screenshot;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UO;
 using ClassicAssist.UO.Data;
 using ClassicAssist.UO.Objects;
+using System.Windows.Input;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.ViewModels.Agents.Screenshot
 {

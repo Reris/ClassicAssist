@@ -1,11 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data;
 using ClassicAssist.Data.Friends;
@@ -18,6 +21,7 @@ using ClassicAssist.UO.Data;
 using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using Sentry;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels.Agents
 {
@@ -199,9 +203,11 @@ namespace ClassicAssist.UI.ViewModels.Agents
             }
         }
 
-        private static void SelectHue( object obj )
+        private static async void SelectHue( object obj )
         {
-            if ( !HuePickerWindow.GetHue( out int hue ) )
+            int hue = await HuePickerWindow.GetHueAsync();
+
+            if ( hue == -1 )
             {
                 return;
             }
@@ -227,28 +233,20 @@ namespace ClassicAssist.UI.ViewModels.Agents
             return Task.CompletedTask;
         }
 
-        private void Import( object obj )
+        private async void Import( object obj )
         {
             string profileDirectory = AssistantOptions.GetProfilePath();
 
-            OpenFileDialog ofd = new OpenFileDialog
-            {
-                InitialDirectory = profileDirectory,
-                Filter = "Json Files|*.json",
-                CheckFileExists = true,
-                Multiselect = false
-            };
+            string[] files = await DialogHelper.ShowOpenFileDialogAsync( "Import", "Json Files|*.json", profileDirectory );
 
-            bool? result = ofd.ShowDialog();
-
-            if ( !result.HasValue || result == false )
+            if ( files.Length == 0 )
             {
                 return;
             }
 
             try
             {
-                string json = File.ReadAllText( ofd.FileName );
+                string json = File.ReadAllText( files[0] );
 
                 JObject jObject = JObject.Parse( json );
 
@@ -279,7 +277,7 @@ namespace ClassicAssist.UI.ViewModels.Agents
             }
             catch ( Exception ex )
             {
-                MessageBox.Show( ex.Message );
+                MessageBoxHelper.Show( ex.Message );
                 SentrySdk.CaptureException( ex );
             }
         }

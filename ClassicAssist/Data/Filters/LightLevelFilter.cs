@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Assistant;
 using ClassicAssist.Shared.UI;
 using ClassicAssist.UI.Views.Filters;
@@ -51,7 +51,7 @@ namespace ClassicAssist.Data.Filters
         public void Configure()
         {
             LightLevelFilterConfigureWindow window = new LightLevelFilterConfigureWindow( FilterOptions );
-            window.ShowDialog();
+            window.ShowDialogCompat();
         }
 
         public void Deserialize( JToken token )

@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2009 Matthew Geyer
+/* Copyright (C) 2009 Matthew Geyer
  * 
  * This file is part of UO Machine.
  * 
@@ -17,11 +17,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+
 using System.IO;
 using System.Linq;
 using System.Text;
 using Assistant;
+using Avalonia;
 using ClassicAssist.Helpers;
 using ClassicAssist.Misc;
 using ClassicAssist.UO.Data;
@@ -156,7 +157,7 @@ namespace ClassicAssist.UO.Objects.Gumps
 
             if ( !NativeMethods.GetWindowRect( windowHandle, out NativeMethods.RECT rect ) )
             {
-                return Point.Empty;
+                return default;
             }
 
             int windowWidth = rect.Right - rect.Left;
@@ -187,7 +188,7 @@ namespace ClassicAssist.UO.Objects.Gumps
 
             if ( currentProfile == null )
             {
-                return Point.Empty;
+                return default;
             }
 
             dynamic gameWindowSize =
@@ -197,7 +198,7 @@ namespace ClassicAssist.UO.Objects.Gumps
 
             if ( gameWindowSize == null || gameWindowPosition == null )
             {
-                return Point.Empty;
+                return default;
             }
 
             return new Point( gameWindowPosition.X + ( gameWindowSize.X >> 1 ),
@@ -208,18 +209,18 @@ namespace ClassicAssist.UO.Objects.Gumps
         {
             Point gameCenterPosition = GetGameWindowCenter();
 
-            if ( gameCenterPosition == Point.Empty )
+            if ( gameCenterPosition == default )
             {
                 Point size = GetWindowSize();
 
-                X = ( size.X - width ) >> 1;
-                Y = ( size.Y - height ) >> 1;
+                X = ( (int) size.X - width ) >> 1;
+                Y = ( (int) size.Y - height ) >> 1;
 
                 return;
             }
 
-            X = gameCenterPosition.X - width / 2;
-            Y = gameCenterPosition.Y - height / 2;
+            X = (int) gameCenterPosition.X - width / 2;
+            Y = (int) gameCenterPosition.Y - height / 2;
         }
 
         /// <summary>

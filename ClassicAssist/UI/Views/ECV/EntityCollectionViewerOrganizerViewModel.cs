@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2024 Reetus
 // 
@@ -16,8 +16,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Windows.Threading;
+using Avalonia.Input;
+using Avalonia.Threading;
 using Assistant;
 using ClassicAssist.Data.Macros.Commands;
 using ClassicAssist.Data.Organizer;
@@ -27,6 +27,7 @@ using ClassicAssist.UI.ViewModels;
 using ClassicAssist.UO;
 using ClassicAssist.UO.Data;
 using ClassicAssist.UO.Objects;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.Views.ECV
 {
@@ -44,7 +45,7 @@ namespace ClassicAssist.UI.Views.ECV
 
         public EntityCollectionViewerOrganizerViewModel()
         {
-            _dispatcher = Dispatcher.CurrentDispatcher;
+            _dispatcher = Avalonia.Threading.Dispatcher.UIThread;
             _manager = OrganizerManager.GetInstance();
             Items = _manager.Items;
         }

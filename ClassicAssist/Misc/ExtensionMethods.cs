@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Drawing;
+
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,10 +9,14 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+
+using Avalonia.Media.Imaging;
+using ClassicAssist.UO.Data;
 
 namespace ClassicAssist.Misc
 {
@@ -54,29 +58,21 @@ namespace ClassicAssist.Misc
             return attr != null ? attr : default;
         }
 
-        [DllImport( "gdi32.dll", EntryPoint = "DeleteObject" )]
-        [return: MarshalAs( UnmanagedType.Bool )]
-        private static extern bool DeleteObject( [In] IntPtr hObject );
-
-        public static ImageSource ToImageSource( this Bitmap bmp )
+        public static IImage ToImageSource( this UOBitmap bmp )
         {
-            IntPtr handle = bmp.GetHbitmap();
+            return bmp?.ToBitmap();
+        }
 
-            try
+        public static IImage ToImageSource( this byte[] data )
+        {
+            if ( data == null || data.Length == 0 )
             {
-                BitmapSource source = Imaging.CreateBitmapSourceFromHBitmap( handle, IntPtr.Zero, Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions() );
-
-                if ( source.CanFreeze )
-                {
-                    source.Freeze();
-                }
-
-                return source;
+                return null;
             }
-            finally
+
+            using ( MemoryStream stream = new MemoryStream( data ) )
             {
-                DeleteObject( handle );
+                return new Bitmap( stream );
             }
         }
 

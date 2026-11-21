@@ -1,5 +1,6 @@
-﻿using System;
-using System.Windows.Media;
+using System;
+using Avalonia;
+using Avalonia.Media;
 using ClassicAssist.Misc;
 using ClassicAssist.Shared.UI;
 using System.Collections.ObjectModel;
@@ -74,14 +75,14 @@ namespace ClassicAssist.Data.Hotkeys
             }
         }
 
-        private static readonly Lazy<ImageSource> _redCircle =
-            new Lazy<ImageSource>( () => Properties.Resources.red_circle.ToImageSource() );
+        private static readonly Lazy<IImage> _redCircle =
+            new Lazy<IImage>( () => Properties.Resources.red_circle.ToImageSource() );
 
-        private static readonly Lazy<ImageSource> _greenCircle =
-            new Lazy<ImageSource>( () => Properties.Resources.green_circle.ToImageSource() );
+        private static readonly Lazy<IImage> _greenCircle =
+            new Lazy<IImage>( () => Properties.Resources.green_circle.ToImageSource() );
 
         [JsonIgnore]
-        public ImageSource Image =>
+        public IImage Image =>
             Equals( Hotkey, ShortcutKeys.Default ) ? _redCircle.Value : _greenCircle.Value;
 
         public bool IsCategory

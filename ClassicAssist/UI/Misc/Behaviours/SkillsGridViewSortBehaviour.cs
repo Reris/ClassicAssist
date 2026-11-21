@@ -1,37 +1,36 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2025 Reetus
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY
 
 #endregion
 
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Xaml.Interactivity;
 using ClassicAssist.Data.Skills;
 using ClassicAssist.Shared.UI;
-using Microsoft.Xaml.Behaviors;
+using System.Windows.Input;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.UI.Misc.Behaviours
 {
-    public class SkillsGridViewSortBehaviour : Behavior<ListView>
+    public class SkillsGridViewSortBehaviour : Behavior<DataGrid>
     {
-        public static readonly DependencyProperty SortChangedCommandProperty =
-            DependencyProperty.Register( nameof( SortChangedCommand ), typeof( ICommand ), typeof( SkillsGridViewSortBehaviour ) );
+        public static readonly Avalonia.StyledProperty<ICommand> SortChangedCommandProperty =
+        AvaloniaCompat.RegisterCompat<SkillsGridViewSortBehaviour, ICommand>(nameof( SortChangedCommand ), default);
 
-        public static readonly DependencyProperty SetSortCommandProperty = DependencyProperty.Register( nameof( SetSortCommand ), typeof( ICommand ),
-            typeof( SkillsGridViewSortBehaviour ), new PropertyMetadata( null ) );
+        public static readonly Avalonia.StyledProperty<ICommand> SetSortCommandProperty =
+        AvaloniaCompat.RegisterCompat<SkillsGridViewSortBehaviour, ICommand>(nameof( SetSortCommand ), null);
 
         private ListSortDirection _lastDirection;
 
@@ -59,40 +58,30 @@ namespace ClassicAssist.UI.Misc.Behaviours
                 return;
             }
 
-            if ( !( AssociatedObject.View is GridView gridView ) )
-            {
-                return;
-            }
-
-            SkillsGridViewColumn column = gridView.Columns.FirstOrDefault( e => e is SkillsGridViewColumn sgvc && sgvc.SortField == info.SortBy ) as SkillsGridViewColumn;
-
-            ApplySort( column, info.Direction );
+            ApplySort( info.SortBy, info.Direction );
         }
 
         protected override void OnAttached()
         {
             base.OnAttached();
 
-            AssociatedObject.AddHandler( ButtonBase.ClickEvent, new RoutedEventHandler( OnHeaderClick ) );
+            AssociatedObject.Sorting += OnSorting;
 
             SetValue( SetSortCommandProperty, SetSortCommandImpl );
         }
 
         protected override void OnDetaching()
         {
-            AssociatedObject.RemoveHandler( ButtonBase.ClickEvent, new RoutedEventHandler( OnHeaderClick ) );
+            AssociatedObject.Sorting -= OnSorting;
 
             base.OnDetaching();
         }
 
-        private void OnHeaderClick( object sender, RoutedEventArgs e )
+        private void OnSorting( object sender, DataGridColumnEventArgs e )
         {
-            if ( !( e.OriginalSource is GridViewColumnHeader headerClicked ) || headerClicked.Column == null )
-            {
-                return;
-            }
+            e.Handled = true;
 
-            SkillsGridViewColumn.Enums sortBy = ((SkillsGridViewColumn)headerClicked.Column).SortField;
+            SkillsGridViewColumn.Enums sortBy = SkillsGridViewColumn.GetSortField( e.Column );
 
             ListSortDirection direction;
 
@@ -105,28 +94,32 @@ namespace ClassicAssist.UI.Misc.Behaviours
                 direction = ListSortDirection.Ascending;
             }
 
-            ApplySort( headerClicked.Column as SkillsGridViewColumn, direction );
+            ApplySort( sortBy, direction );
 
             SortChangedCommand?.Execute( new SkillsSortInfo( sortBy, direction ) );
         }
 
-        private void ApplySort( SkillsGridViewColumn column, ListSortDirection direction )
+        private void ApplySort( SkillsGridViewColumn.Enums sortBy, ListSortDirection direction )
         {
             _lastDirection = direction;
 
-            _lastHeaderClicked = column.SortField;
+            _lastHeaderClicked = sortBy;
 
-            ListCollectionView dataView = (ListCollectionView)CollectionViewSource.GetDefaultView( AssociatedObject.ItemsSource );
-
-            if ( dataView == null )
+            if ( !( AssociatedObject?.ItemsSource is ObservableCollection<SkillEntry> items ) )
             {
                 return;
             }
 
-            dataView.SortDescriptions.Clear();
-            dataView.SortDescriptions.Add( new SortDescription( column.SortField.ToString(), direction ) );
-            dataView.CustomSort = new SkillComparer( direction, column.SortField );
-            dataView.Refresh();
+            SkillComparer comparer = new SkillComparer( direction, sortBy );
+
+            // In-place insertion sort using Move so bindings survive
+            for ( int i = 1; i < items.Count; i++ )
+            {
+                for ( int j = i; j > 0 && comparer.Compare( items[j - 1], items[j] ) > 0; j-- )
+                {
+                    items.Move( j, j - 1 );
+                }
+            }
         }
     }
 

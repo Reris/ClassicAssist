@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Assistant;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using ClassicAssist.Data;
 using ClassicAssist.UI.ViewModels;
 using ClassicAssist.UI.Views;
@@ -19,8 +21,23 @@ namespace ClassicAssist.UITest
             Engine.StartupPath = Environment.CurrentDirectory;
 
             LoadData( UO_FOLDER );
-            //ShowECV();
-            ShowMain();
+
+            AppBuilder.Configure<UITestApp>().UsePlatformDetect().LogToTrace()
+                .StartWithClassicDesktopLifetime( Array.Empty<string>() );
+        }
+
+        private class UITestApp : Application
+        {
+            public override void OnFrameworkInitializationCompleted()
+            {
+                if ( ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop )
+                {
+                    AssistantOptions.Load();
+                    desktop.MainWindow = new MainWindow();
+                }
+
+                base.OnFrameworkInitializationCompleted();
+            }
         }
 
         // ReSharper disable once UnusedMember.Global
@@ -29,7 +46,7 @@ namespace ClassicAssist.UITest
             AssistantOptions.Load();
             MainWindow window = new MainWindow();
 
-            window.ShowDialog();
+            window.Show();
         }
 
         // ReSharper disable once UnusedMember.Global
@@ -83,7 +100,7 @@ namespace ClassicAssist.UITest
             {
                 DataContext =
                     new EntityCollectionViewerViewModel( collection ) { ShowProperties = true, ShowFilter = true }
-            }.ShowDialog();
+            }.Show();
         }
 
         public static void LoadData( string folder )

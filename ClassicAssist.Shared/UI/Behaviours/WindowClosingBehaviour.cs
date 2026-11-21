@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2020 Reetus
 // 
@@ -18,17 +18,21 @@
 #endregion
 
 using System.ComponentModel;
-using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using Avalonia.Xaml.Interactivity;
+using ClassicAssist.Shared.UI.Compat;
 using System.Windows.Input;
-using Microsoft.Xaml.Behaviors;
 
 namespace ClassicAssist.Shared.UI.Behaviours
 {
     public class WindowClosingBehaviour : Behavior<Window>
     {
-        public static DependencyProperty CommandProperty = DependencyProperty.Register( "Command", typeof( ICommand ),
-            typeof( WindowClosingBehaviour ),
-            new FrameworkPropertyMetadata( default, FrameworkPropertyMetadataOptions.None ) );
+        public static readonly Avalonia.StyledProperty<ICommand> CommandProperty =
+        AvaloniaCompat.RegisterCompat<WindowClosingBehaviour, ICommand>("Command", default);
 
         public ICommand Command
         {

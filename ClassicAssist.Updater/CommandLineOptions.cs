@@ -29,7 +29,7 @@ namespace ClassicAssist.Updater
         [Option( "updatepath", Required = false, Default = "" )]
         public string UpdatePath { get; set; }
 
-        [Option( "url", Required = false, Default = default )]
+        [Option( "url", Required = false, Default = null )]
         public string URL { get; set; }
     }
 }

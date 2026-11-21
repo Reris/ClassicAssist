@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -1020,13 +1020,13 @@ namespace ClassicAssist.UO
                     return;
                 }
 
-                _ = Engine.Dispatcher.BeginInvoke( (Action) ( () =>
+                Engine.Dispatcher.Post( () =>
                 {
                     ObjectInspectorWindow window =
                         new ObjectInspectorWindow { DataContext = new ObjectInspectorViewModel( entity ) };
 
                     window.Show();
-                } ) );
+                } );
             }
             else
             {
@@ -1038,7 +1038,7 @@ namespace ClassicAssist.UO
                     }
 
                     LandTile landTile = MapInfo.GetLandTile( (int) Engine.Player.Map, x, y );
-                    _ = Engine.Dispatcher.BeginInvoke( (Action) ( () =>
+                    Engine.Dispatcher.Post( () =>
                     {
                         ObjectInspectorWindow window = new ObjectInspectorWindow
                         {
@@ -1046,7 +1046,7 @@ namespace ClassicAssist.UO
                         };
 
                         window.Show();
-                    } ) );
+                    } );
                 }
                 else
                 {
@@ -1062,7 +1062,7 @@ namespace ClassicAssist.UO
                         selectedStatic.Z = z;
                     }
 
-                    _ = Engine.Dispatcher.BeginInvoke( (Action) ( () =>
+                    Engine.Dispatcher.Post( () =>
                     {
                         ObjectInspectorWindow window = new ObjectInspectorWindow
                         {
@@ -1070,7 +1070,7 @@ namespace ClassicAssist.UO
                         };
 
                         window.Show();
-                    } ) );
+                    } );
                 }
             }
         }

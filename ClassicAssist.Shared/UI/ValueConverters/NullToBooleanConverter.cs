@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 // Copyright (C) 2021 Reetus
 // 
 // This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,8 @@
 
 using System;
 using System.Globalization;
-using System.Windows.Data;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 
 namespace ClassicAssist.Shared.UI.ValueConverters
 {

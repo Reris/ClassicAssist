@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2020 Reetus
 // 
@@ -20,7 +20,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using Avalonia.Input;
 using Assistant;
 using ClassicAssist.Data.Autoloot;
 using ClassicAssist.Shared.Resources;
@@ -28,6 +28,7 @@ using ClassicAssist.Shared.UI;
 using ClassicAssist.UO;
 using ClassicAssist.UO.Network.Packets;
 using ClassicAssist.UO.Objects;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels.Debug
 {

@@ -1,11 +1,12 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Windows.Controls;
-using System.Windows.Navigation;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+
 using System.Xml;
-using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using AvaloniaEdit.Highlighting;
+using AvaloniaEdit.Highlighting.Xshd;
 
 namespace ClassicAssist.Browser
 {
@@ -14,6 +15,8 @@ namespace ClassicAssist.Browser
     /// </summary>
     public partial class MacroBrowserControl : UserControl
     {
+        private const string CONTRIBUTE_URL = "https://github.com/Reetus/ClassicAssist-Macros/blob/master/README.md";
+
         public MacroBrowserControl()
         {
             InitializeComponent();
@@ -23,9 +26,9 @@ namespace ClassicAssist.Browser
                     "Python.Dark.xshd" ) ), HighlightingManager.Instance );
         }
 
-        private void Hyperlink_RequestNavigate( object sender, RequestNavigateEventArgs e )
+        private void Hyperlink_Click( object sender, RoutedEventArgs e )
         {
-            Process.Start( e.Uri.ToString() );
+            Process.Start( new ProcessStartInfo { FileName = CONTRIBUTE_URL, UseShellExecute = true } );
         }
     }
 }

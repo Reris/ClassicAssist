@@ -1,23 +1,6 @@
-﻿<Window
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels"
-    xmlns:ValueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared"
-    xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared"
-    xmlns:System="clr-namespace:System;assembly=mscorlib"
-    xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared"
-    x:Class="ClassicAssist.UI.Views.NewProfileWindow"
-    mc:Ignorable="d" Background="{DynamicResource ThemeWindowBackgroundBrush}"
-    Title="{x:Static resources:Strings.New_Profile}" SizeToContent="Height" Width="350" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
+﻿<Window xmlns="https://github.com/avaloniaui" xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:ValueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.NewProfileWindow" mc:Ignorable="d" Background="{DynamicResource ThemeWindowBackgroundBrush}" Title="{x:Static resources:Strings.New_Profile}" SizeToContent="Height" Width="350" WindowStartupLocation="CenterOwner" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" ExtendClientAreaToDecorationsHint="True" TransparencyLevelHint="AcrylicBlur" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <Window.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <shared:SharedResourceDictionary Source="../../Resources/DarkTheme.xaml" />
-            </ResourceDictionary.MergedDictionaries>
             <ValueConverters:EnumMatchToBooleanConverter x:Key="EnumMatchToBooleanConverter" />
             <viewModels:NewProfileViewModel x:Key="DummyData">
                 <viewModels:NewProfileViewModel.Profiles>
@@ -28,12 +11,13 @@
             </viewModels:NewProfileViewModel>
         </ResourceDictionary>
     </Window.Resources>
+    <Window.Styles>
+        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
+    </Window.Styles>
     <Window.DataContext>
         <viewModels:NewProfileViewModel />
     </Window.DataContext>
-    <Border Margin="10" BorderBrush="{StaticResource ThemeBorderBrush}"
-            Background="{StaticResource ThemeInnerControlBackgroundBrush}"
-            BorderThickness="1" d:DataContext="{StaticResource DummyData}">
+    <Border Margin="10" BorderBrush="{DynamicResource ThemeBorderBrush}" Background="{DynamicResource ThemeInnerControlBackgroundBrush}" BorderThickness="1" d:DataContext="{StaticResource DummyData}">
         <Grid Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -46,8 +30,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{x:Static resources:Strings.Name_}" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,0,0"
-                         Grid.Column="1" />
+                <TextBox Text="{Binding Name, Mode=TwoWay}" Margin="5,0,0,0" Grid.Column="1" />
             </Grid>
             <Grid Grid.Row="1" Margin="0,10">
                 <Grid.RowDefinitions>
@@ -55,38 +38,36 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0">
-                    <RadioButton Content="{x:Static resources:Strings.Blank}" Margin="0,0,10,0"
-                                 IsChecked="{Binding Option, ConverterParameter=Blank, Converter={StaticResource EnumMatchToBooleanConverter}}" />
-                    <RadioButton Content="{x:Static resources:Strings.Duplicate}"
-                                 IsChecked="{Binding Option, ConverterParameter=Duplicate, Converter={StaticResource EnumMatchToBooleanConverter}}" />
+                    <RadioButton Content="{x:Static resources:Strings.Blank}" Margin="0,0,10,0" IsChecked="{Binding Option, ConverterParameter=Blank, Converter={StaticResource EnumMatchToBooleanConverter}}" />
+                    <RadioButton Content="{x:Static resources:Strings.Duplicate}" IsChecked="{Binding Option, ConverterParameter=Duplicate, Converter={StaticResource EnumMatchToBooleanConverter}}" />
                 </StackPanel>
-                <ComboBox Grid.Row="1" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedProfile}" Margin="0,10,0,0">
-                    <ComboBox.Style>
-                        <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Option}" Value="Blank">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                </DataTrigger>
-                            </Style.Triggers>
+                <ComboBox Grid.Row="1" SelectedItem="{Binding SelectedProfile}" Margin="0,10,0,0" ItemsSource="{Binding Profiles}">
+                    <ComboBox.Styles>
+                        <Style Selector="ComboBox">
+                            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Option}" />
+                            <Setter Property="ca:TriggerCondition.Value" Value="Blank" />
+                            <Style Selector="^.ca-dt1">
+                                <Setter Property="IsVisible" Value="False" />
+                            </Style>
                         </Style>
-                    </ComboBox.Style>
+                    </ComboBox.Styles>
                 </ComboBox>
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
-                <StackPanel.Resources>
-                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                <StackPanel.Styles>
+                    <Style Selector="Button">
                         <Setter Property="Margin" Value="5,0,0,0" />
                     </Style>
-                </StackPanel.Resources>
+                </StackPanel.Styles>
                 <Button Content="{x:Static resources:Strings.OK}" Command="{Binding OKCommand}">
-                    <i:Interaction.Behaviors>
+                    <Interaction.Behaviors>
                         <behaviours:CloseOnClickBehaviour />
-                    </i:Interaction.Behaviors>
+                    </Interaction.Behaviors>
                 </Button>
                 <Button Content="{x:Static resources:Strings.Cancel}">
-                    <i:Interaction.Behaviors>
+                    <Interaction.Behaviors>
                         <behaviours:CloseOnClickBehaviour />
-                    </i:Interaction.Behaviors>
+                    </Interaction.Behaviors>
                 </Button>
             </StackPanel>
         </Grid>

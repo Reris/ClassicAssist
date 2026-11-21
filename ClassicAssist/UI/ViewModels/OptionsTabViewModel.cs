@@ -1,10 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
 using ClassicAssist.Data;
 using ClassicAssist.Data.Hotkeys;
 using ClassicAssist.Data.Macros.Commands;
@@ -18,6 +20,7 @@ using ClassicAssist.UI.Views.OptionsTab;
 using ClassicAssist.UO.Data;
 using ClassicAssist.UO.Gumps;
 using Newtonsoft.Json.Linq;
+using System.Windows.Input;
 
 namespace ClassicAssist.UI.ViewModels
 {
@@ -286,7 +289,7 @@ namespace ClassicAssist.UI.ViewModels
             MacrosGump.ResendGump( true );
         }
 
-        private void SelectMacroTextColor( object obj )
+        private async void SelectMacroTextColor( object obj )
         {
             if ( !( obj is Color selectedColor ) )
             {
@@ -298,7 +301,7 @@ namespace ClassicAssist.UI.ViewModels
 
             MacrosGumpTextColorSelectorWindow window = new MacrosGumpTextColorSelectorWindow { DataContext = vm };
 
-            window.ShowDialog();
+            await window.ShowDialogAsync();
 
             if ( !vm.Result )
             {
@@ -346,7 +349,7 @@ namespace ClassicAssist.UI.ViewModels
                     if ( port < 1 || port > 65535 )
                     {
                         CurrentOptions.DebugAdapterEnabled = false;
-                        MessageBox.Show( Strings.Debug_adapter_invalid_port, Strings.Error );
+                        MessageBoxHelper.Show( Strings.Debug_adapter_invalid_port, Strings.Error );
                         return;
                     }
 
@@ -362,7 +365,7 @@ namespace ClassicAssist.UI.ViewModels
                 // Ensure any partially-initialised server is torn down before reverting the toggle.
                 DapServer.Shutdown();
                 CurrentOptions.DebugAdapterEnabled = false;
-                MessageBox.Show( e.Message, Strings.Error );
+                MessageBoxHelper.Show( e.Message, Strings.Error );
             }
         }
 
@@ -377,7 +380,7 @@ namespace ClassicAssist.UI.ViewModels
                     if ( port < 1 || port > 65535 )
                     {
                         CurrentOptions.McpEnabled = false;
-                        MessageBox.Show( Strings.MCP_invalid_port, Strings.Error );
+                        MessageBoxHelper.Show( Strings.MCP_invalid_port, Strings.Error );
                         return;
                     }
 
@@ -394,17 +397,17 @@ namespace ClassicAssist.UI.ViewModels
                 // Ensure any partially-initialised server is torn down before reverting the toggle.
                 McpServer.Shutdown();
                 CurrentOptions.McpEnabled = false;
-                MessageBox.Show( e.Message, Strings.Error );
+                MessageBoxHelper.Show( e.Message, Strings.Error );
             }
         }
 
-        private void ToggleMcpAutoStart( object obj )
+        private async void ToggleMcpAutoStart( object obj )
         {
             try
             {
                 if ( McpAutoStartEnabled )
                 {
-                    MessageBoxResult result = MessageBox.Show( Strings.MCP_autostart_warning, Strings.Warning,
+                    MessageBoxResult result = await MessageBoxHelper.ShowAsync( Strings.MCP_autostart_warning, Strings.Warning,
                         MessageBoxButton.YesNo, MessageBoxImage.Warning );
 
                     if ( result != MessageBoxResult.Yes )
@@ -419,13 +422,13 @@ namespace ClassicAssist.UI.ViewModels
                 if ( McpAutoStartEnabled )
                 {
                     CopyMcpConfig( null );
-                    MessageBox.Show( Strings.MCP_config_copied, Strings.MCP );
+                    MessageBoxHelper.Show( Strings.MCP_config_copied, Strings.MCP );
                 }
             }
             catch ( Exception e )
             {
                 McpAutoStartEnabled = AssistantOptions.McpAutoStart;
-                MessageBox.Show( e.Message, Strings.Error );
+                MessageBoxHelper.Show( e.Message, Strings.Error );
             }
         }
 
@@ -442,7 +445,7 @@ namespace ClassicAssist.UI.ViewModels
 
             JObject config = new JObject { ["mcpServers"] = new JObject { ["classicassist"] = server } };
 
-            Clipboard.SetText( config.ToString() );
+            ClipboardHelper.SetText( config.ToString() );
         }
 
         private static void SetLanguageOverride( object obj )
@@ -454,7 +457,7 @@ namespace ClassicAssist.UI.ViewModels
 
             AssistantOptions.LanguageOverride = language;
 
-            MessageBox.Show( Strings.Restart_game_for_changes_to_take_effect___,
+            MessageBoxHelper.Show( Strings.Restart_game_for_changes_to_take_effect___,
                 Strings.Restart_game_for_changes_to_take_effect___ );
         }
 
@@ -467,7 +470,7 @@ namespace ClassicAssist.UI.ViewModels
 
             AssistantOptions.UseCUOClilocLanguage = useClilocLanguage;
 
-            MessageBox.Show( Strings.Restart_game_for_changes_to_take_effect___,
+            MessageBoxHelper.Show( Strings.Restart_game_for_changes_to_take_effect___,
                 Strings.Restart_game_for_changes_to_take_effect___ );
         }
     }

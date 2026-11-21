@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2023 Reetus
+// Copyright (C) 2023 Reetus
 //  
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,26 +8,29 @@
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY
 
-using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Input;
+using ClassicAssist.Shared.UI.Compat;
 
 namespace ClassicAssist.Controls.Headered
 {
     /// <summary>
     ///     Interaction logic for HorizontalHeaderedContentControl.xaml
     /// </summary>
-    public partial class HorizontalHeaderedContentControl
+    public partial class HorizontalHeaderedContentControl : HeaderedContentControl
     {
-        public static readonly DependencyProperty ChildMarginProperty = DependencyProperty.Register(
-            nameof( ChildMargin ), typeof( Thickness ), typeof( HorizontalHeaderedContentControl ),
-            new PropertyMetadata( new Thickness( 0, 0, 5, 0 ) ) );
+        public static readonly Avalonia.StyledProperty<Thickness> ChildMarginProperty =
+        AvaloniaCompat.RegisterCompat<HorizontalHeaderedContentControl, Thickness>(nameof( ChildMargin ), new Thickness( 0, 0, 5, 0 ));
 
-        public static readonly DependencyProperty HeaderWidthProperty = DependencyProperty.Register(
-            nameof( HeaderWidth ), typeof( double ), typeof( HorizontalHeaderedContentControl ),
-            new PropertyMetadata( double.NaN ) );
+        public static readonly Avalonia.StyledProperty<double> HeaderWidthProperty =
+        AvaloniaCompat.RegisterCompat<HorizontalHeaderedContentControl, double>(nameof( HeaderWidth ), double.NaN);
 
-        public static readonly DependencyProperty HeaderMinWidthProperty = DependencyProperty.Register(
-            nameof( HeaderMinWidth ), typeof( double ), typeof( HorizontalHeaderedContentControl ),
-            new PropertyMetadata( double.NaN ) );
+        public static readonly Avalonia.StyledProperty<double> HeaderMinWidthProperty =
+        AvaloniaCompat.RegisterCompat<HorizontalHeaderedContentControl, double>(nameof( HeaderMinWidth ), double.NaN);
 
         public HorizontalHeaderedContentControl()
         {

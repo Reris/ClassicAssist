@@ -1,6 +1,6 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
+using System;
+
+
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -50,71 +50,43 @@ namespace ClassicAssist.UO.Data
             return entries;
         }
 
-        public static unsafe void ApplyHue( int hue, Bitmap bmp, bool onlyHueGrayPixels )
+        public static void ApplyHue( int hue, UOBitmap bmp, bool onlyHueGrayPixels )
         {
-            BitmapData bd = bmp.LockBits( new Rectangle( 0, 0, bmp.Width, bmp.Height ), ImageLockMode.ReadWrite,
-                PixelFormat.Format16bppArgb1555 );
-
             hue = ( hue & 0x3FFF ) - 1;
 
-            int stride = bd.Stride >> 1;
-            int width = bd.Width;
-            int height = bd.Height;
-            int delta = stride - width;
-
-            ushort* pBuffer = (ushort*) bd.Scan0;
-            ushort* pLineEnd = pBuffer + width;
-            ushort* pImageEnd = pBuffer + stride * height;
+            short[] hueColors = _lazyHueEntries.Value[hue].Colors;
+            ushort[] pixels = bmp.Pixels;
 
             if ( onlyHueGrayPixels )
             {
-                while ( pBuffer < pImageEnd )
+                for ( int i = 0; i < pixels.Length; i++ )
                 {
-                    while ( pBuffer < pLineEnd )
+                    int c = pixels[i];
+
+                    if ( c != 0 )
                     {
-                        int c = *pBuffer;
+                        int r = ( c >> 10 ) & 0x1F;
+                        int g = ( c >> 5 ) & 0x1F;
+                        int b = c & 0x1F;
 
-                        if ( c != 0 )
+                        if ( r == g && r == b )
                         {
-                            int r = ( c >> 10 ) & 0x1F;
-                            int g = ( c >> 5 ) & 0x1F;
-                            int b = c & 0x1F;
-
-                            if ( r == g && r == b )
-                            {
-                                *pBuffer = (ushort) _lazyHueEntries.Value[hue].Colors[( c >> 10 ) & 0x1F];
-                            }
+                            pixels[i] = (ushort) hueColors[( c >> 10 ) & 0x1F];
                         }
-
-                        ++pBuffer;
                     }
-
-                    pBuffer += delta;
-                    pLineEnd += stride;
                 }
             }
             else
             {
-                while ( pBuffer < pImageEnd )
+                for ( int i = 0; i < pixels.Length; i++ )
                 {
-                    while ( pBuffer < pLineEnd )
+                    if ( pixels[i] != 0 )
                     {
-                        if ( *pBuffer != 0 )
-                        {
-                            int index = ( *pBuffer >> 10 ) & 0x1F;
-                            HueEntry hueEntry = _lazyHueEntries.Value[hue];
-                            *pBuffer = (ushort) hueEntry.Colors[index];
-                        }
-
-                        ++pBuffer;
+                        int index = ( pixels[i] >> 10 ) & 0x1F;
+                        pixels[i] = (ushort) hueColors[index];
                     }
-
-                    pBuffer += delta;
-                    pLineEnd += stride;
                 }
             }
-
-            bmp.UnlockBits( bd );
         }
     }
 
