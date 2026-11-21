@@ -1,6 +1,11 @@
 <Styles xmlns="https://github.com/avaloniaui" xmlns:avalonedit="using:AvaloniaEdit">
     <FluentTheme />
     <StyleInclude Source="avares://ClassicAssist.Shared/Resources/Colours.axaml" />
+    <Style Selector="TreeView">
+        <Setter Property="Background" Value="{DynamicResource ThemeInnerControlBackgroundBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource TreeViewBorderBrush}" />
+    </Style>
     <Style Selector="TreeViewItem">
         <Setter Property="Padding" Value="4,1,4,1" />
         <Setter Property="BorderThickness" Value="1" />
@@ -8,33 +13,107 @@
         <Setter Property="Foreground" Value="{DynamicResource TreeViewForegroundBrush}" />
         <Setter Property="Background" Value="{DynamicResource TreeViewBackgroundBrush}" />
     </Style>
-    <Style Selector="TreeView">
-        <Setter Property="Background" Value="{DynamicResource TreeViewBackgroundBrush}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{DynamicResource TreeViewBorderBrush}" />
-    </Style>
-    <Style Selector="TreeView">
-        <Setter Property="Background" Value="{DynamicResource ThemeInnerControlBackgroundBrush}" />
-    </Style>
     <Style Selector="RadioButton">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeForegroundBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="MinHeight" Value="0" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <StackPanel Orientation="Horizontal" Background="Transparent">
+                    <Border Name="CheckBorder" Width="13" Height="13" Background="{DynamicResource ThemeBackgroundBrush}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{DynamicResource ThemeForegroundBrush}">
+                        <Panel>
+                            <Path Name="PART_CheckMark" Width="7" Height="7" IsVisible="False" Stretch="None" Stroke="{DynamicResource ThemeForegroundBrush}" StrokeThickness="2" Data="M 0 0 L 7 7 M 0 7 L 7 0" />
+                            <Path Name="PART_IndeterminateMark" Width="8" Height="8" IsVisible="False" Stretch="None" Fill="{DynamicResource CheckBoxMarkBrush}" Data="M 0 0 L 8 0 L 8 8 L 0 8 Z" />
+                        </Panel>
+                    </Border>
+                    <ContentPresenter Name="PART_ContentPresenter" Margin="4,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
+                </StackPanel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:checked /template/ Path#PART_CheckMark">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#CheckBorder">
+            <Setter Property="Background" Value="{DynamicResource ThemeTabBackgroundBrush}" />
+        </Style>
+        <Style Selector="^:pressed /template/ Border#CheckBorder">
+            <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}" />
+        </Style>
+        <Style Selector="^:disabled /template/ Border#CheckBorder">
+            <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource RadioButtonDisabledBorderBrush}" />
+        </Style>
+        <Style Selector="^:disabled">
+            <Setter Property="Foreground" Value="{DynamicResource RadioButtonDisabledForegroundBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource RadioButtonDisabledBorderBrush}" />
+        </Style>
+        <Style Selector="^:disabled /template/ Path#PART_CheckMark">
+            <Setter Property="Stroke" Value="{DynamicResource RadioButtonDisabledMarkBrush}" />
+        </Style>
     </Style>
     <Style Selector="CheckBox">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeForegroundBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="MinHeight" Value="0" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <StackPanel Orientation="Horizontal" Background="Transparent">
+                    <Border Name="CheckBorder" Width="13" Height="13" Background="{DynamicResource ThemeBackgroundBrush}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{DynamicResource ThemeForegroundBrush}">
+                        <Panel>
+                            <Path Name="PART_CheckMark" Width="7" Height="7" IsVisible="False" Stretch="None" Stroke="{DynamicResource ThemeForegroundBrush}" StrokeThickness="2" Data="M 0 0 L 7 7 M 0 7 L 7 0" />
+                            <Path Name="PART_IndeterminateMark" Width="8" Height="8" IsVisible="False" Stretch="None" Fill="{DynamicResource CheckBoxMarkBrush}" Data="M 0 0 L 8 0 L 8 8 L 0 8 Z" />
+                        </Panel>
+                    </Border>
+                    <ContentPresenter Name="PART_ContentPresenter" Margin="4,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
+                </StackPanel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:checked /template/ Path#PART_CheckMark">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:indeterminate /template/ Path#PART_CheckMark">
+            <Setter Property="IsVisible" Value="True" />
+            <Setter Property="Data" Value="M 0 7 L 7 0" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#CheckBorder">
+            <Setter Property="Background" Value="{DynamicResource ThemeTabBackgroundBrush}" />
+        </Style>
+        <Style Selector="^:pressed /template/ Border#CheckBorder">
+            <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}" />
+        </Style>
+        <Style Selector="^:disabled /template/ Border#CheckBorder">
+            <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CheckBoxDisabledBorderBrush}" />
+        </Style>
+        <Style Selector="^:disabled">
+            <Setter Property="Foreground" Value="{DynamicResource CheckBoxDisabledForegroundBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CheckBoxDisabledBorderBrush}" />
+        </Style>
+        <Style Selector="^:disabled /template/ Path#PART_CheckMark">
+            <Setter Property="Stroke" Value="{DynamicResource CheckBoxDisabledMarkBrush}" />
+        </Style>
+        <Style Selector="^:disabled /template/ Path#PART_IndeterminateMark">
+            <Setter Property="Fill" Value="{DynamicResource CheckBoxDisabledMarkBrush}" />
+        </Style>
     </Style>
     <Style Selector="ListBox">
         <Setter Property="Background" Value="{DynamicResource ThemeInnerControlBackgroundBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}" />
+        <Setter Property="CornerRadius" Value="0" />
     </Style>
     <Style Selector="GroupBox">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
@@ -44,12 +123,14 @@
         <Setter Property="Padding" Value="5" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3" Padding="{TemplateBinding Padding}">
-                    <DockPanel>
-                        <ContentPresenter Content="{TemplateBinding Header}" DockPanel.Dock="Top" Margin="0,0,0,4" />
-                        <ContentPresenter Content="{TemplateBinding Content}" Margin="0" />
-                    </DockPanel>
-                </Border>
+                <Grid RowDefinitions="Auto,*">
+                    <Border Grid.Row="0" HorizontalAlignment="Left" Background="{TemplateBinding BorderBrush}">
+                        <ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Margin="8,3,8,3" />
+                    </Border>
+                    <Border Grid.Row="1" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
+                        <ContentPresenter Margin="{TemplateBinding Padding}" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
+                    </Border>
+                </Grid>
             </ControlTemplate>
         </Setter>
     </Style>
@@ -59,9 +140,42 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
     <Style Selector="TabControl">
-        </Style>
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid RowDefinitions="Auto,*">
+                    <ItemsPresenter Name="PART_ItemsPresenter" Grid.Row="0" Margin="0,0,4,-1" ZIndex="1" ItemsPanel="{TemplateBinding ItemsPanel}" />
+                    <Border Grid.Row="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2">
+                        <ContentPresenter Name="PART_SelectedContentHost" Margin="{TemplateBinding Padding}" />
+                    </Border>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
     <Style Selector="TabItem">
         <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}" />
+        <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="MinHeight" Value="0" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Name="PART_LayoutRoot" Margin="0,0,-4,0" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,1,1,1" CornerRadius="2,12,0,0">
+                    <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Margin="12,2,12,2" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:selected">
+            <Setter Property="ZIndex" Value="100" />
+        </Style>
+        <Style Selector="^:selected /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+            <Setter Property="BorderThickness" Value="1,1,1,0" />
+        </Style>
     </Style>
     <Style Selector="TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
@@ -71,10 +185,14 @@
         <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundBrush}" />
         <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrush}" />
         <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="CornerRadius" Value="0" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Padding" Value="25,5" />
+        <Style Selector="^:pressed">
+            <Setter Property="RenderTransform" Value="none" />
+        </Style>
     </Style>
     <Style Selector="ToggleButton">
         <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -90,9 +208,14 @@
         <Setter Property="Foreground" Value="{DynamicResource TextBoxForegroundBrush}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="Padding" Value="3,0" />
+        <Setter Property="MinHeight" Value="0" />
+        <Setter Property="CornerRadius" Value="0" />
     </Style>
     <Style Selector="TextBox">
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Padding" Value="2" />
+        <Setter Property="MinHeight" Value="0" />
+        <Setter Property="CornerRadius" Value="0" />
     </Style>
     <Style Selector="ScrollViewer">
         <Setter Property="Background" Value="{DynamicResource ScrollViewerBackgroundBrush}" />
@@ -101,15 +224,17 @@
         <Setter Property="Background" Value="{DynamicResource GridSplitterBackgroundBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource GridSplitterForegroundBrush}" />
         <Setter Property="MinWidth" Value="5" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Background="{TemplateBinding Background}">
+                    <Border Width="3" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1,0,1,0" BorderBrush="{TemplateBinding Foreground}" />
+                </Border>
+            </ControlTemplate>
+        </Setter>
     </Style>
     <Style Selector="avalonedit|TextEditor">
         <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
         <Setter Property="Background" Value="{DynamicResource ThemeInnerControlBackgroundBrush}" />
-    </Style>
-    <Style Selector="TreeView">
-        <Setter Property="Background" Value="{DynamicResource TreeViewBackgroundBrush}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{DynamicResource TreeViewBorderBrush}" />
     </Style>
     <Style Selector="ToolTip">
         <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
