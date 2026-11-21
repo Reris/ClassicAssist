@@ -7,7 +7,7 @@ using Avalonia.Input;
 namespace ClassicAssist.UI.Views.Macros
 {
     /// <summary>
-    ///     Interaction logic for MacrosCommandWindow.xaml
+    ///     Interaction logic for MacrosCommandWindow.axaml
     /// </summary>
     public partial class MacrosCommandWindow : Window
     {

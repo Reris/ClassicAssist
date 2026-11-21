@@ -7,7 +7,7 @@ using Avalonia.Input;
 namespace ClassicAssist.Controls.VirtualFolderBrowse
 {
     /// <summary>
-    ///     Interaction logic for FolderPromptWindow.xaml
+    ///     Interaction logic for FolderPromptWindow.axaml
     /// </summary>
     public partial class FolderPromptWindow : Window
     {

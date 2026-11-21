@@ -29,8 +29,8 @@
         </ResourceDictionary>
     </Window.Resources>
     <Window.Styles>
-        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
-        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DebugToolBarStyle.xaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
+        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DebugToolBarStyle.axaml" />
     </Window.Styles>
     <Window.DataContext>
         <filters:ItemIDFilterConfigureWindowViewModel />

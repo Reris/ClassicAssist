@@ -7,7 +7,7 @@ using Avalonia.VisualTree;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for HotkeysTab.xaml
+    ///     Interaction logic for HotkeysTab.axaml
     /// </summary>
     public partial class HotkeysTabControl : UserControl
     {

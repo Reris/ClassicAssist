@@ -2,7 +2,7 @@
 namespace ClassicAssist.Data.Backup.OneDrive
 {
     /// <summary>
-    ///     Interaction logic for OneDriveConfigureControl.xaml
+    ///     Interaction logic for OneDriveConfigureControl.axaml
     /// </summary>
     public partial class OneDriveConfigureControl : UserControl
     {

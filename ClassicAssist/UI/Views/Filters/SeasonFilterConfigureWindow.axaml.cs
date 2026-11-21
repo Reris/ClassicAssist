@@ -11,7 +11,7 @@ using ClassicAssist.Data.Filters;
 namespace ClassicAssist.UI.Views.Filters
 {
     /// <summary>
-    ///     Interaction logic for SeasonFilterConfigureWindow.xaml
+    ///     Interaction logic for SeasonFilterConfigureWindow.axaml
     /// </summary>
     public partial class SeasonFilterConfigureWindow : Window, INotifyPropertyChanged
     {

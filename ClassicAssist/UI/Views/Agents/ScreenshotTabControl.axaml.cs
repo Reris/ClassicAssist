@@ -12,7 +12,7 @@
 namespace ClassicAssist.UI.Views.Agents
 {
     /// <summary>
-    ///     Interaction logic for ScreenshotTabControl.xaml
+    ///     Interaction logic for ScreenshotTabControl.axaml
     /// </summary>
     public partial class ScreenshotTabControl : UserControl
     {

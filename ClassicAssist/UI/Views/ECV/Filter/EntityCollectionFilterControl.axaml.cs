@@ -12,7 +12,7 @@ using System.Windows.Input;
 namespace ClassicAssist.UI.Views.ECV.Filter
 {
     /// <summary>
-    ///     Interaction logic for EntityCollectionFilterControl.xaml
+    ///     Interaction logic for EntityCollectionFilterControl.axaml
     /// </summary>
     public partial class EntityCollectionFilterControl : UserControl
     {

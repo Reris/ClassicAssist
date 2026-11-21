@@ -1,6 +1,6 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:behaviours="clr-namespace:ClassicAssist.UI.Misc.Behaviours" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Controls.CustomWindowTitleControl" mc:Ignorable="d" x:Name="UserControl" d:DesignHeight="50" d:DesignWidth="800" Background="{DynamicResource ThemeWindowBackgroundBrush}" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared" xmlns:sharedBehaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared">
     <UserControl.Styles>
-        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
     </UserControl.Styles>
     <Interaction.Behaviors>
         <sharedBehaviours:DoubleClickBehaviour Command="{Binding MaximizeCommand, ElementName=UserControl}" CommandParameter="{Binding ElementName=UserControl, Mode=OneWay}" />

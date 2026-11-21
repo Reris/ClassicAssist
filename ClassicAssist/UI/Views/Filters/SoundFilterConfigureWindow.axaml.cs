@@ -12,7 +12,7 @@ using ClassicAssist.Data.Filters;
 namespace ClassicAssist.UI.Views.Filters
 {
     /// <summary>
-    ///     Interaction logic for SoundFilterConfigureWindow.xaml
+    ///     Interaction logic for SoundFilterConfigureWindow.axaml
     /// </summary>
     public partial class SoundFilterConfigureWindow : Window, INotifyPropertyChanged
     {

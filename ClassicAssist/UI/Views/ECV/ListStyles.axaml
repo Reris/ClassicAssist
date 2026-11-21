@@ -23,7 +23,7 @@
     </DataTemplate>
         </ResourceDictionary>
     </Styles.Resources>
-        <StyleInclude Source="avares://ClassicAssist/UI/Views/ECV/ContextMenu.xaml" />
+        <StyleInclude Source="avares://ClassicAssist/UI/Views/ECV/ContextMenu.axaml" />
     
     
     

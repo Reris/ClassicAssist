@@ -23,7 +23,7 @@ using ItemCollection = ClassicAssist.UO.Objects.ItemCollection;
 namespace ClassicAssist.UI.Views.ECV
 {
     /// <summary>
-    ///     Interaction logic for EntityCollectionViewerOrganizerControl.xaml
+    ///     Interaction logic for EntityCollectionViewerOrganizerControl.axaml
     /// </summary>
     public partial class EntityCollectionViewerOrganizerControl : UserControl
     {

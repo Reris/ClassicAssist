@@ -3,7 +3,7 @@ using Avalonia.Controls;
 namespace ClassicAssist.UI.Views.Debug
 {
     /// <summary>
-    ///     Interaction logic for DebugGumpControl.xaml
+    ///     Interaction logic for DebugGumpControl.axaml
     /// </summary>
     public partial class DebugGumpControl : UserControl
     {

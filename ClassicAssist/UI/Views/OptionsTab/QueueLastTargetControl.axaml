@@ -1,6 +1,6 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.OptionsTab.QueueLastTargetControl" mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModels:OptionsTabViewModel}" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Styles>
-        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
     </UserControl.Styles>
     <StackPanel>
         <CheckBox Content="{x:Static resources:Strings.Queue_Last_Target___Target_Self}" IsChecked="{Binding CurrentOptions.QueueLastTarget}" />

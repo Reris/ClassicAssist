@@ -17,7 +17,7 @@ using Avalonia.Input;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for AutologinStatusWindow.xaml
+    ///     Interaction logic for AutologinStatusWindow.axaml
     /// </summary>
     public partial class AutologinStatusWindow : Window
     {

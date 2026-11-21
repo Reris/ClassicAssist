@@ -7,7 +7,7 @@ using Avalonia.Input;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for RepositionableGumpWindow.xaml
+    ///     Interaction logic for RepositionableGumpWindow.axaml
     /// </summary>
     public partial class RepositionableGumpWindow : Window
     {

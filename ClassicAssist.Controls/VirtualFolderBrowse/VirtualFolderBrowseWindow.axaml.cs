@@ -3,7 +3,7 @@ using Avalonia.Controls;
 namespace ClassicAssist.Controls.VirtualFolderBrowse
 {
     /// <summary>
-    ///     Interaction logic for OneDrivePathPickerWindow.xaml
+    ///     Interaction logic for OneDrivePathPickerWindow.axaml
     /// </summary>
     public partial class VirtualFolderBrowseWindow : Window
     {

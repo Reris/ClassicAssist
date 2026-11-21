@@ -7,7 +7,7 @@ using Avalonia.Input;
 namespace ClassicAssist.UI.Views.Agents.Scavenger
 {
     /// <summary>
-    ///     Interaction logic for ScavengerClilocFilterWindow.xaml
+    ///     Interaction logic for ScavengerClilocFilterWindow.axaml
     /// </summary>
     public partial class ScavengerClilocFilterWindow : Window
     {

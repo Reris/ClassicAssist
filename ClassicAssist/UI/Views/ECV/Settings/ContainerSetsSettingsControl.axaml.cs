@@ -39,7 +39,7 @@ using System.Windows.Input;
 namespace ClassicAssist.UI.Views.ECV.Settings
 {
     /// <summary>
-    ///     Interaction logic for ContainerSetsSettingControl.xaml
+    ///     Interaction logic for ContainerSetsSettingControl.axaml
     /// </summary>
     public partial class ContainerSetsSettingsControl : UserControl, INotifyPropertyChanged
     {        public static readonly Avalonia.StyledProperty<ObservableCollection<ContainerSet>> ItemsProperty =

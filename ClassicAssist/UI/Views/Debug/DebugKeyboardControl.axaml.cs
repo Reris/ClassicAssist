@@ -5,7 +5,7 @@ using ClassicAssist.UI.ViewModels.Debug;
 namespace ClassicAssist.UI.Views.Debug
 {
     /// <summary>
-    ///     Interaction logic for DebugKeyboardControl.xaml
+    ///     Interaction logic for DebugKeyboardControl.axaml
     /// </summary>
     public partial class DebugKeyboardControl : UserControl
     {

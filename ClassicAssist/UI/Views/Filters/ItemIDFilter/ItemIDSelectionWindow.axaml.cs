@@ -18,7 +18,7 @@ using Avalonia.Controls;
 namespace ClassicAssist.UI.Views.Filters.ItemIDFilter
 {
     /// <summary>
-    ///     Interaction logic for ItemIDSelectionWindow.xaml
+    ///     Interaction logic for ItemIDSelectionWindow.axaml
     /// </summary>
     public partial class ItemIDSelectionWindow : Window, INotifyPropertyChanged
     {        private bool _imagesLoaded;

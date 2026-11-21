@@ -3,7 +3,7 @@
              x:Class="ClassicAssist.Updater.App"
              xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <Application.Styles>
-        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DarkTheme.xaml" />
-        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/Icons.xaml" />
+        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DarkTheme.axaml" />
+        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/Icons.axaml" />
     </Application.Styles>
 </Application>

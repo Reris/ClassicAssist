@@ -19,7 +19,7 @@ using ClassicAssist.UI.Misc;
 namespace ClassicAssist.UI.Views.Debug
 {
     /// <summary>
-    /// Interaction logic for DebugActionQueueControl.xaml
+    /// Interaction logic for DebugActionQueueControl.axaml
     /// </summary>
     public partial class DebugActionQueueControl : UserControl
     {

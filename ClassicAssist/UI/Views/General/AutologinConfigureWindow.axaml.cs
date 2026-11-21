@@ -24,7 +24,7 @@ using System.Windows.Input;
 namespace ClassicAssist.UI.Views.General
 {
     /// <summary>
-    ///     Interaction logic for AutologinConfigureWindow.xaml
+    ///     Interaction logic for AutologinConfigureWindow.axaml
     /// </summary>
     public partial class AutologinConfigureWindow : Window, INotifyPropertyChanged
     {        private string _account;

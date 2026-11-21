@@ -7,7 +7,7 @@ using Avalonia.Input;
 namespace ClassicAssist.UI.Views.Autoloot
 {
     /// <summary>
-    ///     Interaction logic for ClilocSelectedWindow.xaml
+    ///     Interaction logic for ClilocSelectedWindow.axaml
     /// </summary>
     public partial class ClilocSelectionWindow : Window
     {

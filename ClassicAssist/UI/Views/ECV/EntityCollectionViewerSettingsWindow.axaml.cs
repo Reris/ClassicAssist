@@ -19,7 +19,7 @@ using ClassicAssist.Shared.UI.Compat;
 namespace ClassicAssist.UI.Views.ECV
 {
     /// <summary>
-    ///     Interaction logic for EntityCollectionViewerSettingsWindow.xaml
+    ///     Interaction logic for EntityCollectionViewerSettingsWindow.axaml
     /// </summary>
     public partial class EntityCollectionViewerSettingsWindow : Window
     {

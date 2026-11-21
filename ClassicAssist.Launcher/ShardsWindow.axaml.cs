@@ -9,7 +9,7 @@ using Avalonia.Input;
 namespace ClassicAssist.Launcher
 {
     /// <summary>
-    ///     Interaction logic for ShardsWindow.xaml
+    ///     Interaction logic for ShardsWindow.axaml
     /// </summary>
     public partial class ShardsWindow : Window
     {

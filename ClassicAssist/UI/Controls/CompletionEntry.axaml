@@ -15,7 +15,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <UserControl.Styles>
-        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
         <Style Selector="Grid.HideNonExpanded">
             <Setter Property="IsVisible" Value="False" />
             <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsExpanded}" />
@@ -42,7 +42,7 @@
         </Button>
         <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="{DynamicResource ThemeWindowBackgroundBrush}" Classes="HideNonExpanded">
             <Grid.Styles>
-                <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
+                <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
             </Grid.Styles>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />

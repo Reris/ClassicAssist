@@ -21,7 +21,7 @@ using ClassicAssist.Shared.UI.Compat;
 namespace ClassicAssist.UI.Views.ECV.Settings.Controls.EditTextBlocks
 {
     /// <summary>
-    ///     Interaction logic for HueEditTextBlock.xaml
+    ///     Interaction logic for HueEditTextBlock.axaml
     /// </summary>
     public partial class HueEditTextBlock : UserControl, INotifyPropertyChanged
     {        public static readonly Avalonia.StyledProperty<int> HueProperty =

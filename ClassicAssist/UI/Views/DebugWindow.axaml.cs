@@ -13,7 +13,7 @@ using Newtonsoft.Json.Linq;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for PacketLogWindow.xaml
+    ///     Interaction logic for PacketLogWindow.axaml
     /// </summary>
     public partial class DebugWindow : Window
     {

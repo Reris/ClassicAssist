@@ -13,7 +13,7 @@ using Avalonia.Controls;
 namespace ClassicAssist.UI.Views.Agents
 {
     /// <summary>
-    ///     Interaction logic for NameOverrideTabControl.xaml
+    ///     Interaction logic for NameOverrideTabControl.axaml
     /// </summary>
     public partial class NameOverrideTabControl : UserControl
     {

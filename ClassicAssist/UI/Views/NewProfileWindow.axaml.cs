@@ -7,7 +7,7 @@ using Avalonia.Input;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for NewProfileWindow.xaml
+    ///     Interaction logic for NewProfileWindow.axaml
     /// </summary>
     public partial class NewProfileWindow : Window
     {

@@ -8,7 +8,7 @@ using Avalonia.Input;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for EntityCollectionViewer.xaml
+    ///     Interaction logic for EntityCollectionViewer.axaml
     /// </summary>
     public partial class EntityCollectionViewer : Window
     {

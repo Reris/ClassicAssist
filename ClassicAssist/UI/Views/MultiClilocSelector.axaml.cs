@@ -41,7 +41,7 @@ using System.Windows.Input;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for MultiClilocSelector.xaml
+    ///     Interaction logic for MultiClilocSelector.axaml
     /// </summary>
     public partial class MultiClilocSelector : UserControl
     {

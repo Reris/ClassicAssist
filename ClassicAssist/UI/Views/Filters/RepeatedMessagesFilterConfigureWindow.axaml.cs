@@ -7,7 +7,7 @@ using Avalonia.Controls;
 namespace ClassicAssist.UI.Views.Filters
 {
     /// <summary>
-    ///     Interaction logic for RepeatedMessagesFilterConfigureWindow.xaml
+    ///     Interaction logic for RepeatedMessagesFilterConfigureWindow.axaml
     /// </summary>
     public partial class RepeatedMessagesFilterConfigureWindow : Window, INotifyPropertyChanged
     {        private RepeatedMessagesFilter.MessageFilterOptions

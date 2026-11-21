@@ -34,7 +34,7 @@ using Avalonia.Media.Imaging;
 namespace ClassicAssist.UI.Views.Filters.ItemIDFilter
 {
     /// <summary>
-    ///     Interaction logic for ItemIDTooltipControl.xaml
+    ///     Interaction logic for ItemIDTooltipControl.axaml
     /// </summary>
     public partial class ItemIDTooltipControl : UserControl, INotifyPropertyChanged
     {

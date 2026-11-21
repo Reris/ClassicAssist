@@ -17,10 +17,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <AvaloniaXaml Include="**\*.xaml" SubType="Designer" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.3.23" />
     <PackageReference Include="Avalonia.Desktop" Version="11.3.23" />
     <PackageReference Include="Avalonia.Diagnostics" Version="11.3.23" Condition="'$(Configuration)'=='Debug' Or '$(Configuration)'=='Develop'" />

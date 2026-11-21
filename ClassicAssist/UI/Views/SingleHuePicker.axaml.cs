@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for HuePickerWindow.xaml
+    ///     Interaction logic for HuePickerWindow.axaml
     /// </summary>
     public partial class SingleHuePickerWindow : Window, INotifyPropertyChanged
     {

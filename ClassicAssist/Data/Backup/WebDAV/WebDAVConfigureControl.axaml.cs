@@ -13,7 +13,7 @@ using Avalonia.Controls;
 namespace ClassicAssist.Data.Backup.WebDAV
 {
     /// <summary>
-    ///     Interaction logic for WebDAVConfigureControl.xaml
+    ///     Interaction logic for WebDAVConfigureControl.axaml
     /// </summary>
     public partial class WebDAVConfigureControl : UserControl
     {

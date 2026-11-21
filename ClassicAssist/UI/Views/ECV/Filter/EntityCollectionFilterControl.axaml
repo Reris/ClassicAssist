@@ -311,8 +311,8 @@
             </DataTemplate>
     </UserControl.DataTemplates>
     <UserControl.Styles>
-        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DebugToolBarStyle.xaml" />
-        <StyleInclude Source="avares://ClassicAssist/UI/Views/ECV/Filter/Styles.xaml" />
+        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DebugToolBarStyle.axaml" />
+        <StyleInclude Source="avares://ClassicAssist/UI/Views/ECV/Filter/Styles.axaml" />
     </UserControl.Styles>
     <UserControl.DataContext>
         <filter:EntityCollectionFilterViewModel />

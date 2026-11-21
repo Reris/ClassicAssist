@@ -17,7 +17,7 @@ using Avalonia.Input;
 namespace ClassicAssist.UI.Views.OptionsTab
 {
     /// <summary>
-    ///     Interaction logic for MacrosGumpTextColorSelectorWindow.xaml
+    ///     Interaction logic for MacrosGumpTextColorSelectorWindow.axaml
     /// </summary>
     public partial class MacrosGumpTextColorSelectorWindow : Window
     {

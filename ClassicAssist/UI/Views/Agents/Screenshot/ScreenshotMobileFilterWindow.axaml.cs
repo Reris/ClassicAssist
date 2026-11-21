@@ -2,7 +2,7 @@
 namespace ClassicAssist.UI.Views.Agents.Screenshot
 {
     /// <summary>
-    ///     Interaction logic for ScreenshotMobileIDWindow.xaml
+    ///     Interaction logic for ScreenshotMobileIDWindow.axaml
     /// </summary>
     public partial class ScreenshotMobileFilterWindow : Window
     {

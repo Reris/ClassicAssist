@@ -19,7 +19,7 @@ using Avalonia.Input;
 namespace ClassicAssist.UI.Views.Agents.Autoloot.Import
 {
     /// <summary>
-    ///     Interaction logic for CSVImportWindow.xaml
+    ///     Interaction logic for CSVImportWindow.axaml
     /// </summary>
     public partial class CSVImportWindow : Window
     {

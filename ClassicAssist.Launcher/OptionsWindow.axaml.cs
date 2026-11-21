@@ -7,7 +7,7 @@ using Avalonia.Input;
 namespace ClassicAssist.Launcher
 {
     /// <summary>
-    ///     Interaction logic for OptionsWindow.xaml
+    ///     Interaction logic for OptionsWindow.axaml
     /// </summary>
     public partial class OptionsWindow : Window
     {

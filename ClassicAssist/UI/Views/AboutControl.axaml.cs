@@ -7,7 +7,7 @@ using ClassicAssist.Misc;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for AboutControl.xaml
+    ///     Interaction logic for AboutControl.axaml
     /// </summary>
     public partial class AboutControl : UserControl
     {

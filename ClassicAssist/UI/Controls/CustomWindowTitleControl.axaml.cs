@@ -10,7 +10,7 @@ using System.Windows.Input;
 namespace ClassicAssist.UI.Controls
 {
     /// <summary>
-    ///     Interaction logic for CustomWindowTitleControl.xaml
+    ///     Interaction logic for CustomWindowTitleControl.axaml
     /// </summary>
     public partial class CustomWindowTitleControl : UserControl
     {

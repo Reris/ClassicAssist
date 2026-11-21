@@ -11,7 +11,7 @@ using AvaloniaEdit.Highlighting.Xshd;
 namespace ClassicAssist.Browser
 {
     /// <summary>
-    ///     Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.axaml
     /// </summary>
     public partial class MacroBrowserControl : UserControl
     {

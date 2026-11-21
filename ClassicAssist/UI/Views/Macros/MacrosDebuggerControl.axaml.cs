@@ -39,7 +39,7 @@ using System.Windows.Input;
 namespace ClassicAssist.UI.Views.Macros
 {
     /// <summary>
-    ///     Interaction logic for MacrosDebuggerControl.xaml
+    ///     Interaction logic for MacrosDebuggerControl.axaml
     /// </summary>
     public partial class MacrosDebuggerControl : UserControl, INotifyPropertyChanged
     {        public static readonly Avalonia.StyledProperty<MacroEntry> MacroEntryProperty =

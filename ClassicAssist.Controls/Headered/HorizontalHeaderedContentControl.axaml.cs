@@ -19,7 +19,7 @@ using ClassicAssist.Shared.UI.Compat;
 namespace ClassicAssist.Controls.Headered
 {
     /// <summary>
-    ///     Interaction logic for HorizontalHeaderedContentControl.xaml
+    ///     Interaction logic for HorizontalHeaderedContentControl.axaml
     /// </summary>
     public partial class HorizontalHeaderedContentControl : HeaderedContentControl
     {

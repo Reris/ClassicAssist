@@ -3,7 +3,7 @@ using Avalonia.Controls;
 namespace ClassicAssist.UI.Views.Agents
 {
     /// <summary>
-    ///     Interaction logic for OrganizerTabControl.xaml
+    ///     Interaction logic for OrganizerTabControl.axaml
     /// </summary>
     public partial class OrganizerTabControl : UserControl
     {

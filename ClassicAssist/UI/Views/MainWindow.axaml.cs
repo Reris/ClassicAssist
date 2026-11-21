@@ -5,7 +5,7 @@ using Avalonia.Controls;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.axaml
     /// </summary>
     public partial class MainWindow : Window
     {

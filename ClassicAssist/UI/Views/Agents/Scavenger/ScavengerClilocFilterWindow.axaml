@@ -1,6 +1,6 @@
 ﻿<Window xmlns="https://github.com/avaloniaui" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:scavenger="clr-namespace:ClassicAssist.UI.ViewModels.Agents.Scavenger" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.Agents.Scavenger.ScavengerClilocFilterWindow" x:Name="Window" mc:Ignorable="d" Background="{DynamicResource ThemeWindowBackgroundBrush}" Foreground="{DynamicResource ThemeForegroundBrush}" Title="{x:Static resources:Strings.Cliloc_Filter}" Height="450" Width="400" ExtendClientAreaToDecorationsHint="True" TransparencyLevelHint="AcrylicBlur" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:scavengerData="clr-namespace:ClassicAssist.Data.Scavenger" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <Window.Styles>
-        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
     </Window.Styles>
     <Window.DataContext>
         <scavenger:ScavengerClilocFilterViewModel />

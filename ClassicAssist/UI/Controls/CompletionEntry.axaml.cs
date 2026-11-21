@@ -14,7 +14,7 @@ using System.Windows.Input;
 namespace ClassicAssist.UI.Controls
 {
     /// <summary>
-    ///     Interaction logic for CompletionEntry.xaml
+    ///     Interaction logic for CompletionEntry.axaml
     /// </summary>
     public partial class CompletionEntry : UserControl, INotifyPropertyChanged
     {        private ICommand _copyToClipboardCommand;

@@ -35,7 +35,7 @@ using System.Windows.Input;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for MultiItemIDSelector.xaml
+    ///     Interaction logic for MultiItemIDSelector.axaml
     /// </summary>
     public partial class MultiItemIDSelector : UserControl
     {

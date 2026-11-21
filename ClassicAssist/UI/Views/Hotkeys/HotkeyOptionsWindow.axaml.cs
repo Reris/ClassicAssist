@@ -27,7 +27,7 @@ using System.Windows.Input;
 namespace ClassicAssist.UI.Views.Hotkeys
 {
     /// <summary>
-    ///     Interaction logic for HotkeyOptionsWindow.xaml
+    ///     Interaction logic for HotkeyOptionsWindow.axaml
     /// </summary>
     public partial class HotkeyOptionsWindow : Window
     {

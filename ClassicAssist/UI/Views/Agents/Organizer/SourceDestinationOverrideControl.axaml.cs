@@ -19,7 +19,7 @@ using System.Windows.Input;
 namespace ClassicAssist.UI.Views.Agents.Organizer
 {
     /// <summary>
-    ///     Interaction logic for SourceDestinationOverrideControl.xaml
+    ///     Interaction logic for SourceDestinationOverrideControl.axaml
     /// </summary>
     public partial class SourceDestinationOverrideControl : UserControl
     {

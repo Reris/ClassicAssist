@@ -6,11 +6,11 @@
         </ResourceDictionary>
     </Window.Resources>
     <Window.Styles>
-        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
-        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DebugToolBarStyle.xaml" />
-        <StyleInclude Source="avares://ClassicAssist/UI/Views/ECV/Icons.xaml" />
-        <StyleInclude Source="avares://ClassicAssist/UI/Views/ECV/Toolbar.xaml" />
-        <StyleInclude Source="avares://ClassicAssist/UI/Views/ECV/ListStyles.xaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
+        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DebugToolBarStyle.axaml" />
+        <StyleInclude Source="avares://ClassicAssist/UI/Views/ECV/Icons.axaml" />
+        <StyleInclude Source="avares://ClassicAssist/UI/Views/ECV/Toolbar.axaml" />
+        <StyleInclude Source="avares://ClassicAssist/UI/Views/ECV/ListStyles.axaml" />
     </Window.Styles>
     <Grid>
         <Grid.RowDefinitions>

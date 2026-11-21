@@ -16,10 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <AvaloniaXaml Include="Resources\*.xaml" SubType="Designer" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Resources\Strings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

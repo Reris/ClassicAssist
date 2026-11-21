@@ -67,7 +67,7 @@
     </ContextMenu>
         </ResourceDictionary>
     </Styles.Resources>
-        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/MenuStyles.xaml" />
+        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/MenuStyles.axaml" />
     
     
 </Styles>

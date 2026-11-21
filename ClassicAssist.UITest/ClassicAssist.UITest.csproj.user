@@ -2,7 +2,7 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <Page Update="..\ClassicAssist\UI\Views\GeneralControl.xaml">
+    <Page Update="..\ClassicAssist\UI\Views\GeneralControl.axaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

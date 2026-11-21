@@ -7,7 +7,7 @@ using Avalonia.Input;
 namespace ClassicAssist.UI.Views.Autoloot
 {
     /// <summary>
-    ///     Interaction logic for CustomPropertiesWindow.xaml
+    ///     Interaction logic for CustomPropertiesWindow.axaml
     /// </summary>
     public partial class CustomPropertiesWindow : Window
     {

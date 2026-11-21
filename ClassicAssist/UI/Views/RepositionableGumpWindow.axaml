@@ -13,7 +13,7 @@
         </ResourceDictionary>
     </Window.Resources>
     <Window.Styles>
-        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
     </Window.Styles>
     <Window.DataContext>
         <viewModels:RepositionableGumpViewModel />

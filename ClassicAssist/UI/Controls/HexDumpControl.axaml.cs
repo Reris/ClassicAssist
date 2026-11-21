@@ -28,7 +28,7 @@ namespace ClassicAssist.UI.Controls
     }
 
     /// <summary>
-    ///     Interaction logic for HexDumpControl.xaml
+    ///     Interaction logic for HexDumpControl.axaml
     /// </summary>
     public partial class HexDumpControl : UserControl, INotifyPropertyChanged
     {        public static readonly Avalonia.StyledProperty<PacketEntry> PacketProperty =

@@ -7,7 +7,7 @@ using Avalonia.Controls;
 namespace ClassicAssist.UI.Views.Filters
 {
     /// <summary>
-    ///     Interaction logic for LightLevelFilterConfigureWindow.xaml
+    ///     Interaction logic for LightLevelFilterConfigureWindow.axaml
     /// </summary>
     public partial class LightLevelFilterConfigureWindow : Window, INotifyPropertyChanged
     {        private LightLevelOptions _options = new LightLevelOptions();

@@ -13,7 +13,7 @@ using Avalonia.Controls;
 namespace ClassicAssist.UI.Views.OptionsTab
 {
     /// <summary>
-    ///     Interaction logic for QueueLastTargetControl.xaml
+    ///     Interaction logic for QueueLastTargetControl.axaml
     /// </summary>
     public partial class QueueLastTargetControl : UserControl
     {

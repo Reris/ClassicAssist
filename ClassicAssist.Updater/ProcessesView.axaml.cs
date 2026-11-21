@@ -7,7 +7,7 @@ using Avalonia.Input;
 namespace ClassicAssist.Updater
 {
     /// <summary>
-    ///     Interaction logic for ProcessesView.xaml
+    ///     Interaction logic for ProcessesView.axaml
     /// </summary>
     public partial class ProcessesView : Window
     {

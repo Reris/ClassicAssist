@@ -1,6 +1,6 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:behaviours="clr-namespace:ClassicAssist.UI.Misc.Behaviours" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:misc="clr-namespace:ClassicAssist.Misc" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.SkillsTabControl" mc:Ignorable="d" xmlns:data="clr-namespace:ClassicAssist.UO.Data" xmlns:misc1="clr-namespace:ClassicAssist.UI.Misc" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:sharedResources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:skills="clr-namespace:ClassicAssist.Data.Skills" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Styles>
-        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
     </UserControl.Styles>
     <d:DesignerProperties.DesignStyle>
         <Style Selector="UserControl">

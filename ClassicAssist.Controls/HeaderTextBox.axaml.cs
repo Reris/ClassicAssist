@@ -8,7 +8,7 @@ using ClassicAssist.Shared.UI.Compat;
 namespace ClassicAssist.Controls
 {
     /// <summary>
-    ///     Interaction logic for HeaderTextBox.xaml
+    ///     Interaction logic for HeaderTextBox.axaml
     /// </summary>
     public partial class HeaderTextBox : UserControl
     {

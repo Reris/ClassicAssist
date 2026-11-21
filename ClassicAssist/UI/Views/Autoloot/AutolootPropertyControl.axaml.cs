@@ -25,7 +25,7 @@ using ClassicAssist.UI.ViewModels.Agents;
 namespace ClassicAssist.UI.Views.Autoloot
 {
     /// <summary>
-    ///     Interaction logic for AutolootPropertyControl.xaml
+    ///     Interaction logic for AutolootPropertyControl.axaml
     /// </summary>
     public partial class AutolootPropertyControl : UserControl
     {

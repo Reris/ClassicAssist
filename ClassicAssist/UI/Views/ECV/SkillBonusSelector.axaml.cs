@@ -25,7 +25,7 @@ using ClassicAssist.UI.Views.ECV.Filter.Models;
 namespace ClassicAssist.UI.Views.ECV
 {
     /// <summary>
-    ///     Interaction logic for SkillBonusSelector.xaml
+    ///     Interaction logic for SkillBonusSelector.axaml
     /// </summary>
     public partial class SkillBonusSelector : UserControl
     {

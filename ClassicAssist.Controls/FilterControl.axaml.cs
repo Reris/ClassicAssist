@@ -10,7 +10,7 @@ using System.Windows.Input;
 namespace ClassicAssist.Controls
 {
     /// <summary>
-    ///     Interaction logic for FilterControl.xaml
+    ///     Interaction logic for FilterControl.axaml
     /// </summary>
     public partial class FilterControl : UserControl
     {

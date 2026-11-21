@@ -1,9 +1,9 @@
 <Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:draggableTreeView="clr-namespace:ClassicAssist.Controls.DraggableTreeView;assembly=ClassicAssist.Controls" xmlns:headered="clr-namespace:ClassicAssist.Controls.Headered;assembly=ClassicAssist.Controls">
-    <StyleInclude Source="avares://ClassicAssist.Shared/Resources/Icons.xaml" />
-    <StyleInclude Source="avares://ClassicAssist.Shared/Resources/Colours.xaml" />
-    <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DarkTheme.xaml" />
-    <StyleInclude Source="avares://ClassicAssist.Controls/ClearableComboBox.xaml" />
-    <StyleInclude Source="avares://ClassicAssist.Controls/ImageButton.xaml" />
+    <StyleInclude Source="avares://ClassicAssist.Shared/Resources/Icons.axaml" />
+    <StyleInclude Source="avares://ClassicAssist.Shared/Resources/Colours.axaml" />
+    <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DarkTheme.axaml" />
+    <StyleInclude Source="avares://ClassicAssist.Controls/ClearableComboBox.axaml" />
+    <StyleInclude Source="avares://ClassicAssist.Controls/ImageButton.axaml" />
     <Style Selector="controls|EditTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
         <Setter Property="MinWidth" Value="50" />

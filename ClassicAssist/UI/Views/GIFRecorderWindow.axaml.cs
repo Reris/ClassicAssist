@@ -8,7 +8,7 @@ using ClassicAssist.UI.ViewModels;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for GIFRecorderWindow.xaml
+    ///     Interaction logic for GIFRecorderWindow.axaml
     /// </summary>
     public partial class GIFRecorderWindow : Window
     {

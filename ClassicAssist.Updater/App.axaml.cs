@@ -15,7 +15,7 @@ using IOPath = System.IO.Path;
 namespace ClassicAssist.Updater
 {
     /// <summary>
-    ///     Interaction logic for App.xaml
+    ///     Interaction logic for App.axaml
     /// </summary>
     public partial class App : Application
     {

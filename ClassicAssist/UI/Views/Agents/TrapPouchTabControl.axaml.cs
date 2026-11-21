@@ -13,7 +13,7 @@ using Avalonia.Controls;
 namespace ClassicAssist.UI.Views.Agents
 {
     /// <summary>
-    ///     Interaction logic for UseOnceTabControl.xaml
+    ///     Interaction logic for UseOnceTabControl.axaml
     /// </summary>
     public partial class TrapPouchTabControl : UserControl
     {

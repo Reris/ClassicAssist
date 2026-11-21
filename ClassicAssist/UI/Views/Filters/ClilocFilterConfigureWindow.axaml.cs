@@ -7,7 +7,7 @@ using Avalonia.Input;
 namespace ClassicAssist.UI.Views.Filters
 {
     /// <summary>
-    ///     Interaction logic for ClilocFilterConfigureWindow.xaml
+    ///     Interaction logic for ClilocFilterConfigureWindow.axaml
     /// </summary>
     public partial class ClilocFilterConfigureWindow : Window
     {

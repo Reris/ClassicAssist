@@ -17,7 +17,7 @@ using Avalonia.Input;
 namespace ClassicAssist.UI.Views.Filters
 {
     /// <summary>
-    ///     Interaction logic for ItemIDFilterConfigureWindow.xaml
+    ///     Interaction logic for ItemIDFilterConfigureWindow.axaml
     /// </summary>
     public partial class ItemIDFilterConfigureWindow : Window
     {

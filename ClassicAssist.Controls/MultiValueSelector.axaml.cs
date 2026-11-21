@@ -38,7 +38,7 @@ using System.Windows.Input;
 namespace ClassicAssist.Controls
 {
     /// <summary>
-    ///     Interaction logic for MultiValueSelector.xaml
+    ///     Interaction logic for MultiValueSelector.axaml
     /// </summary>
     public partial class MultiValueSelector : UserControl, INotifyPropertyChanged
     {

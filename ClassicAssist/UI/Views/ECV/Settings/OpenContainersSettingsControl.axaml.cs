@@ -20,7 +20,7 @@ using ClassicAssist.Shared.UI.Compat;
 namespace ClassicAssist.UI.Views.ECV.Settings
 {
     /// <summary>
-    ///     Interaction logic for OpenContainersSettingsControl.xaml
+    ///     Interaction logic for OpenContainersSettingsControl.axaml
     /// </summary>
     public partial class OpenContainersSettingsControl : UserControl
     {

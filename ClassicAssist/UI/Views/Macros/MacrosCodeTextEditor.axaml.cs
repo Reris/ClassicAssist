@@ -37,7 +37,7 @@ using System.Windows.Input;
 namespace ClassicAssist.UI.Views.Macros
 {
     /// <summary>
-    ///     Interaction logic for MacrosCodeTextEditor.xaml
+    ///     Interaction logic for MacrosCodeTextEditor.axaml
     /// </summary>
     public partial class MacrosCodeTextEditor : UserControl
     {

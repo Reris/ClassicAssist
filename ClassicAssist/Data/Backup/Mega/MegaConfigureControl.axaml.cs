@@ -2,7 +2,7 @@
 namespace ClassicAssist.Data.Backup.Mega
 {
     /// <summary>
-    ///     Interaction logic for OneDriveConfigureControl.xaml
+    ///     Interaction logic for OneDriveConfigureControl.axaml
     /// </summary>
     public partial class MegaConfigureControl : UserControl
     {

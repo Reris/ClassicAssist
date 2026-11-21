@@ -19,7 +19,7 @@ using Avalonia.Controls;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for SplashWindow.xaml
+    ///     Interaction logic for SplashWindow.axaml
     /// </summary>
     public partial class SplashWindow : Window, INotifyPropertyChanged
     {        public IImage Image { get; set; }

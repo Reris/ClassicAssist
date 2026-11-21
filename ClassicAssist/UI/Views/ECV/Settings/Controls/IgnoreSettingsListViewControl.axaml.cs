@@ -12,7 +12,7 @@
 namespace ClassicAssist.UI.Views.ECV.Settings.Controls
 {
     /// <summary>
-    ///     Interaction logic for IgnoreSettingsControl.xaml
+    ///     Interaction logic for IgnoreSettingsControl.axaml
     /// </summary>
     public partial class IgnoreSettingsControl : UserControl
     {

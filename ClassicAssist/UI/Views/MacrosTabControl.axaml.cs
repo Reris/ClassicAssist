@@ -28,7 +28,7 @@ using ClassicAssist.Data.Macros;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for MacrosTabControl.xaml
+    ///     Interaction logic for MacrosTabControl.axaml
     /// </summary>
     public partial class MacrosTabControl : UserControl
     {

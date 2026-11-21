@@ -11,8 +11,8 @@
         </ResourceDictionary>
     </Window.Resources>
     <Window.Styles>
-        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.xaml" />
-        <StyleInclude Source="avares://ClassicAssist/UI/Views/Debug/Styles.xaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
+        <StyleInclude Source="avares://ClassicAssist/UI/Views/Debug/Styles.axaml" />
     </Window.Styles>
     <Window.DataContext>
         <filters:ClilocFilterConfigureViewModel />

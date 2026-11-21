@@ -29,7 +29,7 @@ using System.Windows.Input;
 namespace ClassicAssist.UI.Views.ECV.Settings.Controls.EditTextBlocks
 {
     /// <summary>
-    ///     Interaction logic for GraphicEditTextBlock.xaml
+    ///     Interaction logic for GraphicEditTextBlock.axaml
     /// </summary>
     public partial class GraphicEditTextBlock : UserControl, INotifyPropertyChanged
     {        public static readonly Avalonia.StyledProperty<int> IDProperty =

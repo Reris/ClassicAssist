@@ -33,7 +33,7 @@ using System.Windows.Input;
 namespace ClassicAssist.UI.Views.ECV.Settings.Controls.EditTextBlocks
 {
     /// <summary>
-    ///     Interaction logic for ClilocEditTextBlock.xaml
+    ///     Interaction logic for ClilocEditTextBlock.axaml
     /// </summary>
     public partial class ClilocEditTextBlock : UserControl, INotifyPropertyChanged
     {        public static readonly Avalonia.StyledProperty<int> ClilocProperty =

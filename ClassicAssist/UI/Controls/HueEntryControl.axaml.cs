@@ -10,7 +10,7 @@ using ClassicAssist.Shared.UI.Compat;
 namespace ClassicAssist.UI.Controls
 {
     /// <summary>
-    ///     Interaction logic for HueEntryControl.xaml
+    ///     Interaction logic for HueEntryControl.axaml
     /// </summary>
     public partial class HueEntryControl : UserControl
     {

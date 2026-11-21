@@ -7,7 +7,7 @@ using Avalonia.Input;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for ActiveObjectsWindow.xaml
+    ///     Interaction logic for ActiveObjectsWindow.axaml
     /// </summary>
     public partial class ActiveObjectsWindow : Window
     {

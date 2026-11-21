@@ -11,7 +11,7 @@ using ClassicAssist.UO;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for ChatWindow.xaml
+    ///     Interaction logic for ChatWindow.axaml
     /// </summary>
     public partial class ChatWindow : Window
     {

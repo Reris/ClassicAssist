@@ -3,8 +3,8 @@
         <ResourceDictionary />
     </Window.Resources>
     <Window.Styles>
-        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DarkTheme.xaml" />
-        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DebugToolBarStyle.xaml" />
+        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DarkTheme.axaml" />
+        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DebugToolBarStyle.axaml" />
     </Window.Styles>
     <Window.DataContext>
         <virtualFolderBrowse:VirtualFolderBrowseViewModel />

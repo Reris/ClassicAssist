@@ -1,3 +1,3 @@
 <Styles xmlns="https://github.com/avaloniaui">
-    <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DarkTheme.xaml" />
+    <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DarkTheme.axaml" />
 </Styles>

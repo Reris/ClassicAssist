@@ -10,7 +10,7 @@ using ClassicAssist.Shared.UI.Compat;
 namespace ClassicAssist.Controls
 {
     /// <summary>
-    ///     Interaction logic for EditTextBlock.xaml
+    ///     Interaction logic for EditTextBlock.axaml
     /// </summary>
     public partial class EditTextBlock : UserControl
     {

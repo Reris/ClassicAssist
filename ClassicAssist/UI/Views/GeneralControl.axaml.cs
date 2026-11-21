@@ -3,7 +3,7 @@ using Avalonia.Controls;
 namespace ClassicAssist.UI.Views
 {
     /// <summary>
-    ///     Interaction logic for GeneralControl.xaml
+    ///     Interaction logic for GeneralControl.axaml
     /// </summary>
     public partial class GeneralControl : UserControl
     {

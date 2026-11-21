@@ -20,7 +20,7 @@ using ClassicAssist.Shared.UI.Compat;
 namespace ClassicAssist.UI.Views.ECV.Settings
 {
     /// <summary>
-    ///     Interaction logic for CombineStacksSettingsControl.xaml
+    ///     Interaction logic for CombineStacksSettingsControl.axaml
     /// </summary>
     public partial class CombineStacksSettingsControl : UserControl
     {

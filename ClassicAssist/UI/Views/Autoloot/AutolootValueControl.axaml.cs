@@ -37,7 +37,7 @@ using ClassicAssist.UO.Data;
 namespace ClassicAssist.UI.Views.Autoloot
 {
     /// <summary>
-    ///     Interaction logic for AutolootValueControl.xaml
+    ///     Interaction logic for AutolootValueControl.axaml
     /// </summary>
     public partial class AutolootValueControl : UserControl
     {

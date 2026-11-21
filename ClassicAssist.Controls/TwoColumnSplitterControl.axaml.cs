@@ -18,7 +18,7 @@ using ClassicAssist.Shared.UI.Compat;
 namespace ClassicAssist.Controls
 {
     /// <summary>
-    ///     Interaction logic for TwoColumnSplitterControl.xaml
+    ///     Interaction logic for TwoColumnSplitterControl.axaml
     /// </summary>
     public partial class TwoColumnSplitterControl : UserControl
     {

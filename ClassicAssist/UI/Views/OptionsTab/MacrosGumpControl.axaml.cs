@@ -12,7 +12,7 @@
 namespace ClassicAssist.UI.Views.OptionsTab
 {
     /// <summary>
-    ///     Interaction logic for MacrosGumpControl.xaml
+    ///     Interaction logic for MacrosGumpControl.axaml
     /// </summary>
     public partial class MacrosGumpControl : UserControl
     {
