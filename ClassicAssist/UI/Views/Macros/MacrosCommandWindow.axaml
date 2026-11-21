@@ -5,7 +5,7 @@
         </ResourceDictionary>
     </Window.Resources>
     <Window.Styles>
-        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/Theme.axaml" />
     </Window.Styles>
     <Window.DataContext>
         <macros:MacrosCommandViewModel />

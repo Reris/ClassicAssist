@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ClassicAssist.UI.App">
     <Application.Styles>
-        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/Theme.axaml" />
         <StyleInclude Source="avares://ClassicAssist/UI/Views/ECV/Toolbar.axaml" />
         <StyleInclude Source="avares://ClassicAssist/UI/Views/ECV/ListStyles.axaml" />
         <StyleInclude Source="avares://ClassicAssist.Shared/Resources/MenuStyles.axaml" />

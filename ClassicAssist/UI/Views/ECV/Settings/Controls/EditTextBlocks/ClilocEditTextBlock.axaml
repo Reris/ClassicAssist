@@ -1,6 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="userControl" x:Class="ClassicAssist.UI.Views.ECV.Settings.Controls.EditTextBlocks.ClilocEditTextBlock" mc:Ignorable="d" d:DesignWidth="300" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:editTextBlocks="clr-namespace:ClassicAssist.UI.Views.ECV.Settings.Controls.EditTextBlocks" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Styles>
-        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/Theme.axaml" />
         <StyleInclude Source="avares://ClassicAssist/UI/Views/Debug/Styles.axaml" />
     </UserControl.Styles>
     <controls:EditTextBlock Text="{Binding Cliloc, ElementName=userControl}" Label="{Binding Label, ElementName=userControl}" ShowIcon="True" CanEdit="True">

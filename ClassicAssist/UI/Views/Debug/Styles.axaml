@@ -1,5 +1,5 @@
 <Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:sharedControls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
-    <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
+    <StyleInclude Source="avares://ClassicAssist/Resources/Theme.axaml" />
     <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DebugToolBarStyle.axaml" />
     <Style Selector="TextBox.TextBoxStyle">
         <Setter Property="VerticalAlignment" Value="Stretch" />

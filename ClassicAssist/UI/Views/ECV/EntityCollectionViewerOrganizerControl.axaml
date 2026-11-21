@@ -1,6 +1,6 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:local="clr-namespace:ClassicAssist.UI.Views.ECV" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.ECV.EntityCollectionViewerOrganizerControl" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Styles>
-        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/Theme.axaml" />
     </UserControl.Styles>
     <UserControl.DataContext>
         <local:EntityCollectionViewerOrganizerViewModel />

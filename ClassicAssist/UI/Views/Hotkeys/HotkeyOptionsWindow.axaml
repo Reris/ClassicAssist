@@ -1,6 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="window" x:Class="ClassicAssist.UI.Views.Hotkeys.HotkeyOptionsWindow" mc:Ignorable="d" Title="{x:Static resources:Strings.Options}" SizeToContent="Height" Width="300" Background="{DynamicResource ThemeWindowBackgroundBrush}" Topmost="True" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <Window.Styles>
-        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/Theme.axaml" />
     </Window.Styles>
     <Grid Margin="10">
         <Grid.RowDefinitions>

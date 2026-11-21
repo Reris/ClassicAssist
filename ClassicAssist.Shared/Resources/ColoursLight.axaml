@@ -153,9 +153,9 @@
 
             <!--
               Fluent theme resource overrides.
-              FluentTheme (added in DarkTheme.axaml) provides control templates, but its default light/dark
+              FluentTheme (added in Theme.axaml) provides control templates, but its default light/dark
               palette doesn't match the migrated WPF palette. These aliases remap Fluent's resource keys onto
-              the palette above. They are declared after FluentTheme in DarkTheme.axaml, and Styles resource
+              the palette above. They are declared after FluentTheme in Theme.axaml, and Styles resource
               lookup consults later children first, so these win over Fluent's theme dictionaries.
             -->
             <SolidColorBrush x:Key="TransparentBrush" Color="Transparent" />

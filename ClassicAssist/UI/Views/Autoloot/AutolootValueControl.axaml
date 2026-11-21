@@ -1,6 +1,6 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.Autoloot.AutolootValueControl" mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Styles>
-        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/Theme.axaml" />
         <StyleInclude Source="avares://ClassicAssist.Shared/Resources/Icons.axaml" />
     </UserControl.Styles>
     <StackPanel x:Name="Grid" Orientation="Horizontal" />

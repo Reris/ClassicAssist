@@ -9,7 +9,7 @@
     <UserControl.Styles>
         <StyleInclude Source="avares://ClassicAssist.Shared/Resources/Icons.axaml" />
         <StyleInclude Source="avares://ClassicAssist.Shared/Resources/Colours.axaml" />
-        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/DarkTheme.axaml" />
+        <StyleInclude Source="avares://ClassicAssist.Shared/Resources/Theme.axaml" />
     </UserControl.Styles>
     <Grid>
         <Grid DataContext="{Binding ElementName=userControl, Mode=OneWay}">

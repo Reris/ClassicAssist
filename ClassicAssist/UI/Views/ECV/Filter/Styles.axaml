@@ -41,7 +41,7 @@
             <localValueConverters:GroupItemMultiValueConverter x:Key="GroupItemMultiValueConverter" />
         </ResourceDictionary>
     </Styles.Resources>
-        <StyleInclude Source="avares://ClassicAssist/Resources/DarkTheme.axaml" />
+        <StyleInclude Source="avares://ClassicAssist/Resources/Theme.axaml" />
     
     
     
