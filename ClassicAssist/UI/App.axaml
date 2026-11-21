@@ -1,4 +1,5 @@
 ﻿<Application xmlns="https://github.com/avaloniaui"
+             RequestedThemeVariant="Dark"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ClassicAssist.UI.App">
     <Application.Styles>

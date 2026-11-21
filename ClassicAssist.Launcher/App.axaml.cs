@@ -22,6 +22,7 @@ using Avalonia.Markup.Xaml;
 
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Styling;
 
 using CommandLine;
 using Exceptionless;
@@ -49,6 +50,15 @@ namespace ClassicAssist.Launcher
 			if ( ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop )
 			{
 				Parser.Default.ParseArguments<CommandLineOptions>( desktop.Args ).WithParsed( o => CurrentOptions = o );
+
+				if ( CurrentOptions.Dark )
+				{
+					RequestedThemeVariant = ThemeVariant.Dark;
+				}
+				else if ( CurrentOptions.Light )
+				{
+					RequestedThemeVariant = ThemeVariant.Light;
+				}
 
 				desktop.MainWindow = new MainWindow();
 			}

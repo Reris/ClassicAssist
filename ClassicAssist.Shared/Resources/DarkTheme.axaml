@@ -1,4 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui" xmlns:avalonedit="using:AvaloniaEdit">
+    <FluentTheme />
+    <StyleInclude Source="avares://ClassicAssist.Shared/Resources/Colours.axaml" />
     <Style Selector="TreeViewItem">
         <Setter Property="Padding" Value="4,1,4,1" />
         <Setter Property="BorderThickness" Value="1" />
@@ -17,18 +19,16 @@
     <Style Selector="RadioButton">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{DynamicResource ThemeForegroundBrush}" />
     </Style>
     <Style Selector="CheckBox">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{DynamicResource ThemeForegroundBrush}" />
     </Style>
     <Style Selector="ListBox">
         <Setter Property="Background" Value="{DynamicResource ThemeInnerControlBackgroundBrush}" />
@@ -71,17 +71,24 @@
         <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundBrush}" />
         <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrush}" />
         <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Padding" Value="25,5" />
+    </Style>
+    <Style Selector="ToggleButton">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+    </Style>
+    <Style Selector="RepeatButton">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
     </Style>
     <Style Selector="ScrollBar">
         <Setter Property="Background" Value="{DynamicResource ScrollBarBackgroundBrush}" />
     </Style>
     <Style Selector="ComboBox">
-        <Setter Property="Background" Value="{DynamicResource TextBoxBackgroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource ComboBoxNonEditableBackgroundBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource TextBoxForegroundBrush}" />
-        
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="Padding" Value="3,0" />
     </Style>
     <Style Selector="TextBox">

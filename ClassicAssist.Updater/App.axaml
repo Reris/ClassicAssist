@@ -1,4 +1,5 @@
 <Application xmlns="https://github.com/avaloniaui"
+             RequestedThemeVariant="Dark"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ClassicAssist.Updater.App"
              xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
