@@ -513,7 +513,7 @@ namespace ClassicAssist.Launcher
 
             string plugins = string.Join( ",", pluginList.ToArray() );
 
-            args.Append( $"-plugins \"{plugins}\" " );
+            args.Append( $"-plugins \"{plugins.Replace( @"\", @"\\" )}\" " );
             args.Append( $"-ip \"{ip}\" -port \"{SelectedShard.Port}\" " );
             args.Append( $"-uopath \"{SelectedDataPath.Replace( @"\", @"\\" )}\" " );
             args.Append( $"-encryption {( SelectedShard.Encryption ? 1 : 0 )} " );
