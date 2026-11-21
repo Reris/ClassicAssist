@@ -207,7 +207,7 @@
         <Setter Property="Background" Value="{DynamicResource ComboBoxNonEditableBackgroundBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource TextBoxForegroundBrush}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="Padding" Value="3,0" />
+        <Setter Property="Padding" Value="3,3" />
         <Setter Property="MinHeight" Value="0" />
         <Setter Property="CornerRadius" Value="0" />
     </Style>

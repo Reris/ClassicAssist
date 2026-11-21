@@ -2,6 +2,14 @@
   "profiles": {
     "ClassicAssist.Launcher": {
       "commandName": "Project"
+    },
+    "ClassicAssist.Launcher Light": {
+      "commandName": "Project",
+      "commandLineArgs": "--light"
+    },
+    "ClassicAssist.Launcher Dark": {
+      "commandName": "Project",
+      "commandLineArgs": "--dark"
     }
   }
 }
