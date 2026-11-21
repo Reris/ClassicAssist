@@ -2,6 +2,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <converters:CharToStringValueConverter x:Key="CharToStringValueConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <UserControl.Styles>
@@ -48,7 +49,7 @@
                             </ComboBox>
                         </headered:HorizontalHeaderedContentControl>
                         <headered:HorizontalHeaderedContentControl Header="{x:Static resources:Strings.Command_Prefix_}">
-                            <ComboBox Text="{Binding CurrentOptions.CommandPrefix}">
+                            <ComboBox SelectedValueBinding="{Binding Content}" SelectedValue="{Binding CurrentOptions.CommandPrefix, Converter={StaticResource CharToStringValueConverter}}">
                                 <ComboBoxItem Content="+" />
                                 <ComboBoxItem Content="=" />
                             </ComboBox>

@@ -24,7 +24,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <ComboBox Grid.Column="0" Margin="0,0,5,0" Text="{Binding SelectedClientPath}" ItemsSource="{Binding ClientPaths}" />
+                <ComboBox Grid.Column="0" Margin="0,0,5,0" SelectedItem="{Binding SelectedClientPath}" ItemsSource="{Binding ClientPaths}" />
                 <Button Content="…" Grid.Column="1" Padding="10,0,10,0" Command="{Binding SelectClientPathCommand, Mode=OneWay}" />
             </Grid>
         </GroupBox>
@@ -34,7 +34,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <ComboBox Grid.Column="0" Margin="0,0,5,0" Text="{Binding SelectedDataPath}" ItemsSource="{Binding DataPaths}" />
+                <ComboBox Grid.Column="0" Margin="0,0,5,0" SelectedItem="{Binding SelectedDataPath}" ItemsSource="{Binding DataPaths}" />
                 <Button Content="…" Grid.Column="1" Padding="10,0,10,0" Command="{Binding SelectDataPathCommand, Mode=OneWay}" />
             </Grid>
         </GroupBox>

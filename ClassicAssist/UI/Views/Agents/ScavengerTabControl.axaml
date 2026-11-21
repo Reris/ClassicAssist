@@ -73,7 +73,7 @@
                     <DataGridTemplateColumn Header="{x:Static resources:Strings.Priority}" Width="106">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="scavenger:ScavengerEntry">
-                                <ComboBox Text="{Binding Priority, Mode=TwoWay}" Width="{Binding Width, ConverterParameter=15, Converter={StaticResource CellWidthValueConverter}, ElementName=PriorityColumn}" ItemsSource="{Binding Source={misc:EnumBindingSource {x:Type scavenger:ScavengerPriority}}}" />
+                                <ComboBox SelectedItem="{Binding Priority, Mode=TwoWay}" Width="{Binding Width, ConverterParameter=15, Converter={StaticResource CellWidthValueConverter}, ElementName=PriorityColumn}" ItemsSource="{Binding Source={misc:EnumBindingSource {x:Type scavenger:ScavengerPriority}}}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
