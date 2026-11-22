@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -14,6 +16,7 @@ namespace ClassicAssist.Launcher
         private static ShardManager _instance;
         private static readonly object _lock = new object();
         private readonly ShardEntryComparer _comparer = new ShardEntryComparer();
+        private readonly ObservableCollection<ShardEntry> _visibleShards = new ObservableCollection<ShardEntry>();
 
         private ShardManager()
         {
@@ -124,15 +127,15 @@ namespace ClassicAssist.Launcher
                     Website = "https://uoalive.com/"
                 }, _comparer );
 
-            Shards.CollectionChanged += ( sender, args ) => { OnPropertyChanged( nameof( VisibleShards ) ); };
+            Shards.CollectionChanged += OnShardsCollectionChanged;
+
+            SyncVisibleShards();
         }
 
         public bool OverridePresets { get; set; }
 
         public ObservableCollection<ShardEntry> Shards { get; set; } = new ObservableCollection<ShardEntry>();
-
-        public ObservableCollection<ShardEntry> VisibleShards =>
-            new ObservableCollection<ShardEntry>( Shards.Where( e => !e.Deleted ) );
+        public ObservableCollection<ShardEntry> VisibleShards => _visibleShards;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -160,6 +163,44 @@ namespace ClassicAssist.Launcher
         protected virtual void OnPropertyChanged( [CallerMemberName] string propertyName = null )
         {
             PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
+        }
+
+        private void OnShardsCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+        {
+            SyncVisibleShards();
+        }
+
+        private void OnShardEntryPropertyChanged( object sender, PropertyChangedEventArgs e )
+        {
+            if ( e.PropertyName == nameof( ShardEntry.Deleted ) )
+            {
+                SyncVisibleShards();
+            }
+        }
+
+        private void SyncVisibleShards()
+        {
+            List<ShardEntry> visible = Shards.Where( e => !e.Deleted ).ToList();
+
+            for ( int i = _visibleShards.Count - 1; i >= 0; i-- )
+            {
+                if ( !visible.Contains( _visibleShards[i] ) )
+                {
+                    _visibleShards[i].PropertyChanged -= OnShardEntryPropertyChanged;
+
+                    _visibleShards.RemoveAt( i );
+                }
+            }
+
+            for ( int i = 0; i < visible.Count; i++ )
+            {
+                if ( !_visibleShards.Contains( visible[i] ) )
+                {
+                    visible[i].PropertyChanged += OnShardEntryPropertyChanged;
+
+                    _visibleShards.Insert( Math.Min( i, _visibleShards.Count ), visible[i] );
+                }
+            }
         }
 
         public void ImportPresets( List<ShardEntry> shards )
