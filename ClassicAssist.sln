@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.12.12412.261 stable
+VisualStudioVersion = 18.12.12412.261
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassicAssist", "ClassicAssist\ClassicAssist.csproj", "{2161A709-F90A-4308-976F-3457A9DAB80A}"
 EndProject
@@ -25,6 +25,16 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassicAssist.Shared", "ClassicAssist.Shared\ClassicAssist.Shared.csproj", "{F4DD685D-6E90-4713-9134-7AB83E9B88F0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncPOEditor", "Tools\SyncPOEditor\SyncPOEditor.csproj", "{9967E68D-72FF-4F02-AA34-180E299DC72F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2A8C8ABC-AB94-473C-9F3E-02BA26CB32AB}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		ClassicAssist.sln.DotSettings = ClassicAssist.sln.DotSettings
+		CLAUDE.md = CLAUDE.md
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

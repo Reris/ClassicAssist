@@ -9,14 +9,16 @@
     <PlatformTarget>x64</PlatformTarget>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Configurations>Debug;Release;Develop</Configurations>
+    <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.3.23" />
-    <PackageReference Include="Avalonia.Headless" Version="11.3.23" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.23" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-    <PackageReference Include="MSTest" Version="3.11.1" />
+    <PackageReference Include="Avalonia" Version="12.1.6" />
+    <PackageReference Include="Avalonia.Headless" Version="12.1.6" />
+    <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="12.1.6" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.6" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.12.0" />
+    <PackageReference Include="MSTest" Version="4.5.3" />
   </ItemGroup>
 
   <ItemGroup>

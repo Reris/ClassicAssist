@@ -68,7 +68,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
                 return;
             }
 
-            Window window = element.GetVisualRoot() as Window;
+            Window window = element.GetPresentationSource()?.RootVisual as Window;
 
             if ( window?.WindowState != WindowState.Maximized )
             {
@@ -90,7 +90,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
                 _lastMouseDown = e.GetPosition( element );
             }
 
-            Window window = element.GetVisualRoot() as Window;
+            Window window = element.GetPresentationSource()?.RootVisual as Window;
 
             if ( window == null || window.WindowState == WindowState.Maximized )
             {

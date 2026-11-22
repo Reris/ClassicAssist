@@ -191,9 +191,8 @@ namespace ClassicAssist.Mcp
             SKBitmap resized = new SKBitmap( width, height );
 
             using ( SKCanvas canvas = new SKCanvas( resized ) )
-            using ( SKPaint paint = new SKPaint { FilterQuality = SKFilterQuality.High } )
             {
-                canvas.DrawBitmap( source, new SKRect( 0, 0, width, height ), paint );
+                canvas.DrawBitmap( source, new SKRect( 0, 0, width, height ), new SKSamplingOptions( SKCubicResampler.Mitchell ) );
             }
 
             return resized;

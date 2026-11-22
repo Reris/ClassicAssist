@@ -10,8 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.3.23" />
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.3.0.6" />
+    <PackageReference Include="Avalonia" Version="12.1.6" />
+    <PackageReference Include="Xaml.Behaviors" Version="12.1.5" />
   </ItemGroup>
 
 </Project>

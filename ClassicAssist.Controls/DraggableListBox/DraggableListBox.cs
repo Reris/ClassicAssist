@@ -28,6 +28,8 @@ namespace ClassicAssist.Controls.DraggableListBox
 
         private Point _dragStartPosition;
 
+        private PointerPressedEventArgs _dragTriggerEvent;
+
         private bool _pointerDown;
 
         public DraggableListBox()
@@ -57,12 +59,13 @@ namespace ClassicAssist.Controls.DraggableListBox
 
             _dragItem = container.DataContext;
             _dragStartPosition = e.GetPosition( this );
+            _dragTriggerEvent = e;
             _pointerDown = true;
         }
 
         private async void OnPointerMoved( object sender, PointerEventArgs e )
         {
-            if ( !_pointerDown || _dragItem == null )
+            if ( !_pointerDown || _dragItem == null || _dragTriggerEvent == null )
             {
                 return;
             }
@@ -76,17 +79,16 @@ namespace ClassicAssist.Controls.DraggableListBox
 
             _pointerDown = false;
 
-            DataObject data = new DataObject();
-            data.Set( DataFormats.Text, string.Empty );
+            DataTransfer data = new DataTransfer();
+            data.Add( DataTransferItem.Create( DataFormat.Text, string.Empty ) );
 
-#pragma warning disable CS0618
-            await DragDrop.DoDragDrop( e, data, DragDropEffects.Move );
-#pragma warning restore CS0618
+            await DragDrop.DoDragDropAsync( _dragTriggerEvent, data, DragDropEffects.Move );
         }
 
         private void OnPointerReleased( object sender, PointerReleasedEventArgs e )
         {
             _pointerDown = false;
+            _dragTriggerEvent = null;
         }
 
         private void OnDragOver( object sender, DragEventArgs e )

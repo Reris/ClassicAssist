@@ -33,8 +33,8 @@ namespace ClassicAssist.Shared.UI.Compat
     /// </summary>
     public static class TriggerCondition
     {
-        public static readonly AttachedProperty<IBinding> BindProperty =
-            AvaloniaProperty.RegisterAttached<AvaloniaObject, IBinding>( "Bind", typeof( TriggerCondition ) );
+        public static readonly AttachedProperty<BindingBase> BindProperty =
+            AvaloniaProperty.RegisterAttached<AvaloniaObject, BindingBase>( "Bind", typeof( TriggerCondition ) );
 
         public static readonly AttachedProperty<object> ValueProperty =
             AvaloniaProperty.RegisterAttached<AvaloniaObject, object>( "Value", typeof( TriggerCondition ) );
@@ -42,14 +42,14 @@ namespace ClassicAssist.Shared.UI.Compat
         public static readonly AttachedProperty<string> KeyProperty =
             AvaloniaProperty.RegisterAttached<AvaloniaObject, string>( "Key", typeof( TriggerCondition ) );
 
-        public static readonly AttachedProperty<IBinding> Bind2Property =
-            AvaloniaProperty.RegisterAttached<AvaloniaObject, IBinding>( "Bind2", typeof( TriggerCondition ) );
+        public static readonly AttachedProperty<BindingBase> Bind2Property =
+            AvaloniaProperty.RegisterAttached<AvaloniaObject, BindingBase>( "Bind2", typeof( TriggerCondition ) );
 
         public static readonly AttachedProperty<object> Value2Property =
             AvaloniaProperty.RegisterAttached<AvaloniaObject, object>( "Value2", typeof( TriggerCondition ) );
 
-        public static readonly AttachedProperty<IBinding> Bind3Property =
-            AvaloniaProperty.RegisterAttached<AvaloniaObject, IBinding>( "Bind3", typeof( TriggerCondition ) );
+        public static readonly AttachedProperty<BindingBase> Bind3Property =
+            AvaloniaProperty.RegisterAttached<AvaloniaObject, BindingBase>( "Bind3", typeof( TriggerCondition ) );
 
         public static readonly AttachedProperty<object> Value3Property =
             AvaloniaProperty.RegisterAttached<AvaloniaObject, object>( "Value3", typeof( TriggerCondition ) );
@@ -77,9 +77,9 @@ namespace ClassicAssist.Shared.UI.Compat
             Value3Property.Changed.AddClassHandler<AvaloniaObject>( OnConditionChanged );
         }
 
-        public static void SetBind( AvaloniaObject element, IBinding value ) => element.SetValue( BindProperty, value );
+        public static void SetBind( AvaloniaObject element, BindingBase value ) => element.SetValue( BindProperty, value );
 
-        public static IBinding GetBind( AvaloniaObject element ) => element.GetValue( BindProperty );
+        public static BindingBase GetBind( AvaloniaObject element ) => element.GetValue( BindProperty );
 
         public static void SetValue( AvaloniaObject element, object value ) => element.SetValue( ValueProperty, value );
 
@@ -89,20 +89,20 @@ namespace ClassicAssist.Shared.UI.Compat
 
         public static string GetKey( AvaloniaObject element ) => element.GetValue( KeyProperty );
 
-        public static void SetBind2( AvaloniaObject element, IBinding value ) =>
+        public static void SetBind2( AvaloniaObject element, BindingBase value ) =>
             element.SetValue( Bind2Property, value );
 
-        public static IBinding GetBind2( AvaloniaObject element ) => element.GetValue( Bind2Property );
+        public static BindingBase GetBind2( AvaloniaObject element ) => element.GetValue( Bind2Property );
 
         public static void SetValue2( AvaloniaObject element, object value ) =>
             element.SetValue( Value2Property, value );
 
         public static object GetValue2( AvaloniaObject element ) => element.GetValue( Value2Property );
 
-        public static void SetBind3( AvaloniaObject element, IBinding value ) =>
+        public static void SetBind3( AvaloniaObject element, BindingBase value ) =>
             element.SetValue( Bind3Property, value );
 
-        public static IBinding GetBind3( AvaloniaObject element ) => element.GetValue( Bind3Property );
+        public static BindingBase GetBind3( AvaloniaObject element ) => element.GetValue( Bind3Property );
 
         public static void SetValue3( AvaloniaObject element, object value ) =>
             element.SetValue( Value3Property, value );
@@ -117,14 +117,14 @@ namespace ClassicAssist.Shared.UI.Compat
                     ? CurrentValue2Property
                     : CurrentValue3Property;
 
-            if ( e.OldValue is IBinding )
+            if ( e.OldValue is BindingBase )
             {
                 element.GetValue( SubscriptionProperty )?.Dispose();
                 element.SetValue( SubscriptionProperty, null );
                 element.ClearValue( currentProperty );
             }
 
-            if ( e.NewValue is IBinding binding )
+            if ( e.NewValue is BindingBase binding )
             {
                 IDisposable subscription = element.Bind( currentProperty, binding );
                 element.SetValue( SubscriptionProperty, subscription );

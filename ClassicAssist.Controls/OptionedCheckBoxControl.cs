@@ -11,7 +11,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
-using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Input;
 using ClassicAssist.Shared.UI.Compat;
@@ -30,12 +29,6 @@ namespace ClassicAssist.Controls
         private object _label;
         private bool _rebuilding;
 
-        public OptionedCheckBoxControl()
-        {
-            Checked += OnCheckedChanged;
-            Unchecked += OnCheckedChanged;
-        }
-
         public object ChildContent
         {
             get => GetValue( ChildContentProperty );
@@ -49,6 +42,10 @@ namespace ClassicAssist.Controls
             if ( e.Property == ContentProperty )
             {
                 OnContentChanged( e.OldValue, e.NewValue );
+            }
+            else if ( e.Property == IsCheckedProperty )
+            {
+                UpdateChildEnabled();
             }
         }
 
@@ -109,11 +106,6 @@ namespace ClassicAssist.Controls
             _rebuilding = true;
             Content = content;
             _rebuilding = false;
-        }
-
-        private void OnCheckedChanged( object sender, RoutedEventArgs routedEventArgs )
-        {
-            UpdateChildEnabled();
         }
 
         private void UpdateChildEnabled()

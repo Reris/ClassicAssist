@@ -15,7 +15,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using Avalonia;
@@ -102,27 +101,26 @@ namespace ClassicAssist.UI.ViewModels.Agents.Autoloot.Folder
             {
                 using ( StreamReader reader = new StreamReader( fileName ) )
                 {
-                    using ( CsvReader csv = new CsvReader( reader, CultureInfo.InvariantCulture ) )
+                    using ( CsvReader csv = CsvReader.Create( reader ) )
                     {
-                        csv.Read();
-                        csv.ReadHeader();
-
                         while ( csv.Read() )
                         {
-                            if ( !csv.TryGetField( "ID", out string idString ) )
+                            if ( !csv.TryGetFieldIndex( "ID", out int idIndex ) )
                             {
                                 continue;
                             }
 
                             try
                             {
+                                string idString = csv.GetString( idIndex );
+
                                 int id = idString.StartsWith( "0x", StringComparison.CurrentCultureIgnoreCase ) ? Convert.ToInt32( idString, 16 ) : Convert.ToInt32( idString );
 
                                 string name = $"0x{id:x}";
 
-                                if ( csv.TryGetField( "Name", out string nameString ) )
+                                if ( csv.TryGetFieldIndex( "Name", out int nameIndex ) )
                                 {
-                                    name = nameString;
+                                    name = csv.GetString( nameIndex );
                                 }
 
                                 AutolootEntry autolootEntry = new AutolootEntry
@@ -136,16 +134,18 @@ namespace ClassicAssist.UI.ViewModels.Agents.Autoloot.Folder
                                     Rehue = false
                                 };
 
-                                List<string> columns = csv.HeaderRecord.Where( ( value, index ) => value.StartsWith( "Property" ) ).ToList();
+                                List<string> columns = csv.Headers.Where( value => value.StartsWith( "Property" ) ).ToList();
 
                                 if ( columns.Any() )
                                 {
                                     foreach ( string column in columns )
                                     {
-                                        if ( !csv.TryGetField( column, out string fieldValue ) )
+                                        if ( !csv.TryGetFieldIndex( column, out int fieldIndex ) )
                                         {
                                             continue;
                                         }
+
+                                        string fieldValue = csv.GetString( fieldIndex );
 
                                         if ( string.IsNullOrEmpty( fieldValue ) )
                                         {

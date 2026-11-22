@@ -1,6 +1,8 @@
 .vs/
 **/bin/Debug/**
 **/obj/Debug/**
+**/bin/Release/**
+**/obj/Release/**
 */obj/**
 Output/
 Output2/

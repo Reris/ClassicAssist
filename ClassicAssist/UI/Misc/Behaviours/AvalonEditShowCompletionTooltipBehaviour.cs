@@ -50,7 +50,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
         public static readonly Avalonia.StyledProperty<bool> IsPausedProperty =
         AvaloniaCompat.RegisterCompat<AvalonEditShowCompletionTooltipBehaviour, bool>(nameof( IsPaused ), false);
 
-        private readonly Popup _toolTip = new Popup { PlacementMode = PlacementMode.Pointer };
+        private readonly Popup _toolTip = new Popup { Placement = PlacementMode.Pointer };
         private List<PythonCompletionData> _completionData;
         private CompletionWindow _completionWindow;
         private TextEditor _textEditor;

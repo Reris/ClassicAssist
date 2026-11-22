@@ -39,7 +39,7 @@ namespace ClassicAssist.Shared.UI
                     return string.Empty;
                 }
 
-                return await clipboard.GetTextAsync() ?? string.Empty;
+                return await clipboard.TryGetTextAsync() ?? string.Empty;
             }
             catch
             {

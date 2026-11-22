@@ -29,7 +29,7 @@ namespace ClassicAssist.Shared.UI.Behaviours
                 return;
             }
 
-            Window window = button.GetVisualRoot() as Window;
+            Window window = button.GetPresentationSource()?.RootVisual as Window;
 
             window?.Close();
         }
