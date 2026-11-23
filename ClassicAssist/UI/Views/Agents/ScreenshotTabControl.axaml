@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:ValueConverters="clr-namespace:ClassicAssist.Shared.UI.ValueConverters;assembly=ClassicAssist.Shared" xmlns:agents="clr-namespace:ClassicAssist.UI.ViewModels.Agents" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.Agents.ScreenshotTabControl" mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:ValueConverters="clr-namespace:ClassicAssist.Shared.UI.ValueConverters;assembly=ClassicAssist.Shared" xmlns:agents="clr-namespace:ClassicAssist.UI.ViewModels.Agents" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.Agents.ScreenshotTabControl" mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Resources>
         <ResourceDictionary>
             <ValueConverters:InverseBooleanValueConverter x:Key="InverseBooleanValueConverter" />
@@ -73,19 +73,15 @@
                     <StackPanel Margin="5">
                         <StackPanel.Styles>
                             <Style Selector="Button">
-                                <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IncludeInfoBar}" />
-                                <Setter Property="ca:TriggerCondition.Value" Value="False" />
-                                <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
-                                <Style Selector="^.ca-dt1">
+                                <Setter Property="(Classes.InfoBarDisabled)" Value="{Binding !IncludeInfoBar}" />
+                                <Style Selector="^.InfoBarDisabled">
                                     <Setter Property="IsEnabled" Value="False" />
                                 </Style>
                             </Style>
                             <Style Selector="TextBlock">
                                 <Setter Property="VerticalAlignment" Value="Center" />
-                                <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IncludeInfoBar}" />
-                                <Setter Property="ca:TriggerCondition.Value" Value="False" />
-                                <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
-                                <Style Selector="^.ca-dt2">
+                                <Setter Property="(Classes.InfoBarDisabled)" Value="{Binding !IncludeInfoBar}" />
+                                <Style Selector="^.InfoBarDisabled">
                                     <Setter Property="IsEnabled" Value="False" />
                                     <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
                                 </Style>
@@ -120,25 +116,19 @@
                     <StackPanel Margin="5">
                         <StackPanel.Styles>
                             <Style Selector="CheckBox">
-                                <Setter Property="ca:TriggerCondition.Bind" Value="{Binding AutoScreenshot}" />
-                                <Setter Property="ca:TriggerCondition.Value" Value="False" />
-                                <Setter Property="ca:TriggerCondition.Key" Value="dt3" />
-                                <Style Selector="^.ca-dt3">
+                                <Setter Property="(Classes.AutoScreenshotDisabled)" Value="{Binding !AutoScreenshot}" />
+                                <Style Selector="^.AutoScreenshotDisabled">
                                     <Setter Property="IsEnabled" Value="False" />
                                 </Style>
                             </Style>
                             <Style Selector="TextBlock">
                                 <Setter Property="VerticalAlignment" Value="Center" />
-                                <Setter Property="ca:TriggerCondition.Bind" Value="{Binding MobileDeath}" />
-                                <Setter Property="ca:TriggerCondition.Value" Value="False" />
-                                <Setter Property="ca:TriggerCondition.Key" Value="dt4" />
-                                <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding AutoScreenshot}" />
-                                <Setter Property="ca:TriggerCondition.Value2" Value="False" />
-                                <Setter Property="ca:TriggerCondition.Key2" Value="dt5" />
-                                <Style Selector="^.ca-dt4">
+                                <Setter Property="(Classes.MobileDeathDisabled)" Value="{Binding !MobileDeath}" />
+                                <Setter Property="(Classes.AutoScreenshotDisabled)" Value="{Binding !AutoScreenshot}" />
+                                <Style Selector="^.MobileDeathDisabled">
                                     <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
                                 </Style>
-                                <Style Selector="^.ca-dt5">
+                                <Style Selector="^.AutoScreenshotDisabled">
                                     <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
                                 </Style>
                             </Style>
@@ -154,16 +144,12 @@
                                 </TextBlock.Text>
                                 <TextBlock.Styles>
                                     <Style Selector="TextBlock">
-                                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding PlayerDeath}" />
-                                        <Setter Property="ca:TriggerCondition.Value" Value="False" />
-                                        <Setter Property="ca:TriggerCondition.Key" Value="dt6" />
-                                        <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding AutoScreenshot}" />
-                                        <Setter Property="ca:TriggerCondition.Value2" Value="False" />
-                                        <Setter Property="ca:TriggerCondition.Key2" Value="dt7" />
-                                        <Style Selector="^.ca-dt6">
+                                        <Setter Property="(Classes.PlayerDeathDisabled)" Value="{Binding !PlayerDeath}" />
+                                        <Setter Property="(Classes.AutoScreenshotDisabled)" Value="{Binding !AutoScreenshot}" />
+                                        <Style Selector="^.PlayerDeathDisabled">
                                             <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
                                         </Style>
-                                        <Style Selector="^.ca-dt7">
+                                        <Style Selector="^.AutoScreenshotDisabled">
                                             <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
                                         </Style>
                                     </Style>
@@ -172,10 +158,8 @@
                             <TextBox Text="{Binding PlayerDeathDelay}" DockPanel.Dock="Right">
                                 <TextBox.Styles>
                                     <Style Selector="TextBox">
-                                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding PlayerDeath}" />
-                                        <Setter Property="ca:TriggerCondition.Value" Value="False" />
-                                        <Setter Property="ca:TriggerCondition.Key" Value="dt8" />
-                                        <Style Selector="^.ca-dt8">
+                                        <Setter Property="(Classes.PlayerDeathDisabled)" Value="{Binding !PlayerDeath}" />
+                                        <Style Selector="^.PlayerDeathDisabled">
                                             <Setter Property="IsEnabled" Value="False" />
                                         </Style>
                                     </Style>
@@ -198,10 +182,8 @@
                             <TextBox Text="{Binding MobileDeathDelay}" DockPanel.Dock="Right">
                                 <TextBox.Styles>
                                     <Style Selector="TextBox">
-                                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding MobileDeath}" />
-                                        <Setter Property="ca:TriggerCondition.Value" Value="False" />
-                                        <Setter Property="ca:TriggerCondition.Key" Value="dt9" />
-                                        <Style Selector="^.ca-dt9">
+                                        <Setter Property="(Classes.MobileDeathDisabled)" Value="{Binding !MobileDeath}" />
+                                        <Style Selector="^.MobileDeathDisabled">
                                             <Setter Property="IsEnabled" Value="False" />
                                         </Style>
                                     </Style>

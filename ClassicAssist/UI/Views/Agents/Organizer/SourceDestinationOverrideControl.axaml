@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="userControl" x:Class="ClassicAssist.UI.Views.Agents.Organizer.SourceDestinationOverrideControl" mc:Ignorable="d" d:DesignWidth="100" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:local="clr-namespace:ClassicAssist.UI.Views.Agents.Organizer" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="userControl" x:Class="ClassicAssist.UI.Views.Agents.Organizer.SourceDestinationOverrideControl" mc:Ignorable="d" d:DesignWidth="100" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:local="clr-namespace:ClassicAssist.UI.Views.Agents.Organizer" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Resources>
         <ResourceDictionary>
             <valueConverters:IntToHexStringValueConverter x:Key="IntToHexStringValueConverter" />
@@ -17,10 +17,8 @@
             <TextBlock.Styles>
                 <Style Selector="TextBlock">
                     <Setter Property="IsVisible" Value="False" />
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Serial, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SourceDestinationOverrideControl}}}" />
-                    <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
-                    <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
-                    <Style Selector="^.ca-dt1">
+                    <Setter Property="(Classes.NoSerial)" Value="{Binding Serial, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SourceDestinationOverrideControl}}, Converter={x:Static ObjectConverters.IsNull}}" />
+                    <Style Selector="^.NoSerial">
                         <Setter Property="IsVisible" Value="True" />
                     </Style>
                 </Style>
@@ -30,10 +28,8 @@
             <TextBlock.Styles>
                 <Style Selector="TextBlock">
                     <Setter Property="IsVisible" Value="True" />
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Serial, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SourceDestinationOverrideControl}}}" />
-                    <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
-                    <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
-                    <Style Selector="^.ca-dt2">
+                    <Setter Property="(Classes.NoSerial)" Value="{Binding Serial, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SourceDestinationOverrideControl}}, Converter={x:Static ObjectConverters.IsNull}}" />
+                    <Style Selector="^.NoSerial">
                         <Setter Property="IsVisible" Value="False" />
                     </Style>
                 </Style>

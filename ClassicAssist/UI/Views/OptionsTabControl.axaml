@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:behaviours="clr-namespace:ClassicAssist.UI.Misc.Behaviours" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:converters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:headered="clr-namespace:ClassicAssist.Controls.Headered;assembly=ClassicAssist.Controls" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:optionsTab="clr-namespace:ClassicAssist.UI.Views.OptionsTab" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.OptionsTabControl" mc:Ignorable="d" d:DesignHeight="633.233" d:DesignWidth="798.666" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:misc1="clr-namespace:ClassicAssist.UI.Misc" xmlns:data="clr-namespace:ClassicAssist.Data" xmlns:cliloc="clr-namespace:ClassicAssist.UO.Data" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:behaviours="clr-namespace:ClassicAssist.UI.Misc.Behaviours" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:converters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:headered="clr-namespace:ClassicAssist.Controls.Headered;assembly=ClassicAssist.Controls" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:optionsTab="clr-namespace:ClassicAssist.UI.Views.OptionsTab" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.OptionsTabControl" mc:Ignorable="d" d:DesignHeight="633.233" d:DesignWidth="798.666" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:misc1="clr-namespace:ClassicAssist.UI.Misc" xmlns:data="clr-namespace:ClassicAssist.Data" xmlns:cliloc="clr-namespace:ClassicAssist.UO.Data" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
@@ -136,16 +136,12 @@
                                 <CheckBox.Styles>
                                     <Style Selector="CheckBox">
                                         <Setter Property="IsEnabled" Value="False" />
-                                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding CurrentOptions.McpEnabled}" />
-                                        <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                                        <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
-                                        <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding McpAutoStartEnabled}" />
-                                        <Setter Property="ca:TriggerCondition.Value2" Value="True" />
-                                        <Setter Property="ca:TriggerCondition.Key2" Value="dt2" />
-                                        <Style Selector="^.ca-dt1">
+                                        <Setter Property="(Classes.McpEnabled)" Value="{Binding CurrentOptions.McpEnabled}" />
+                                        <Setter Property="(Classes.AutoStartEnabled)" Value="{Binding McpAutoStartEnabled}" />
+                                        <Style Selector="^.McpEnabled">
                                             <Setter Property="IsEnabled" Value="True" />
                                         </Style>
-                                        <Style Selector="^.ca-dt2">
+                                        <Style Selector="^.AutoStartEnabled">
                                             <Setter Property="IsEnabled" Value="True" />
                                         </Style>
                                     </Style>

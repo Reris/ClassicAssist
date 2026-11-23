@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:ValueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:agents="clr-namespace:ClassicAssist.UI.ViewModels.Agents" xmlns:autoloot1="clr-namespace:ClassicAssist.UI.Views.Autoloot" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:behaviours1="clr-namespace:ClassicAssist.UI.Misc.Behaviours" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:draggableTreeView="clr-namespace:ClassicAssist.Controls.DraggableTreeView;assembly=ClassicAssist.Controls" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:misc="clr-namespace:ClassicAssist.UI.Misc" xmlns:misc1="clr-namespace:ClassicAssist.Misc" xmlns:valueConverters="clr-namespace:ClassicAssist.Shared.UI.ValueConverters;assembly=ClassicAssist.Shared" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.Agents.AutolootTabControl" mc:Ignorable="d" d:DesignHeight="250" d:DesignWidth="600" x:Name="userControl" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:autoloot="clr-namespace:ClassicAssist.Data.Autoloot" xmlns:autoloot2="clr-namespace:ClassicAssist.UI.Views.Agents.Autoloot" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:ValueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:agents="clr-namespace:ClassicAssist.UI.ViewModels.Agents" xmlns:autoloot1="clr-namespace:ClassicAssist.UI.Views.Autoloot" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:behaviours1="clr-namespace:ClassicAssist.UI.Misc.Behaviours" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:draggableTreeView="clr-namespace:ClassicAssist.Controls.DraggableTreeView;assembly=ClassicAssist.Controls" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:misc="clr-namespace:ClassicAssist.UI.Misc" xmlns:misc1="clr-namespace:ClassicAssist.Misc" xmlns:valueConverters="clr-namespace:ClassicAssist.Shared.UI.ValueConverters;assembly=ClassicAssist.Shared" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.Agents.AutolootTabControl" mc:Ignorable="d" d:DesignHeight="250" d:DesignWidth="600" x:Name="userControl" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:autoloot="clr-namespace:ClassicAssist.Data.Autoloot" xmlns:autoloot2="clr-namespace:ClassicAssist.UI.Views.Agents.Autoloot" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Resources>
         <ResourceDictionary>
             <misc1:BindingProxy x:Key="Proxy" Data="{Binding}" />
@@ -60,16 +60,12 @@
                                 </controls:EditTextBlock.Label>
                                 <controls:EditTextBlock.Styles>
                                     <Style Selector="TextBlock">
-                                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Enabled}" />
-                                        <Setter Property="ca:TriggerCondition.Value" Value="False" />
-                                        <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
-                                        <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding Path=Group.Enabled}" />
-                                        <Setter Property="ca:TriggerCondition.Value2" Value="False" />
-                                        <Setter Property="ca:TriggerCondition.Key2" Value="dt2" />
-                                        <Style Selector="^.ca-dt1">
+                                        <Setter Property="(Classes.Disabled)" Value="{Binding !Enabled}" />
+                                        <Setter Property="(Classes.GroupDisabled)" Value="{Binding Path=!Group.Enabled}" />
+                                        <Style Selector="^.Disabled">
                                             <Setter Property="TextDecorations" Value="Strikethrough" />
                                         </Style>
-                                        <Style Selector="^.ca-dt2">
+                                        <Style Selector="^.GroupDisabled">
                                             <Setter Property="TextDecorations" Value="Strikethrough" />
                                         </Style>
                                     </Style>
@@ -86,10 +82,8 @@
                                 <controls:EditTextBlock Text="{Binding Name, Mode=TwoWay}" Grid.Column="1" Width="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}}, Converter={StaticResource CellWidthValueConverter}, ConverterParameter=10}">
                                     <controls:EditTextBlock.Styles>
                                         <Style Selector="TextBlock">
-                                            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Enabled}" />
-                                            <Setter Property="ca:TriggerCondition.Value" Value="False" />
-                                            <Setter Property="ca:TriggerCondition.Key" Value="dt3" />
-                                            <Style Selector="^.ca-dt3">
+                                            <Setter Property="(Classes.Disabled)" Value="{Binding !Enabled}" />
+                                            <Style Selector="^.Disabled">
                                                 <Setter Property="TextDecorations" Value="Strikethrough" />
                                             </Style>
                                         </Style>
@@ -112,10 +106,8 @@
                             <Separator>
                                 <Separator.Styles>
                                     <Style Selector="Separator">
-                                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding SelectedItem}" />
-                                        <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
-                                        <Setter Property="ca:TriggerCondition.Key" Value="dt4" />
-                                        <Style Selector="^.ca-dt4">
+                                        <Setter Property="(Classes.NoSelection)" Value="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNull}}" />
+                                        <Style Selector="^.NoSelection">
                                             <Setter Property="IsVisible" Value="False" />
                                         </Style>
                                     </Style>
@@ -124,10 +116,8 @@
                             <MenuItem Header="{x:Static resources:Strings.Move_to_group}" ItemsSource="{Binding Draggables}">
                                 <MenuItem.Styles>
                                     <Style Selector="MenuItem">
-                                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding SelectedItem}" />
-                                        <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
-                                        <Setter Property="ca:TriggerCondition.Key" Value="dt5" />
-                                        <Style Selector="^.ca-dt5">
+                                        <Setter Property="(Classes.NoSelection)" Value="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNull}}" />
+                                        <Style Selector="^.NoSelection">
                                             <Setter Property="IsVisible" Value="False" />
                                         </Style>
                                     </Style>

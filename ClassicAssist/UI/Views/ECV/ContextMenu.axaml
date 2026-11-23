@@ -1,4 +1,4 @@
-<Styles xmlns="https://github.com/avaloniaui" xmlns:misc="clr-namespace:ClassicAssist.Misc" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels">
+<Styles xmlns="https://github.com/avaloniaui" xmlns:valueConverters="clr-namespace:ClassicAssist.Shared.UI.ValueConverters;assembly=ClassicAssist.Shared" xmlns:misc="clr-namespace:ClassicAssist.Misc" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels">
     <Styles.Resources>
         <ResourceDictionary>
             <misc:BindingProxy x:Key="Proxy" Data="{Binding}" />
@@ -11,10 +11,8 @@
         <MenuItem Header="{x:Static resources:Strings.Move_to_set}" ItemsSource="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).Options.ContainerSets}">
             <MenuItem.Styles>
                 <Style Selector="MenuItem">
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).Options.ContainerSets.Count}" />
-                    <Setter Property="ca:TriggerCondition.Value" Value="0" />
-                    <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
-                    <Style Selector="^.ca-dt1">
+                    <Setter Property="(Classes.NoContainerSets)" Value="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).Options.ContainerSets.Count, Converter={x:Static valueConverters:ValueEqualityConverter.Instance}, ConverterParameter=0}" />
+                    <Style Selector="^.NoContainerSets">
                         <Setter Property="IsVisible" Value="False" />
                     </Style>
                 </Style>
@@ -27,10 +25,8 @@
         <MenuItem Header="{x:Static resources:Strings.Lock_item}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).ContextToggleLockCommand}">
             <MenuItem.Styles>
                 <Style Selector="MenuItem">
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).SelectedItemsAllLocked}" />
-                    <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                    <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
-                    <Style Selector="^.ca-dt2">
+                    <Setter Property="(Classes.AllLocked)" Value="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).SelectedItemsAllLocked}" />
+                    <Style Selector="^.AllLocked">
                         <Setter Property="IsVisible" Value="False" />
                     </Style>
                 </Style>
@@ -39,10 +35,8 @@
         <MenuItem Header="{x:Static resources:Strings.Unlock_item}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).ContextToggleLockCommand}">
             <MenuItem.Styles>
                 <Style Selector="MenuItem">
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).SelectedItemsAllLocked}" />
-                    <Setter Property="ca:TriggerCondition.Value" Value="False" />
-                    <Setter Property="ca:TriggerCondition.Key" Value="dt3" />
-                    <Style Selector="^.ca-dt3">
+                    <Setter Property="(Classes.NotAllLocked)" Value="{Binding Source={StaticResource Proxy}, Path=!Data.(viewModels:EntityCollectionViewerViewModel).SelectedItemsAllLocked}" />
+                    <Style Selector="^.NotAllLocked">
                         <Setter Property="IsVisible" Value="False" />
                     </Style>
                 </Style>
@@ -55,10 +49,8 @@
         <MenuItem Header="{x:Static resources:Strings.Custom_Actions}" ItemsSource="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).CustomContextActions}">
             <MenuItem.Styles>
                 <Style Selector="MenuItem">
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).CustomContextActions.Count}" />
-                    <Setter Property="ca:TriggerCondition.Value" Value="0" />
-                    <Setter Property="ca:TriggerCondition.Key" Value="dt4" />
-                    <Style Selector="^.ca-dt4">
+                    <Setter Property="(Classes.NoCustomActions)" Value="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).CustomContextActions.Count, Converter={x:Static valueConverters:ValueEqualityConverter.Instance}, ConverterParameter=0}" />
+                    <Style Selector="^.NoCustomActions">
                         <Setter Property="IsVisible" Value="False" />
                     </Style>
                 </Style>

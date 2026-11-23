@@ -1,4 +1,4 @@
-﻿<Window xmlns="https://github.com/avaloniaui" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.Filters.ItemIDFilter.ItemIDSelectionWindow" mc:Ignorable="d" Background="{DynamicResource ThemeWindowBackgroundBrush}" Title="{x:Static resources:Strings.ItemID_Filter}" Height="450" Width="300" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+﻿<Window xmlns="https://github.com/avaloniaui" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.Filters.ItemIDFilter.ItemIDSelectionWindow" mc:Ignorable="d" Background="{DynamicResource ThemeWindowBackgroundBrush}" Title="{x:Static resources:Strings.ItemID_Filter}" Height="450" Width="300" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <Window.Resources>
         <ResourceDictionary>
             <DrawingImage x:Key="LoadIcon">
@@ -49,10 +49,8 @@
             <Image.Styles>
                 <Style Selector="Image">
                     <Setter Property="IsVisible" Value="True" />
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding ImagesLoaded}" />
-                    <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                    <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
-                    <Style Selector="^.ca-dt1">
+                    <Setter Property="(Classes.ImagesLoaded)" Value="{Binding ImagesLoaded}" />
+                    <Style Selector="^.ImagesLoaded">
                         <Setter Property="IsVisible" Value="False" />
                     </Style>
                 </Style>

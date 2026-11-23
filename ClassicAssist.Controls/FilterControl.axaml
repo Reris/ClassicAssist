@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="userControl" x:Class="ClassicAssist.Controls.FilterControl" mc:Ignorable="d" d:DesignHeight="22" d:DesignWidth="200" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="userControl" x:Class="ClassicAssist.Controls.FilterControl" mc:Ignorable="d" d:DesignHeight="22" d:DesignWidth="200" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Styles>
         <StyleInclude Source="avares://ClassicAssist.Shared/Resources/Icons.axaml" />
         <StyleInclude Source="avares://ClassicAssist.Shared/Resources/Colours.axaml" />
@@ -12,10 +12,8 @@
         </Grid.ColumnDefinitions>
         <Grid.Styles>
             <Style Selector="Grid">
-                <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
-                <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsFilterVisible, ElementName=userControl}" />
-                <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                <Style Selector="^.ca-dt1">
+                <Setter Property="(Classes.FilterVisible)" Value="{Binding IsFilterVisible, ElementName=userControl}" />
+                <Style Selector="^.FilterVisible">
                     <Setter Property="IsVisible" Value="True" />
                 </Style>
             </Style>
@@ -30,10 +28,8 @@
             <Button.Styles>
                 <Style Selector="Button">
                     <Setter Property="IsVisible" Value="False" />
-                    <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding ShowCloseButton, ElementName=userControl}" />
-                    <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                    <Style Selector="^.ca-dt2">
+                    <Setter Property="(Classes.ShowCloseButton)" Value="{Binding ShowCloseButton, ElementName=userControl}" />
+                    <Style Selector="^.ShowCloseButton">
                         <Setter Property="IsVisible" Value="True" />
                     </Style>
                 </Style>

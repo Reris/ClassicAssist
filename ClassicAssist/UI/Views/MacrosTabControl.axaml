@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:controls1="clr-namespace:ClassicAssist.UI.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:draggableTreeView="clr-namespace:ClassicAssist.Controls.DraggableTreeView;assembly=ClassicAssist.Controls" xmlns:hotkeys="clr-namespace:ClassicAssist.Data.Hotkeys" xmlns:local="clr-namespace:ClassicAssist.Data.Macros" xmlns:macros="clr-namespace:ClassicAssist.UI.Views.Macros" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:misc="clr-namespace:ClassicAssist.UI.Misc" xmlns:misc1="clr-namespace:ClassicAssist.Misc" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.MacrosTabControl" mc:Ignorable="d" d:DesignHeight="500" Padding="5" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:sharedValueConverters="clr-namespace:ClassicAssist.Shared.UI.ValueConverters;assembly=ClassicAssist.Shared" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:controls1="clr-namespace:ClassicAssist.UI.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:draggableTreeView="clr-namespace:ClassicAssist.Controls.DraggableTreeView;assembly=ClassicAssist.Controls" xmlns:hotkeys="clr-namespace:ClassicAssist.Data.Hotkeys" xmlns:local="clr-namespace:ClassicAssist.Data.Macros" xmlns:macros="clr-namespace:ClassicAssist.UI.Views.Macros" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:misc="clr-namespace:ClassicAssist.UI.Misc" xmlns:misc1="clr-namespace:ClassicAssist.Misc" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.MacrosTabControl" mc:Ignorable="d" d:DesignHeight="500" Padding="5" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Resources>
         <ResourceDictionary>
             <valueConverters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
@@ -69,10 +69,8 @@
                     <controls:FilterControl.Styles>
                         <Style Selector="controls|FilterControl">
                             <Setter Property="IsVisible" Value="False" />
-                            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsFilterOpen}" />
-                            <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                            <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
-                            <Style Selector="^.ca-dt2">
+                            <Setter Property="(Classes.FilterOpen)" Value="{Binding IsFilterOpen}" />
+                            <Style Selector="^.FilterOpen">
                                 <Setter Property="IsVisible" Value="True" />
                             </Style>
                         </Style>
@@ -92,10 +90,8 @@
                                 <Separator>
                                     <Separator.Styles>
                                         <Style Selector="Separator">
-                                            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding SelectedItem}" />
-                                            <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
-                                            <Setter Property="ca:TriggerCondition.Key" Value="dt3" />
-                                            <Style Selector="^.ca-dt3">
+                                            <Setter Property="(Classes.NoSelection)" Value="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNull}}" />
+                                            <Style Selector="^.NoSelection">
                                                 <Setter Property="IsVisible" Value="False" />
                                             </Style>
                                         </Style>
@@ -104,10 +100,8 @@
                                 <MenuItem Header="{x:Static resources:Strings.Move_to_group}" ItemsSource="{Binding Draggables}">
                                     <MenuItem.Styles>
                                         <Style Selector="MenuItem">
-                                            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding SelectedItem}" />
-                                            <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
-                                            <Setter Property="ca:TriggerCondition.Key" Value="dt4" />
-                                            <Style Selector="^.ca-dt4">
+                                            <Setter Property="(Classes.NoSelection)" Value="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNull}}" />
+                                            <Style Selector="^.NoSelection">
                                                 <Setter Property="IsVisible" Value="False" />
                                             </Style>
                                         </Style>
@@ -143,16 +137,12 @@
                                         <controls:EditTextBlock.Styles>
                                             <Style Selector="TextBlock">
                                                 <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-                                                <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Global}" />
-                                                <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                                                <Setter Property="ca:TriggerCondition.Key" Value="dt5" />
-                                                <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding IsRunning}" />
-                                                <Setter Property="ca:TriggerCondition.Value2" Value="True" />
-                                                <Setter Property="ca:TriggerCondition.Key2" Value="dt6" />
-                                                <Style Selector="^.ca-dt5">
+                                                <Setter Property="(Classes.Global)" Value="{Binding Global}" />
+                                                <Setter Property="(Classes.Running)" Value="{Binding IsRunning}" />
+                                                <Style Selector="^.Global">
                                                     <Setter Property="FontWeight" Value="Bold" />
                                                 </Style>
-                                                <Style Selector="^.ca-dt6">
+                                                <Style Selector="^.Running">
                                                     <Setter Property="FontStyle" Value="Italic" />
                                                     <Setter Property="FontWeight" Value="Bold" />
                                                 </Style>
@@ -163,10 +153,8 @@
                                         <Image.Styles>
                                             <Style Selector="Image">
                                                 <Setter Property="IsVisible" Value="False" />
-                                                <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsFileBacked}" />
-                                                <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                                                <Setter Property="ca:TriggerCondition.Key" Value="dt7" />
-                                                <Style Selector="^.ca-dt7">
+                                                <Setter Property="(Classes.FileBacked)" Value="{Binding IsFileBacked}" />
+                                                <Style Selector="^.FileBacked">
                                                     <Setter Property="IsVisible" Value="True" />
                                                 </Style>
                                             </Style>
@@ -175,10 +163,8 @@
                                     <TextBlock x:Name="Hotkey" Text="{Binding Hotkey}" Margin="2,0,0,0" Grid.Column="2" FontSize="9" Foreground="SpringGreen" TextAlignment="Right" VerticalAlignment="Center" HorizontalAlignment="Right">
                                         <TextBlock.Styles>
                                             <Style Selector="TextBlock">
-                                                <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Hotkey}" />
-                                                <Setter Property="ca:TriggerCondition.Value" Value="{x:Static hotkeys:ShortcutKeys.Default}" />
-                                                <Setter Property="ca:TriggerCondition.Key" Value="dt8" />
-                                                <Style Selector="^.ca-dt8">
+                                                <Setter Property="(Classes.DefaultHotkey)" Value="{Binding Hotkey, Converter={x:Static sharedValueConverters:ValueEqualityConverter.Instance}, ConverterParameter={x:Static hotkeys:ShortcutKeys.Default}}" />
+                                                <Style Selector="^.DefaultHotkey">
                                                     <Setter Property="IsVisible" Value="False" />
                                                 </Style>
                                             </Style>
@@ -208,10 +194,8 @@
                     <Button Content="{x:Static resources:Strings.Remove}" Grid.Column="0" Margin="0,0,2.5,0" Command="{Binding RemoveMacroConfirmCommand, Mode=OneWay}" CommandParameter="{Binding SelectedItem}">
                         <Button.Styles>
                             <Style Selector="Button">
-                                <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Path=SelectedItem}" />
-                                <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
-                                <Setter Property="ca:TriggerCondition.Key" Value="dt9" />
-                                <Style Selector="^.ca-dt9">
+                                <Setter Property="(Classes.NoSelection)" Value="{Binding Path=SelectedItem, Converter={x:Static ObjectConverters.IsNull}}" />
+                                <Style Selector="^.NoSelection">
                                     <Setter Property="IsEnabled" Value="False" />
                                 </Style>
                             </Style>
@@ -270,10 +254,8 @@
                 <WrapPanel.Styles>
                     <Style Selector="CheckBox">
                         <Setter Property="Margin" Value="0,0,10,0" />
-                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Path=SelectedItem}" />
-                        <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
-                        <Setter Property="ca:TriggerCondition.Key" Value="dt10" />
-                        <Style Selector="^.ca-dt10">
+                        <Setter Property="(Classes.NoSelection)" Value="{Binding Path=SelectedItem, Converter={x:Static ObjectConverters.IsNull}}" />
+                        <Style Selector="^.NoSelection">
                             <Setter Property="IsEnabled" Value="False" />
                         </Style>
                     </Style>

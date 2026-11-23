@@ -1,12 +1,9 @@
-﻿<Window xmlns="https://github.com/avaloniaui" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:validationRules="clr-namespace:ClassicAssist.Shared.UI.ValidationRules;assembly=ClassicAssist.Shared" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.BackupSettingsWindow" mc:Ignorable="d" Topmost="True" SizeToContent="Height" Title="{x:Static resources:Strings.Backup_Settings}" MinHeight="350" Width="400" Background="{DynamicResource ThemeWindowBackgroundBrush}" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+﻿<Window xmlns="https://github.com/avaloniaui" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:validationRules="clr-namespace:ClassicAssist.Shared.UI.ValidationRules;assembly=ClassicAssist.Shared" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.BackupSettingsWindow" mc:Ignorable="d" Topmost="True" SizeToContent="Height" Title="{x:Static resources:Strings.Backup_Settings}" MinHeight="350" Width="400" Background="{DynamicResource ThemeWindowBackgroundBrush}" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <Window.Styles>
         <StyleInclude Source="avares://ClassicAssist/Resources/Theme.axaml" />
         <Style Selector="ContentControl.Login">
             <Setter Property="IsVisible" Value="True" />
-            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding BackupOptions.Provider.LoginControl}" />
-            <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
-            <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
-            <Style Selector="^.ca-dt1">
+            <Style Selector="^.NoLoginControl">
                 <Setter Property="IsVisible" Value="False" />
             </Style>
         </Style>
@@ -49,7 +46,7 @@
                     <Label Content="{x:Static resources:Strings.Type}" DockPanel.Dock="Left" />
                     <ComboBox x:Name="comboBox" DisplayMemberBinding="{Binding Name}" SelectedItem="{Binding BackupOptions.Provider}" ItemsSource="{Binding Providers}" />
                 </DockPanel>
-                <ContentControl Grid.Row="3" Content="{Binding BackupOptions.Provider.LoginControl}" Margin="0,0,0,10" Classes="Login" />
+                <ContentControl Grid.Row="3" Content="{Binding BackupOptions.Provider.LoginControl}" Margin="0,0,0,10" Classes="Login" Classes.NoLoginControl="{Binding BackupOptions.Provider.LoginControl, Converter={x:Static ObjectConverters.IsNull}}" />
                 <DockPanel Grid.Row="4">
                     <Label Content="{x:Static resources:Strings.Backup_Days}" DockPanel.Dock="Left" />
                     <NumericUpDown Value="{Binding BackupOptions.Days}" Background="{DynamicResource ThemeBackgroundBrush}" Foreground="{DynamicResource ThemeForegroundBrush}" BorderBrush="{DynamicResource ThemeBorderBrush}" ToolTip.Tip="{x:Static resources:Strings.Setting_to_zero_will_cause_it_to_backup_on_every_client_close}" />
@@ -70,10 +67,8 @@
             <StackPanel.Styles>
                 <Style Selector="Button">
                     <Setter Property="IsEnabled" Value="True" />
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Path=(Validation.HasError), ElementName=TextBox}" />
-                    <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                    <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
-                    <Style Selector="^.ca-dt2">
+                    <Setter Property="(Classes.HasError)" Value="{Binding Path=(Validation.HasError), ElementName=TextBox}" />
+                    <Style Selector="^.HasError">
                         <Setter Property="IsEnabled" Value="False" />
                     </Style>
                 </Style>

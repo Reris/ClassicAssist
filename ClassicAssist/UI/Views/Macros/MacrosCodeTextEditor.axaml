@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:avalonedit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit" xmlns:behaviours="clr-namespace:ClassicAssist.UI.Misc.Behaviours" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ClassicAssist.UI.Views.Macros" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="userControl" x:Class="ClassicAssist.UI.Views.Macros.MacrosCodeTextEditor" mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:avalonedit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit" xmlns:behaviours="clr-namespace:ClassicAssist.UI.Misc.Behaviours" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ClassicAssist.UI.Views.Macros" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="userControl" x:Class="ClassicAssist.UI.Views.Macros.MacrosCodeTextEditor" mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Resources>
         <ResourceDictionary>
             <valueConverters:LinePausedValueConverter x:Key="LinePausedValueConverter" />
@@ -18,10 +18,8 @@
         <avalonedit:TextEditor ShowLineNumbers="True" x:Name="CodeTextEditor" FontFamily="Consolas">
             <avalonedit:TextEditor.Styles>
                 <Style Selector="avalonedit|TextEditor">
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Path=.}" />
-                    <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
-                    <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
-                    <Style Selector="^.ca-dt1">
+                    <Setter Property="(Classes.NoMacro)" Value="{Binding Path=., Converter={x:Static ObjectConverters.IsNull}}" />
+                    <Style Selector="^.NoMacro">
                         <Setter Property="IsEnabled" Value="False" />
                     </Style>
                 </Style>
@@ -38,10 +36,8 @@
             <local:MacrosDebuggerControl.Styles>
                 <Style Selector="local|MacrosDebuggerControl">
                     <Setter Property="IsVisible" Value="False" />
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsPaused}" />
-                    <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                    <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
-                    <Style Selector="^.ca-dt2">
+                    <Setter Property="(Classes.Paused)" Value="{Binding IsPaused}" />
+                    <Style Selector="^.Paused">
                         <Setter Property="IsVisible" Value="True" />
                     </Style>
                 </Style>
@@ -51,10 +47,8 @@
         <StackPanel Orientation="Horizontal" Grid.Row="2" VerticalAlignment="Bottom" Background="{DynamicResource ThemeBackgroundBrush}">
             <StackPanel.Styles>
                 <Style Selector="StackPanel">
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding FormatError,ElementName=userControl, TargetNullValue=''}" />
-                    <Setter Property="ca:TriggerCondition.Value" Value="" />
-                    <Setter Property="ca:TriggerCondition.Key" Value="dt3" />
-                    <Style Selector="^.ca-dt3">
+                    <Setter Property="(Classes.NoFormatError)" Value="{Binding FormatError,ElementName=userControl, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                    <Style Selector="^.NoFormatError">
                         <Setter Property="IsVisible" Value="False" />
                     </Style>
                 </Style>
@@ -66,10 +60,8 @@
             <Grid.Styles>
                 <Style Selector="Grid">
                     <Setter Property="IsVisible" Value="True" />
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding LastException}" />
-                    <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
-                    <Setter Property="ca:TriggerCondition.Key" Value="dt4" />
-                    <Style Selector="^.ca-dt4">
+                    <Setter Property="(Classes.NoException)" Value="{Binding LastException, Converter={x:Static ObjectConverters.IsNull}}" />
+                    <Style Selector="^.NoException">
                         <Setter Property="IsVisible" Value="False" />
                     </Style>
                 </Style>
@@ -87,10 +79,8 @@
             <Grid.Styles>
                 <Style Selector="Grid">
                     <Setter Property="IsVisible" Value="False" />
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsPaused}" />
-                    <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                    <Setter Property="ca:TriggerCondition.Key" Value="dt5" />
-                    <Style Selector="^.ca-dt5">
+                    <Setter Property="(Classes.Paused)" Value="{Binding IsPaused}" />
+                    <Style Selector="^.Paused">
                         <Setter Property="IsVisible" Value="True" />
                     </Style>
                 </Style>

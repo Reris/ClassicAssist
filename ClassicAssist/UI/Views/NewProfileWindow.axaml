@@ -1,4 +1,4 @@
-﻿<Window xmlns="https://github.com/avaloniaui" xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:ValueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.NewProfileWindow" mc:Ignorable="d" Background="{DynamicResource ThemeWindowBackgroundBrush}" Title="{x:Static resources:Strings.New_Profile}" SizeToContent="Height" Width="350" WindowStartupLocation="CenterOwner" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+﻿<Window xmlns="https://github.com/avaloniaui" xmlns:valueConverters="clr-namespace:ClassicAssist.Shared.UI.ValueConverters;assembly=ClassicAssist.Shared" xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:ValueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.NewProfileWindow" mc:Ignorable="d" Background="{DynamicResource ThemeWindowBackgroundBrush}" Title="{x:Static resources:Strings.New_Profile}" SizeToContent="Height" Width="350" WindowStartupLocation="CenterOwner" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <Window.Resources>
         <ResourceDictionary>
             <ValueConverters:EnumMatchToBooleanConverter x:Key="EnumMatchToBooleanConverter" />
@@ -44,10 +44,8 @@
                 <ComboBox Grid.Row="1" SelectedItem="{Binding SelectedProfile}" Margin="0,10,0,0" ItemsSource="{Binding Profiles}">
                     <ComboBox.Styles>
                         <Style Selector="ComboBox">
-                            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Option}" />
-                            <Setter Property="ca:TriggerCondition.Value" Value="Blank" />
-                            <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
-                            <Style Selector="^.ca-dt1">
+                            <Setter Property="(Classes.BlankOption)" Value="{Binding Option, Converter={x:Static valueConverters:ValueEqualityConverter.Instance}, ConverterParameter=Blank}" />
+                            <Style Selector="^.BlankOption">
                                 <Setter Property="IsVisible" Value="False" />
                             </Style>
                         </Style>

@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui" xmlns:local="clr-namespace:ClassicAssist.Data.Backup.OneDrive" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.Data.Backup.OneDrive.OneDriveConfigureControl" mc:Ignorable="d" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:local="clr-namespace:ClassicAssist.Data.Backup.OneDrive" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.Data.Backup.OneDrive.OneDriveConfigureControl" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Resources>
         <ResourceDictionary />
     </UserControl.Resources>
@@ -6,28 +6,19 @@
         <StyleInclude Source="avares://ClassicAssist/Resources/Theme.axaml" />
         <Style Selector="TextBlock.HideIfEmpty">
             <Setter Property="IsVisible" Value="True" />
-            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Text, RelativeSource={RelativeSource Self}}" />
-            <Setter Property="ca:TriggerCondition.Value" Value="" />
-            <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
-            <Style Selector="^.ca-dt1">
+            <Style Selector="^.Empty">
                 <Setter Property="IsVisible" Value="False" />
             </Style>
         </Style>
         <Style Selector="StackPanel.HideOnLoggedIn">
             <Setter Property="IsVisible" Value="True" />
-            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsLoggedIn}" />
-            <Setter Property="ca:TriggerCondition.Value" Value="True" />
-            <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
-            <Style Selector="^.ca-dt2">
+            <Style Selector="^.LoggedIn">
                 <Setter Property="IsVisible" Value="False" />
             </Style>
         </Style>
         <Style Selector="StackPanel.ShowOnLoggedIn">
             <Setter Property="IsVisible" Value="False" />
-            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsLoggedIn}" />
-            <Setter Property="ca:TriggerCondition.Value" Value="True" />
-            <Setter Property="ca:TriggerCondition.Key" Value="dt3" />
-            <Style Selector="^.ca-dt3">
+            <Style Selector="^.LoggedIn">
                 <Setter Property="IsVisible" Value="True" />
             </Style>
         </Style>
@@ -40,11 +31,11 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="5" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Classes="HideOnLoggedIn">
+        <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Classes="HideOnLoggedIn" Classes.LoggedIn="{Binding IsLoggedIn}">
             <Button Content="{x:Static resources:Strings.Login_With_Windows}" Command="{Binding LoginCommand}" />
-            <TextBlock Text="{Binding ErrorMessage}" TextAlignment="Center" Classes="HideIfEmpty" />
+            <TextBlock Text="{Binding ErrorMessage}" TextAlignment="Center" Classes="HideIfEmpty" Classes.Empty="{Binding Text, RelativeSource={RelativeSource Self}, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
         </StackPanel>
-        <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Classes="ShowOnLoggedIn">
+        <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Classes="ShowOnLoggedIn" Classes.LoggedIn="{Binding IsLoggedIn}">
             <Button Content="{x:Static resources:Strings.Logout}" Command="{Binding LogoutCommand}" Margin="0,0,0,10" />
             <StackPanel Orientation="Horizontal">
                 <Label Content="{x:Static resources:Strings.Username}" Width="100" />

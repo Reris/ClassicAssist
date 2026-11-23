@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:agents="clr-namespace:ClassicAssist.UI.ViewModels.Agents" xmlns:behaviours="clr-namespace:ClassicAssist.UI.Misc.Behaviours" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:draggableListBox="clr-namespace:ClassicAssist.Controls.DraggableListBox;assembly=ClassicAssist.Controls" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:misc="clr-namespace:ClassicAssist.Misc" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.Agents.DressTabControl" mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="500" Margin="0" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:dress="clr-namespace:ClassicAssist.Data.Dress" xmlns:misc1="clr-namespace:ClassicAssist.UI.Misc" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:sharedValueConverters="clr-namespace:ClassicAssist.Shared.UI.ValueConverters;assembly=ClassicAssist.Shared" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:agents="clr-namespace:ClassicAssist.UI.ViewModels.Agents" xmlns:behaviours="clr-namespace:ClassicAssist.UI.Misc.Behaviours" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:draggableListBox="clr-namespace:ClassicAssist.Controls.DraggableListBox;assembly=ClassicAssist.Controls" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:misc="clr-namespace:ClassicAssist.Misc" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.Agents.DressTabControl" mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="500" Margin="0" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:dress="clr-namespace:ClassicAssist.Data.Dress" xmlns:misc1="clr-namespace:ClassicAssist.UI.Misc" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Resources>
         <ResourceDictionary>
             <misc:BindingProxy Data="{Binding}" x:Key="Proxy" />
@@ -76,16 +76,12 @@
                         <ContextMenu>
                             <ContextMenu.Styles>
                                 <Style Selector="MenuItem">
-                                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding SelectedDressItem.Type}" />
-                                    <Setter Property="ca:TriggerCondition.Value" Value="{x:Static dress:DressAgentItemType.ID}" />
-                                    <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
-                                    <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding SelectedDressItem.Type}" />
-                                    <Setter Property="ca:TriggerCondition.Value2" Value="{x:Static dress:DressAgentItemType.Serial}" />
-                                    <Setter Property="ca:TriggerCondition.Key2" Value="dt2" />
-                                    <Style Selector="^.ca-dt1">
+                                    <Setter Property="(Classes.TypeId)" Value="{Binding SelectedDressItem.Type, Converter={x:Static sharedValueConverters:ValueEqualityConverter.Instance}, ConverterParameter={x:Static dress:DressAgentItemType.ID}}" />
+                                    <Setter Property="(Classes.TypeSerial)" Value="{Binding SelectedDressItem.Type, Converter={x:Static sharedValueConverters:ValueEqualityConverter.Instance}, ConverterParameter={x:Static dress:DressAgentItemType.Serial}}" />
+                                    <Style Selector="^.TypeId">
                                         <Setter Property="IsChecked" Value="True" />
                                     </Style>
-                                    <Style Selector="^.ca-dt2">
+                                    <Style Selector="^.TypeSerial">
                                         <Setter Property="IsChecked" Value="False" />
                                     </Style>
                                 </Style>
@@ -116,16 +112,12 @@
             <Button Grid.Row="0" Command="{Binding DressAllItemsCommand, Mode=OneWay}" CommandParameter="{Binding SelectedItem}">
                 <Button.Styles>
                     <Style Selector="Button">
-                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsDressing}" />
-                        <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                        <Setter Property="ca:TriggerCondition.Key" Value="dt3" />
-                        <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding IsDressing}" />
-                        <Setter Property="ca:TriggerCondition.Value2" Value="False" />
-                        <Setter Property="ca:TriggerCondition.Key2" Value="dt4" />
-                        <Style Selector="^.ca-dt3">
+                        <Setter Property="(Classes.Dressing)" Value="{Binding IsDressing}" />
+                        <Setter Property="(Classes.NotDressing)" Value="{Binding !IsDressing}" />
+                        <Style Selector="^.Dressing">
                             <Setter Property="Content" Value="{x:Static resources:Strings.Stop}" />
                         </Style>
-                        <Style Selector="^.ca-dt4">
+                        <Style Selector="^.NotDressing">
                             <Setter Property="Content" Value="{x:Static resources:Strings.Dress}" />
                         </Style>
                     </Style>
@@ -134,16 +126,12 @@
             <Button Grid.Row="1" Command="{Binding UndressItemsCommand}" CommandParameter="{Binding SelectedItem}">
                 <Button.Styles>
                     <Style Selector="Button">
-                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsUndressing}" />
-                        <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                        <Setter Property="ca:TriggerCondition.Key" Value="dt5" />
-                        <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding IsUndressing}" />
-                        <Setter Property="ca:TriggerCondition.Value2" Value="False" />
-                        <Setter Property="ca:TriggerCondition.Key2" Value="dt6" />
-                        <Style Selector="^.ca-dt5">
+                        <Setter Property="(Classes.Undressing)" Value="{Binding IsUndressing}" />
+                        <Setter Property="(Classes.NotUndressing)" Value="{Binding !IsUndressing}" />
+                        <Style Selector="^.Undressing">
                             <Setter Property="Content" Value="{x:Static resources:Strings.Stop}" />
                         </Style>
-                        <Style Selector="^.ca-dt6">
+                        <Style Selector="^.NotUndressing">
                             <Setter Property="Content" Value="{x:Static resources:Strings.Undress}" />
                         </Style>
                     </Style>
@@ -152,16 +140,12 @@
             <Button Grid.Row="2" Command="{Binding UndressAllItemsCommand}">
                 <Button.Styles>
                     <Style Selector="Button">
-                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsUndressingAll}" />
-                        <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                        <Setter Property="ca:TriggerCondition.Key" Value="dt7" />
-                        <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding IsUndressingAll}" />
-                        <Setter Property="ca:TriggerCondition.Value2" Value="False" />
-                        <Setter Property="ca:TriggerCondition.Key2" Value="dt8" />
-                        <Style Selector="^.ca-dt7">
+                        <Setter Property="(Classes.UndressingAll)" Value="{Binding IsUndressingAll}" />
+                        <Setter Property="(Classes.NotUndressingAll)" Value="{Binding !IsUndressingAll}" />
+                        <Style Selector="^.UndressingAll">
                             <Setter Property="Content" Value="{x:Static resources:Strings.Stop}" />
                         </Style>
-                        <Style Selector="^.ca-dt8">
+                        <Style Selector="^.NotUndressingAll">
                             <Setter Property="Content" Value="{x:Static resources:Strings.Undress_All}" />
                         </Style>
                     </Style>

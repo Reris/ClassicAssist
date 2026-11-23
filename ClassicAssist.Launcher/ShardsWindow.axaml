@@ -1,4 +1,4 @@
-<Window xmlns="https://github.com/avaloniaui" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:launcher="clr-namespace:ClassicAssist.Launcher" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:valueConverters="clr-namespace:ClassicAssist.Shared.UI.ValueConverters;assembly=ClassicAssist.Shared" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.Launcher.ShardsWindow" Foreground="{DynamicResource ThemeForegroundBrush}" mc:Ignorable="d" x:Name="Window" Background="{DynamicResource ThemeBackgroundBrush}" Title="{x:Static properties:Resources.Shards}" Height="600" Width="720" WindowStartupLocation="CenterScreen" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:properties="clr-namespace:ClassicAssist.Launcher.Properties">
+<Window xmlns="https://github.com/avaloniaui" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:launcher="clr-namespace:ClassicAssist.Launcher" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:valueConverters="clr-namespace:ClassicAssist.Shared.UI.ValueConverters;assembly=ClassicAssist.Shared" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.Launcher.ShardsWindow" Foreground="{DynamicResource ThemeForegroundBrush}" mc:Ignorable="d" x:Name="Window" Background="{DynamicResource ThemeBackgroundBrush}" Title="{x:Static properties:Resources.Shards}" Height="600" Width="720" WindowStartupLocation="CenterScreen" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:properties="clr-namespace:ClassicAssist.Launcher.Properties">
     <Window.Resources>
         <ResourceDictionary>
             <valueConverters:InverseBooleanValueConverter x:Key="InverseBooleanConverter" />
@@ -50,10 +50,8 @@
                                 <Button Grid.Column="1" Background="Transparent" BorderThickness="0" Command="{Binding Path=DataContext.OpenWebsiteCommand, ElementName=Window}" CommandParameter="{Binding}">
                                     <Button.Styles>
                                         <Style Selector="Button">
-                                            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Website}" />
-                                            <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
-                                            <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
-                                            <Style Selector="^.ca-dt1">
+                                            <Setter Property="(Classes.NoWebsite)" Value="{Binding Website, Converter={x:Static ObjectConverters.IsNull}}" />
+                                            <Style Selector="^.NoWebsite">
                                                 <Setter Property="IsEnabled" Value="False" />
                                                 <Setter Property="Opacity" Value="0" />
                                             </Style>

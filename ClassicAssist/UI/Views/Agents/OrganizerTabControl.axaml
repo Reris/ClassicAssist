@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:agents="clr-namespace:ClassicAssist.UI.ViewModels.Agents" xmlns:behaviours="clr-namespace:ClassicAssist.UI.Misc.Behaviours" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:controls1="clr-namespace:ClassicAssist.UI.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:draggableListBox="clr-namespace:ClassicAssist.Controls.DraggableListBox;assembly=ClassicAssist.Controls" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:organizer1="clr-namespace:ClassicAssist.UI.Views.Agents.Organizer" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="userControl" x:Class="ClassicAssist.UI.Views.Agents.OrganizerTabControl" mc:Ignorable="d" d:DesignHeight="250" d:DesignWidth="500" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:organizer="clr-namespace:ClassicAssist.Data.Organizer" xmlns:misc="clr-namespace:ClassicAssist.UI.Misc" xmlns:local="clr-namespace:ClassicAssist.UI.Views.Agents" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:agents="clr-namespace:ClassicAssist.UI.ViewModels.Agents" xmlns:behaviours="clr-namespace:ClassicAssist.UI.Misc.Behaviours" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:controls1="clr-namespace:ClassicAssist.UI.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:draggableListBox="clr-namespace:ClassicAssist.Controls.DraggableListBox;assembly=ClassicAssist.Controls" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:organizer1="clr-namespace:ClassicAssist.UI.Views.Agents.Organizer" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="userControl" x:Class="ClassicAssist.UI.Views.Agents.OrganizerTabControl" mc:Ignorable="d" d:DesignHeight="250" d:DesignWidth="500" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:organizer="clr-namespace:ClassicAssist.Data.Organizer" xmlns:misc="clr-namespace:ClassicAssist.UI.Misc" xmlns:local="clr-namespace:ClassicAssist.UI.Views.Agents" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Styles>
         <StyleInclude Source="avares://ClassicAssist/Resources/Theme.axaml" />
     </UserControl.Styles>
@@ -36,10 +36,8 @@
                 <Button Content="{Binding PlayStopButtonText}" Command="{Binding OrganizeCommand}" CommandParameter="{Binding SelectedItem}">
                     <Button.Styles>
                         <Style Selector="Button">
-                            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsOrganizing}" />
-                            <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                            <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
-                            <Style Selector="^.ca-dt1">
+                            <Setter Property="(Classes.Organizing)" Value="{Binding IsOrganizing}" />
+                            <Style Selector="^.Organizing">
                                 <Setter Property="Content" Value="{x:Static resources:Strings.Stop}" />
                             </Style>
                         </Style>
@@ -71,10 +69,8 @@
                 <CheckBox Content="{x:Static resources:Strings.Return_Excess}" IsChecked="{Binding SelectedItem.ReturnExcess}">
                     <CheckBox.Styles>
                         <Style Selector="CheckBox">
-                            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding SelectedItem.Complete}" />
-                            <Setter Property="ca:TriggerCondition.Value" Value="False" />
-                            <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
-                            <Style Selector="^.ca-dt2">
+                            <Setter Property="(Classes.Incomplete)" Value="{Binding !SelectedItem.Complete}" />
+                            <Style Selector="^.Incomplete">
                                 <Setter Property="IsEnabled" Value="False" />
                             </Style>
                         </Style>

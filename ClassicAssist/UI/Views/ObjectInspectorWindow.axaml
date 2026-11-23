@@ -1,4 +1,4 @@
-﻿<Window xmlns="https://github.com/avaloniaui" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:behaviours="clr-namespace:ClassicAssist.UI.Misc.Behaviours" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:models="clr-namespace:ClassicAssist.UI.Models" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.ObjectInspectorWindow" mc:Ignorable="d" Topmost="True" Title="{x:Static resources:Strings.Object_Inspector}" Height="396.8" Width="450" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+﻿<Window xmlns="https://github.com/avaloniaui" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:behaviours="clr-namespace:ClassicAssist.UI.Misc.Behaviours" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:models="clr-namespace:ClassicAssist.UI.Models" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.ObjectInspectorWindow" mc:Ignorable="d" Topmost="True" Title="{x:Static resources:Strings.Object_Inspector}" Height="396.8" Width="450" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <Window.Resources>
         <ResourceDictionary>
             <viewModels:ObjectInspectorViewModel x:Key="DummyData">
@@ -39,10 +39,8 @@
                                 <Image Grid.Column="1" MaxHeight="12" Source="{DynamicResource PointerIcon}" d:DataContext="{d:DesignInstance models:ObjectInspectorData}">
                                     <Image.Styles>
                                         <Style Selector="Image">
-                                            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding OnDoubleClick}" />
-                                            <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
-                                            <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
-                                            <Style Selector="^.ca-dt1">
+                                            <Setter Property="(Classes.NoDoubleClick)" Value="{Binding OnDoubleClick, Converter={x:Static ObjectConverters.IsNull}}" />
+                                            <Style Selector="^.NoDoubleClick">
                                                 <Setter Property="IsVisible" Value="False" />
                                             </Style>
                                         </Style>

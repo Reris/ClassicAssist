@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:controls="clr-namespace:ClassicAssist.UI.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:misc="clr-namespace:ClassicAssist.Misc" xmlns:sharedControls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.HotkeysTabControl" mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="500" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:local="clr-namespace:ClassicAssist.Data.Hotkeys" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:commands="clr-namespace:ClassicAssist.Data.Hotkeys.Commands" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:controls="clr-namespace:ClassicAssist.UI.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:misc="clr-namespace:ClassicAssist.Misc" xmlns:sharedControls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.HotkeysTabControl" mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="500" xmlns:local="clr-namespace:ClassicAssist.Data.Hotkeys" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:commands="clr-namespace:ClassicAssist.Data.Hotkeys.Commands" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Resources>
         <ResourceDictionary>
             <valueConverters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
@@ -46,16 +46,12 @@
                 <controls:TextBoxKey x:Name="textBoxKey" Shortcut="{Binding Hotkey}" Grid.Row="0" Margin="10">
                     <controls:TextBoxKey.Styles>
                         <Style Selector="controls|TextBoxKey">
-                            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Path=SelectedItem.IsCategory}" />
-                            <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                            <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
-                            <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding Path=SelectedItem.(local:HotkeyEntry).Hotkey}" />
-                            <Setter Property="ca:TriggerCondition.Value2" Value="{x:Null}" />
-                            <Setter Property="ca:TriggerCondition.Key2" Value="dt2" />
-                            <Style Selector="^.ca-dt1">
+                            <Setter Property="(Classes.IsCategory)" Value="{Binding Path=SelectedItem.IsCategory}" />
+                            <Setter Property="(Classes.NoHotkey)" Value="{Binding Path=SelectedItem.(local:HotkeyEntry).Hotkey, Converter={x:Static ObjectConverters.IsNull}}" />
+                            <Style Selector="^.IsCategory">
                                 <Setter Property="IsEnabled" Value="False" />
                             </Style>
-                            <Style Selector="^.ca-dt2">
+                            <Style Selector="^.NoHotkey">
                                 <Setter Property="IsEnabled" Value="False" />
                             </Style>
                         </Style>
@@ -79,10 +75,8 @@
                         <CheckBox.Styles>
                             <Style Selector="CheckBox">
                                 <Setter Property="IsEnabled" Value="{Binding IsEnabled, ElementName=textBoxKey}" />
-                                <Setter Property="ca:TriggerCondition.Bind" Value="{Binding SelectedItem.CanGlobal}" />
-                                <Setter Property="ca:TriggerCondition.Value" Value="False" />
-                                <Setter Property="ca:TriggerCondition.Key" Value="dt3" />
-                                <Style Selector="^.ca-dt3">
+                                <Setter Property="(Classes.CannotGlobal)" Value="{Binding !SelectedItem.CanGlobal}" />
+                                <Style Selector="^.CannotGlobal">
                                     <Setter Property="IsEnabled" Value="False" />
                                 </Style>
                             </Style>
