@@ -8,7 +8,7 @@ Assistant for [ClassicUO](https://github.com/andreakarasho/ClassicUO) with UOSte
 
 ## Installation
 
-Add the full path to ClassicAssist.dll to the plugin section of the ClassicUO settings.json config file.
+Add the full path to ClassicAssist.Proxy.dll to the plugin section of the ClassicUO settings.json config file. The proxy (net472) starts the .NET runtime in-process and loads ClassicAssist.dll (net11.0) from the same folder, which must be copied alongside it — the .NET 11 runtime (x64) must be installed. Like the ClassicUO bootstrapper itself, the proxy works on Windows, Linux and macOS.
 
 Alternatively, use ClassicAssist.Launcher.exe and it will launch ClassicUO with the required path to the plugin.
 

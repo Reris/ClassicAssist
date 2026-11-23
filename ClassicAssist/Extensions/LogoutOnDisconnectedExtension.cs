@@ -32,7 +32,7 @@ namespace ClassicAssist.Extensions
 
         public void Initialize()
         {
-            _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds( 60 ) };
+            _timer = new DispatcherTimer( TimeSpan.FromSeconds( 60 ), DispatcherPriority.Background, Dispatcher.UIThread );
             _timer.Tick += TimerOnTick;
             Engine.ConnectedEvent += EngineOnConnectedEvent;
             Engine.DisconnectedEvent += EngineOnDisconnectedEvent;

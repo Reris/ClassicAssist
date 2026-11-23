@@ -33,7 +33,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Threading;
 using ClassicAssist.Data;
@@ -104,6 +103,8 @@ namespace Assistant
         private static OnSetTitle _setTitle;
         private static MainWindow _window;
         private static Thread _mainThread;
+        private static bool _uiThreadReady;
+        private static bool _installAttempted;
         private static readonly CancellationTokenSource _mainThreadCancellationTokenSource = new CancellationTokenSource();
         private static OnClientClose _onClientClosing;
         private static readonly PacketFilter _incomingPacketFilter = new PacketFilter();
@@ -195,52 +196,96 @@ namespace Assistant
 
         public static unsafe void Install( PluginHeader* plugin )
         {
+            if ( _installAttempted )
+            {
+                return;
+            }
+
+            _installAttempted = true;
+
             AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
+
+            StartUIThread(); // Start UI Thread first
 
             Initialize();
 
             InitializePlugin( plugin );
 
+            ShowMainWindow();
+        }
+
+        private static void StartUIThread()
+        {
+            using ManualResetEventSlim uiReady = new( false );
+            System.Diagnostics.Debugger.Launch();
+
             _mainThread = new Thread( () =>
             {
-                AppBuilder builder = AppBuilder.Configure<ClassicAssist.UI.App>()
-                    .UsePlatformDetect()
-                    .With( new Win32PlatformOptions() )
-                    .With( new X11PlatformOptions() )
-                    .With( new AvaloniaNativePlatformOptions() )
-                    .SetupWithoutStarting();
-
-                Dispatcher.UIThread.Post( () =>
+                try
                 {
-                    SplashWindow splashWindow = new SplashWindow();
-                    splashWindow.Show();
+                    AppBuilder.Configure<ClassicAssist.UI.App>()
+                        .UsePlatformDetect()
+                        .With( new Win32PlatformOptions() )
+                        .With( new X11PlatformOptions() )
+                        .With( new AvaloniaNativePlatformOptions() )
+                        .SetupWithoutStarting();
 
-                    _window = new MainWindow();
-                    _window.Show();
+                    _uiThreadReady = true;
+                }
+                catch ( Exception e )
+                {
+                    ReportCallbackException( "AvaloniaSetup", e );
+                }
+                finally
+                {
+                    // ReSharper disable once AccessToDisposedClosure
+                    uiReady.Set();
+                }
 
-                    splashWindow.Close();
-                } );
-
-                Dispatcher.UIThread.MainLoop( _mainThreadCancellationTokenSource.Token );
+                if ( _uiThreadReady )
+                {
+                    Dispatcher.UIThread.MainLoop( _mainThreadCancellationTokenSource.Token );
+                }
             } ) { IsBackground = true };
 
             _mainThread.SetApartmentState( ApartmentState.STA );
             _mainThread.Start();
+
+            uiReady.Wait();
+        }
+
+        private static void ShowMainWindow()
+        {
+            if ( !_uiThreadReady )
+            {
+                return;
+            }
+
+            Dispatcher.UIThread.Post( () =>
+            {
+                SplashWindow splashWindow = new SplashWindow();
+                splashWindow.Show();
+
+                _window = new MainWindow();
+                _window.Show();
+
+                splashWindow.Close();
+            } );
         }
 
         internal static unsafe void InitializePlugin( PluginHeader* plugin )
         {
-            _onConnected = OnConnected;
-            _onDisconnected = OnDisconnected;
-            _onReceive = OnPacketReceive;
-            _onSend = OnPacketSend;
-            _onPlayerPositionChanged = OnPlayerPositionChanged;
-            _onClientClosing = OnClientClosing;
-            _onHotkeyPressed = OnHotkeyPressed;
-            _onMouse = OnMouse;
-            _onTick = OnTick;
-            _onFocusGained = () => OnFocusChanged( true );
-            _onFocusLost = () => OnFocusChanged( false );
+            _onConnected = () => Safe( nameof( OnConnected ), OnConnected );
+            _onDisconnected = () => Safe( nameof( OnDisconnected ), OnDisconnected );
+            _onReceive = ( ref data, ref length ) => Safe( nameof( OnPacketReceive ), OnPacketReceive, ref data, ref length ); ;
+            _onSend = ( ref data, ref length ) => Safe( nameof( OnPacketSend ), OnPacketSend, ref data, ref length );
+            _onPlayerPositionChanged = ( x, y, z ) => Safe( nameof( OnPlayerPositionChanged ), OnPlayerPositionChanged, x, y, z );
+            _onClientClosing = ( ) => Safe( nameof( OnClientClosing ), OnClientClosing );
+            _onHotkeyPressed = (key, mod, pressed) => Safe( nameof( OnHotkeyPressed ), OnHotkeyPressed, key, mod, pressed );
+            _onMouse = ( button, wheel ) => Safe( nameof( OnMouse ), OnMouse, button, wheel );
+            _onTick = () => Safe( nameof( OnTick ), OnTick );
+            _onFocusGained = () => Safe( nameof( OnFocusChanged ), () => OnFocusChanged( true ) );
+            _onFocusLost = () => Safe( nameof( OnFocusChanged ), () => OnFocusChanged( false ) );
             WindowHandle = plugin->HWND;
 
             plugin->OnConnected = Marshal.GetFunctionPointerForDelegate( _onConnected );
@@ -288,6 +333,107 @@ namespace Assistant
             }
 
             InitializeExtensions();
+        }
+
+        private static void ReportCallbackException( string handlerName, Exception e )
+        {
+            try
+            {
+                SentrySdk.CaptureException( e );
+            }
+            catch
+            {
+                // Sentry must not take the client down either.
+            }
+
+            try
+            {
+                // ReSharper disable once LocalizableElement
+                Console.WriteLine( $"ERROR: [{handlerName}]: {e}" );
+            }
+            catch
+            {
+                // No console attached — ignore.
+            }
+
+            ShowErrorMessageBox( $"[{handlerName}]: {e}" );
+        }
+
+        /// <summary>
+        /// Wrap Callbacks so an unhandled exception cannot cross the native thunk into ClassicUO — that would fail-fast the client.
+        /// </summary>
+        private static void Safe( string handlerName, Action action )
+        {
+            try
+            {
+                action();
+            }
+            catch ( Exception e )
+            {
+                ReportCallbackException( handlerName, e );
+            }
+        }
+
+        /// <summary>
+        /// Wrap Callbacks so an unhandled exception cannot cross the native thunk into ClassicUO — that would fail-fast the client.
+        /// </summary>
+        private static void Safe<T1, T2>( string handlerName, Action<T1, T2> action, T1 arg1, T2 arg2 )
+        {
+            try
+            {
+                action( arg1, arg2 );
+            }
+            catch ( Exception e )
+            {
+                ReportCallbackException( handlerName, e );
+            }
+        }
+
+        /// <summary>
+        /// Wrap Callbacks so an unhandled exception cannot cross the native thunk into ClassicUO — that would fail-fast the client.
+        /// </summary>
+        private static bool Safe( string handlerName, OnPacketSendRecv action, ref byte[] data, ref int length )
+        {
+            try
+            {
+                return action(ref data, ref length );
+            }
+            catch ( Exception e )
+            {
+                ReportCallbackException( handlerName, e );
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Wrap Callbacks so an unhandled exception cannot cross the native thunk into ClassicUO — that would fail-fast the client.
+        /// </summary>
+        private static void Safe<T1, T2, T3>( string handlerName, Action<T1, T2, T3> action, T1 arg1, T2 arg2, T3 arg3 )
+        {
+            try
+            {
+                action( arg1, arg2, arg3 );
+            }
+            catch ( Exception e )
+            {
+                ReportCallbackException( handlerName, e );
+            }
+        }
+
+        /// <summary>
+        /// Wrap Callbacks so an unhandled exception cannot cross the native thunk into ClassicUO — that would fail-fast the client.
+        /// </summary>
+        private static bool Safe<T1, T2, T3>( string handlerName, Func<T1, T2, T3, bool> action, T1 arg1, T2 arg2, T3 arg3 )
+        {
+            try
+            {
+                return action( arg1, arg2, arg3 );
+            }
+            catch ( Exception e )
+            {
+                ReportCallbackException( handlerName, e );
+                return true;
+            }
         }
 
         private static void OnFocusChanged( bool focus )
@@ -1200,5 +1346,20 @@ namespace Assistant
         }
 
         #endregion
+
+        public static void ShowErrorMessageBox( string message )
+        {
+            if ( RuntimeInformation.IsOSPlatform( OSPlatform.Windows ) )
+            {
+                const uint MB_ICONERROR = 0x10;
+                // Windows only — the bootstrapper runs without a console on normal launches,
+                // so make the failure visible with a message box. On other platforms the
+                // ClassicUO console is the error surface.
+                MessageBox( IntPtr.Zero, message, "ClassicAssist", MB_ICONERROR );
+            }
+        }
+
+        [DllImport( "user32", CharSet = CharSet.Unicode )]
+        private static extern int MessageBox( IntPtr hWnd, string text, string caption, uint type );
     }
 }

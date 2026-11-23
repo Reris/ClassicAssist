@@ -504,7 +504,7 @@ namespace ClassicAssist.Launcher
 
             StringBuilder args = new StringBuilder();
 
-            List<string> pluginList = new List<string> { Path.Combine( Environment.CurrentDirectory, "ClassicAssist.dll" ) };
+            List<string> pluginList = new List<string> { Path.Combine( Environment.CurrentDirectory, "ClassicAssist.Proxy.dll" ) };
 
             foreach ( PluginEntry plugin in Plugins )
             {

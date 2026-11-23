@@ -9,6 +9,11 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <OutputPath>..\Output\</OutputPath>
     <Configurations>Debug;Release;Develop</Configurations>
+    <!-- ClassicAssist is hosted as a component by ClassicAssist.Proxy (net472) via hostfxr, which needs a runtimeconfig.json next to the assembly. -->
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <!-- hostfxr resolves component dependencies from the deps.json against files in this folder; copy all package assets so the deployment is complete. -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <RollForward>LatestMinor</RollForward>
     <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
     <BuildDate>$([System.DateTime]::op_Subtraction($([System.DateTime]::get_Now().get_Date()),$([System.DateTime]::new(2020,7,3))).get_TotalDays())</BuildDate>
