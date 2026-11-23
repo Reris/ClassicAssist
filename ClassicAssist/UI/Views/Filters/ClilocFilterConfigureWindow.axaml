@@ -45,7 +45,7 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{Binding Cliloc}" Grid.Column="0" VerticalAlignment="Center" Foreground="{DynamicResource ThemeForegroundBrush}" />
-                                    <controls:ImageButton ImageSource="{DynamicResource ExportIcon}" HorizontalAlignment="Right" Grid.Column="1" CommandParameter="{Binding}" Command="{Binding Path=Data.(filters:ClilocFilterConfigureViewModel.ChooseClilocCommand), Source={StaticResource Proxy}}" ToolTip.Tip="{x:Static resources:Strings.Choose_by_Cliloc}" />
+                                    <controls:ImageButton ImageSource="{DynamicResource ExportIcon}" HorizontalAlignment="Right" Grid.Column="1" CommandParameter="{Binding}" Command="{Binding Path=Data.(filters:ClilocFilterConfigureViewModel).ChooseClilocCommand, Source={StaticResource Proxy}}" ToolTip.Tip="{x:Static resources:Strings.Choose_by_Cliloc}" />
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -67,7 +67,7 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{Binding Hue}" Grid.Column="0" VerticalAlignment="Center" Foreground="{DynamicResource ThemeForegroundBrush}" />
-                                    <controls:ImageButton ImageSource="{DynamicResource ColorWheelIcon}" HorizontalAlignment="Right" Grid.Column="1" CommandParameter="{Binding}" Command="{Binding Path=Data.(filters:ClilocFilterConfigureViewModel.SelectHueCommand), Source={StaticResource Proxy}}" />
+                                    <controls:ImageButton ImageSource="{DynamicResource ColorWheelIcon}" HorizontalAlignment="Right" Grid.Column="1" CommandParameter="{Binding}" Command="{Binding Path=Data.(filters:ClilocFilterConfigureViewModel).SelectHueCommand, Source={StaticResource Proxy}}" />
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

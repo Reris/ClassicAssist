@@ -1,4 +1,4 @@
-﻿<Styles xmlns="https://github.com/avaloniaui" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:controls="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel" xmlns:misc="clr-namespace:ClassicAssist.Misc" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels">
+<Styles xmlns="https://github.com/avaloniaui" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:controls="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel" xmlns:misc="clr-namespace:ClassicAssist.Misc" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels">
     <Styles.Resources>
         <ResourceDictionary>
             <misc:BindingProxy x:Key="Proxy" Data="{Binding}" />
@@ -6,9 +6,9 @@
         <VirtualizingStackPanel Orientation="Horizontal" />
     </ItemsPanelTemplate>
             <DataTemplate x:Key="DataTemplate">
-        <DockPanel x:Name="DockPanel" Background="Transparent" ca:TriggerCondition.Bind="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ShowProperties)}" ca:TriggerCondition.Value="True" ca:TriggerCondition.Key="dt4">
+        <DockPanel x:Name="DockPanel" Background="Transparent" ca:TriggerCondition.Bind="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).ShowProperties}" ca:TriggerCondition.Value="True" ca:TriggerCondition.Key="dt4">
             <Interaction.Behaviors>
-                <behaviours:DoubleClickBehaviour Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ItemDoubleClickCommand)}" CommandParameter="{Binding $parent[ListBox].SelectedItem}" />
+                <behaviours:DoubleClickBehaviour Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).ItemDoubleClickCommand}" CommandParameter="{Binding $parent[ListBox].SelectedItem}" />
             </Interaction.Behaviors>
             <StackPanel ContextMenu="{DynamicResource ContextMenu}">
                 <Grid DockPanel.Dock="Top" HorizontalAlignment="Center">
@@ -46,36 +46,36 @@
         <Setter Property="ItemTemplate" Value="{StaticResource DataTemplate}" />
     </Style>
     <Style Selector="DockPanel.ca-dt1">
-        <Style Selector="DockPanel.ca-dt1 Image#LockIcon">
+        <Style Selector="^ Image#LockIcon">
             <Setter Property="IsVisible" Value="True" />
         </Style>
     </Style>
     <Style Selector="DockPanel.ca-dt2">
-        <Style Selector="DockPanel.ca-dt2 TextBlock#TextBlock">
+        <Style Selector="^ TextBlock#TextBlock">
             <Setter Property="Background" Value="{DynamicResource SelectionColor1Brush}" />
         </Style>
-        <Style Selector="DockPanel.ca-dt2 Border#Border">
+        <Style Selector="^ Border#Border">
             <Setter Property="BorderBrush" Value="{DynamicResource SelectionColor2Brush}" />
         </Style>
-        <Style Selector="DockPanel.ca-dt2 TextBlock#TextBlock">
+        <Style Selector="^ TextBlock#TextBlock">
             <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
         </Style>
     </Style>
     <Style Selector="DockPanel.ca-dt3">
         <Setter Property="Width" Value="60" />
-        <Style Selector="DockPanel.ca-dt3 TextBlock#TextBlock">
+        <Style Selector="^ TextBlock#TextBlock">
             <Setter Property="FontSize" Value="10" />
         </Style>
-        <Style Selector="DockPanel.ca-dt3 TextBlock#TextBlock">
+        <Style Selector="^ TextBlock#TextBlock">
             <Setter Property="Text" Value="{Binding Name}" />
         </Style>
     </Style>
     <Style Selector="DockPanel.ca-dt4">
         <Setter Property="Width" Value="120" />
-        <Style Selector="DockPanel.ca-dt4 TextBlock#TextBlock">
+        <Style Selector="^ TextBlock#TextBlock">
             <Setter Property="FontSize" Value="10" />
         </Style>
-        <Style Selector="DockPanel.ca-dt4 TextBlock#TextBlock">
+        <Style Selector="^ TextBlock#TextBlock">
             <Setter Property="Text" Value="{Binding FullName}" />
         </Style>
     </Style>

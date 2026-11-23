@@ -253,7 +253,7 @@ namespace ClassicAssist.UI.ViewModels
             CurrentOptions.ChatWindowWidth = config?["ChatWindowWidth"]?.ToObject<double>() ?? 650;
             CurrentOptions.MacrosGumpHeight = config?["MacrosGumpHeight"]?.ToObject<int>() ?? 190;
             CurrentOptions.MacrosGumpWidth = config?["MacrosGumpWidth"]?.ToObject<int>() ?? 180;
-            CurrentOptions.MacrosGumpTextColor = config?["MacrosGumpTextColor"]?.ToObject<Color>() ?? Colors.White;
+            CurrentOptions.MacrosGumpTextColor = ( config?["MacrosGumpTextColor"] ).ToColor( Colors.White );
             CurrentOptions.MacrosGumpTransparent = config?["MacrosGumpTransparent"]?.ToObject<bool>() ?? true;
             CurrentOptions.ChatWindowHeight = config?["ChatWindowHeight"]?.ToObject<double>() ?? 350;
             CurrentOptions.ChatWindowRightColumn = new GridLength( config?["ChatWindowRightColumn"]?.ToObject<double>() ?? 220 );

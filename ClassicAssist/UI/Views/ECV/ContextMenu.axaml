@@ -1,18 +1,19 @@
-﻿<Styles xmlns="https://github.com/avaloniaui" xmlns:misc="clr-namespace:ClassicAssist.Misc" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels">
+<Styles xmlns="https://github.com/avaloniaui" xmlns:misc="clr-namespace:ClassicAssist.Misc" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels">
     <Styles.Resources>
         <ResourceDictionary>
             <misc:BindingProxy x:Key="Proxy" Data="{Binding}" />
             <ContextMenu x:Key="ContextMenu">
-        <MenuItem Header="{x:Static resources:Strings.Use_item}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ContextUseItemCommand)}" />
-        <MenuItem Header="{x:Static resources:Strings.Move_to_backpack}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ContextMoveToBackpackCommand)}" />
-        <MenuItem Header="{x:Static resources:Strings.Move_to_container}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ContextMoveToContainerCommand)}" />
-        <MenuItem Header="{x:Static resources:Strings.Move_to_bank}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ContextMoveToBankCommand)}" />
-        <MenuItem Header="{x:Static resources:Strings.Move_to_ground}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ContextMoveToGroundCommand)}" />
-        <MenuItem Header="{x:Static resources:Strings.Move_to_set}" ItemsSource="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.Options).ContainerSets}">
+        <MenuItem Header="{x:Static resources:Strings.Use_item}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).ContextUseItemCommand}" />
+        <MenuItem Header="{x:Static resources:Strings.Move_to_backpack}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).ContextMoveToBackpackCommand}" />
+        <MenuItem Header="{x:Static resources:Strings.Move_to_container}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).ContextMoveToContainerCommand}" />
+        <MenuItem Header="{x:Static resources:Strings.Move_to_bank}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).ContextMoveToBankCommand}" />
+        <MenuItem Header="{x:Static resources:Strings.Move_to_ground}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).ContextMoveToGroundCommand}" />
+        <MenuItem Header="{x:Static resources:Strings.Move_to_set}" ItemsSource="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).Options.ContainerSets}">
             <MenuItem.Styles>
                 <Style Selector="MenuItem">
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.Options).ContainerSets.Count}" />
+                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).Options.ContainerSets.Count}" />
                     <Setter Property="ca:TriggerCondition.Value" Value="0" />
+                    <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
                     <Style Selector="^.ca-dt1">
                         <Setter Property="IsVisible" Value="False" />
                     </Style>
@@ -20,25 +21,27 @@
             </MenuItem.Styles>
 <!-- MIGRATION: MenuItem.ItemContainerStyle removed - no Avalonia equivalent -->
             </MenuItem>
-        <MenuItem Header="{x:Static resources:Strings.Open_container}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ContextOpenContainerCommand)}" />
-        <MenuItem Header="{x:Static resources:Strings.Drop_to_ground}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ContextDropToGroundCommand)}" />
+        <MenuItem Header="{x:Static resources:Strings.Open_container}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).ContextOpenContainerCommand}" />
+        <MenuItem Header="{x:Static resources:Strings.Drop_to_ground}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).ContextDropToGroundCommand}" />
         <Separator />
-        <MenuItem Header="{x:Static resources:Strings.Lock_item}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ContextToggleLockCommand)}">
+        <MenuItem Header="{x:Static resources:Strings.Lock_item}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).ContextToggleLockCommand}">
             <MenuItem.Styles>
                 <Style Selector="MenuItem">
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.SelectedItemsAllLocked)}" />
+                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).SelectedItemsAllLocked}" />
                     <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                    <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
                     <Style Selector="^.ca-dt2">
                         <Setter Property="IsVisible" Value="False" />
                     </Style>
                 </Style>
             </MenuItem.Styles>
         </MenuItem>
-        <MenuItem Header="{x:Static resources:Strings.Unlock_item}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ContextToggleLockCommand)}">
+        <MenuItem Header="{x:Static resources:Strings.Unlock_item}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).ContextToggleLockCommand}">
             <MenuItem.Styles>
                 <Style Selector="MenuItem">
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.SelectedItemsAllLocked)}" />
+                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).SelectedItemsAllLocked}" />
                     <Setter Property="ca:TriggerCondition.Value" Value="False" />
+                    <Setter Property="ca:TriggerCondition.Key" Value="dt3" />
                     <Style Selector="^.ca-dt3">
                         <Setter Property="IsVisible" Value="False" />
                     </Style>
@@ -46,14 +49,15 @@
             </MenuItem.Styles>
         </MenuItem>
         <Separator />
-        <MenuItem Header="{x:Static resources:Strings.Context_menu_request}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ContextContextMenuRequestCommand)}" />
-        <MenuItem Header="{x:Static resources:Strings.Equip_Item}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.EquipItemCommand)}" />
-        <MenuItem Header="{x:Static resources:Strings.Hide}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.HideItemCommand)}" />
-        <MenuItem Header="{x:Static resources:Strings.Custom_Actions}" ItemsSource="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.CustomContextActions)}">
+        <MenuItem Header="{x:Static resources:Strings.Context_menu_request}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).ContextContextMenuRequestCommand}" />
+        <MenuItem Header="{x:Static resources:Strings.Equip_Item}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).EquipItemCommand}" />
+        <MenuItem Header="{x:Static resources:Strings.Hide}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).HideItemCommand}" />
+        <MenuItem Header="{x:Static resources:Strings.Custom_Actions}" ItemsSource="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).CustomContextActions}">
             <MenuItem.Styles>
                 <Style Selector="MenuItem">
-                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.CustomContextActions).Count}" />
+                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).CustomContextActions.Count}" />
                     <Setter Property="ca:TriggerCondition.Value" Value="0" />
+                    <Setter Property="ca:TriggerCondition.Key" Value="dt4" />
                     <Style Selector="^.ca-dt4">
                         <Setter Property="IsVisible" Value="False" />
                     </Style>
@@ -62,8 +66,8 @@
 <!-- MIGRATION: MenuItem.ItemContainerStyle removed - no Avalonia equivalent -->
             </MenuItem>
         <Separator />
-        <MenuItem Header="{x:Static resources:Strings.Target}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ContextTargetCommand)}" />
-        <MenuItem Header="{x:Static resources:Strings.Target_Owner}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel.ContextTargetOwnerCommand)}" />
+        <MenuItem Header="{x:Static resources:Strings.Target}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).ContextTargetCommand}" />
+        <MenuItem Header="{x:Static resources:Strings.Target_Owner}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:EntityCollectionViewerViewModel).ContextTargetOwnerCommand}" />
     </ContextMenu>
         </ResourceDictionary>
     </Styles.Resources>

@@ -2,14 +2,14 @@
     <Style Selector="Button.ToolbarButtonStyle">
         <Setter Property="Margin" Value="0,0,5,0" />
         <Setter Property="Opacity" Value="1" />
-        <Style Selector="Button.ToolbarButtonStyle:disabled">
+        <Style Selector="^:disabled">
             <Setter Property="Opacity" Value="0.5" />
         </Style>
     </Style>
     <Style Selector="ToggleButton.ToolbarToggleButtonStyle">
         <Setter Property="Margin" Value="0,0,5,0" />
         <Setter Property="Opacity" Value="1" />
-        <Style Selector="ToggleButton.ToolbarToggleButtonStyle:disabled">
+        <Style Selector="^:disabled">
             <Setter Property="Opacity" Value="0.5" />
         </Style>
     </Style>

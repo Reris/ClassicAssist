@@ -62,7 +62,7 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <Thumb x:Name="ResizeThumb" HorizontalAlignment="Left" Width="6" Cursor="SizeWE" Background="Transparent">
+            <Thumb x:Name="ResizeThumb" HorizontalAlignment="Left" Width="6" Cursor="SizeWestEast" Background="Transparent">
                 <Thumb.Template>
                     <ControlTemplate>
                         <Border Background="Transparent">

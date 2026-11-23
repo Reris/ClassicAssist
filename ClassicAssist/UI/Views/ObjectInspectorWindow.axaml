@@ -41,6 +41,7 @@
                                         <Style Selector="Image">
                                             <Setter Property="ca:TriggerCondition.Bind" Value="{Binding OnDoubleClick}" />
                                             <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
+                                            <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
                                             <Style Selector="^.ca-dt1">
                                                 <Setter Property="IsVisible" Value="False" />
                                             </Style>

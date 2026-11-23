@@ -78,8 +78,10 @@
                                 <Style Selector="MenuItem">
                                     <Setter Property="ca:TriggerCondition.Bind" Value="{Binding SelectedDressItem.Type}" />
                                     <Setter Property="ca:TriggerCondition.Value" Value="{x:Static dress:DressAgentItemType.ID}" />
-                                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding SelectedDressItem.Type}" />
-                                    <Setter Property="ca:TriggerCondition.Value" Value="{x:Static dress:DressAgentItemType.Serial}" />
+                                    <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
+                                    <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding SelectedDressItem.Type}" />
+                                    <Setter Property="ca:TriggerCondition.Value2" Value="{x:Static dress:DressAgentItemType.Serial}" />
+                                    <Setter Property="ca:TriggerCondition.Key2" Value="dt2" />
                                     <Style Selector="^.ca-dt1">
                                         <Setter Property="IsChecked" Value="True" />
                                     </Style>
@@ -116,8 +118,10 @@
                     <Style Selector="Button">
                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsDressing}" />
                         <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsDressing}" />
-                        <Setter Property="ca:TriggerCondition.Value" Value="False" />
+                        <Setter Property="ca:TriggerCondition.Key" Value="dt3" />
+                        <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding IsDressing}" />
+                        <Setter Property="ca:TriggerCondition.Value2" Value="False" />
+                        <Setter Property="ca:TriggerCondition.Key2" Value="dt4" />
                         <Style Selector="^.ca-dt3">
                             <Setter Property="Content" Value="{x:Static resources:Strings.Stop}" />
                         </Style>
@@ -132,8 +136,10 @@
                     <Style Selector="Button">
                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsUndressing}" />
                         <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsUndressing}" />
-                        <Setter Property="ca:TriggerCondition.Value" Value="False" />
+                        <Setter Property="ca:TriggerCondition.Key" Value="dt5" />
+                        <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding IsUndressing}" />
+                        <Setter Property="ca:TriggerCondition.Value2" Value="False" />
+                        <Setter Property="ca:TriggerCondition.Key2" Value="dt6" />
                         <Style Selector="^.ca-dt5">
                             <Setter Property="Content" Value="{x:Static resources:Strings.Stop}" />
                         </Style>
@@ -148,8 +154,10 @@
                     <Style Selector="Button">
                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsUndressingAll}" />
                         <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsUndressingAll}" />
-                        <Setter Property="ca:TriggerCondition.Value" Value="False" />
+                        <Setter Property="ca:TriggerCondition.Key" Value="dt7" />
+                        <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding IsUndressingAll}" />
+                        <Setter Property="ca:TriggerCondition.Value2" Value="False" />
+                        <Setter Property="ca:TriggerCondition.Key2" Value="dt8" />
                         <Style Selector="^.ca-dt7">
                             <Setter Property="Content" Value="{x:Static resources:Strings.Stop}" />
                         </Style>

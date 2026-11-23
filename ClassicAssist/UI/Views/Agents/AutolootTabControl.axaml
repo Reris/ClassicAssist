@@ -62,8 +62,10 @@
                                     <Style Selector="TextBlock">
                                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Enabled}" />
                                         <Setter Property="ca:TriggerCondition.Value" Value="False" />
-                                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Path=Group.Enabled}" />
-                                        <Setter Property="ca:TriggerCondition.Value" Value="False" />
+                                        <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
+                                        <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding Path=Group.Enabled}" />
+                                        <Setter Property="ca:TriggerCondition.Value2" Value="False" />
+                                        <Setter Property="ca:TriggerCondition.Key2" Value="dt2" />
                                         <Style Selector="^.ca-dt1">
                                             <Setter Property="TextDecorations" Value="Strikethrough" />
                                         </Style>
@@ -86,6 +88,7 @@
                                         <Style Selector="TextBlock">
                                             <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Enabled}" />
                                             <Setter Property="ca:TriggerCondition.Value" Value="False" />
+                                            <Setter Property="ca:TriggerCondition.Key" Value="dt3" />
                                             <Style Selector="^.ca-dt3">
                                                 <Setter Property="TextDecorations" Value="Strikethrough" />
                                             </Style>
@@ -104,13 +107,14 @@
                     </Interaction.Behaviors>
                     <draggableTreeView:DraggableTreeView.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="{x:Static resources:Strings.New_Group}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:AutolootViewModel.NewGroupCommand)}" />
-                            <MenuItem Header="{x:Static resources:Strings.Remove_Group}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:AutolootViewModel.RemoveGroupCommand)}" CommandParameter="{Binding SelectedGroup}" />
+                            <MenuItem Header="{x:Static resources:Strings.New_Group}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:AutolootViewModel).NewGroupCommand}" />
+                            <MenuItem Header="{x:Static resources:Strings.Remove_Group}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:AutolootViewModel).RemoveGroupCommand}" CommandParameter="{Binding SelectedGroup}" />
                             <Separator>
                                 <Separator.Styles>
                                     <Style Selector="Separator">
                                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding SelectedItem}" />
                                         <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
+                                        <Setter Property="ca:TriggerCondition.Key" Value="dt4" />
                                         <Style Selector="^.ca-dt4">
                                             <Setter Property="IsVisible" Value="False" />
                                         </Style>
@@ -122,6 +126,7 @@
                                     <Style Selector="MenuItem">
                                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding SelectedItem}" />
                                         <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
+                                        <Setter Property="ca:TriggerCondition.Key" Value="dt5" />
                                         <Style Selector="^.ca-dt5">
                                             <Setter Property="IsVisible" Value="False" />
                                         </Style>
@@ -156,9 +161,9 @@
                                 </Style>
                         </Button.Styles>
                         <Button.ContextMenu>
-                            <ContextMenu IsOpen="False">
-                                <MenuItem Header="{x:Static resources:Strings.ID_from_target}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:AutolootViewModel.InsertCommand)}" />
-                                <MenuItem Header="{x:Static resources:Strings.Match_Any_ID}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:AutolootViewModel.InsertMatchAnyCommand)}" />
+                            <ContextMenu>
+                                <MenuItem Header="{x:Static resources:Strings.ID_from_target}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:AutolootViewModel).InsertCommand}" />
+                                <MenuItem Header="{x:Static resources:Strings.Match_Any_ID}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:AutolootViewModel).InsertMatchAnyCommand}" />
                             </ContextMenu>
                         </Button.ContextMenu>
                     </Button>
@@ -171,10 +176,10 @@
                     <Button Content="{x:Static resources:Strings.Set_Container}" Margin="0,10,5,0" Command="{Binding SetContainerCommand}" Grid.Column="0" />
                     <Image Source="{DynamicResource configureIcon}" Height="16" Margin="5,10,0,0" Grid.Column="1" behaviours1:ClickOpensContextMenuBehaviour.Enabled="True">
                         <Image.ContextMenu>
-                            <ContextMenu IsOpen="False">
-                                <MenuItem Header="{x:Static resources:Strings.Reset_Container}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:AutolootViewModel.ResetContainerCommand)}" />
-                                <MenuItem Header="{x:Static resources:Strings.Define_Custom_Properties}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:AutolootViewModel.DefineCustomPropertiesCommand)}" />
-                                <MenuItem Header="{x:Static resources:Strings.CSV_Import}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:AutolootViewModel.CSVImportCommand)}" />
+                            <ContextMenu>
+                                <MenuItem Header="{x:Static resources:Strings.Reset_Container}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:AutolootViewModel).ResetContainerCommand}" />
+                                <MenuItem Header="{x:Static resources:Strings.Define_Custom_Properties}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:AutolootViewModel).DefineCustomPropertiesCommand}" />
+                                <MenuItem Header="{x:Static resources:Strings.CSV_Import}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:AutolootViewModel).CSVImportCommand}" />
                             </ContextMenu>
                         </Image.ContextMenu>
                     </Image>

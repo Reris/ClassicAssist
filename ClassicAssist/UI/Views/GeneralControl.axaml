@@ -112,6 +112,7 @@
                                     <Setter Property="IsEnabled" Value="True" />
                                     <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Options.Autologin}" />
                                     <Setter Property="ca:TriggerCondition.Value" Value="False" />
+                                    <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
                                     <Style Selector="^.ca-dt1">
                                         <Setter Property="IsEnabled" Value="False" />
                                     </Style>
@@ -146,8 +147,10 @@
                                         <Style Selector="Image">
                                             <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsLinkedProfile}" />
                                             <Setter Property="ca:TriggerCondition.Value" Value="False" />
-                                            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsLinkedProfile}" />
-                                            <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                                            <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
+                                            <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding IsLinkedProfile}" />
+                                            <Setter Property="ca:TriggerCondition.Value2" Value="True" />
+                                            <Setter Property="ca:TriggerCondition.Key2" Value="dt3" />
                                             <Style Selector="^.ca-dt2">
                                                 <Setter Property="Source" Value="{DynamicResource unlinkedIcon}" />
                                                 <Setter Property="ToolTip.Tip" Value="{x:Static r:Strings.Unlinked}" />

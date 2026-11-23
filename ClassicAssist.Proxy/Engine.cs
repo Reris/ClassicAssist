@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using CUO_API;
@@ -57,6 +58,7 @@ namespace Assistant
             ShowErrorMessageBox( message );
         }
 
+        [Conditional("DEBUG")]
         private static void ShowErrorMessageBox( string message )
         {
             if ( RuntimeInformation.IsOSPlatform( OSPlatform.Windows ) )

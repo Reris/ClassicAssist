@@ -105,8 +105,10 @@
                                 <Style Selector="Image">
                                     <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Data.IsRecording, Source={StaticResource Proxy}}" />
                                     <Setter Property="ca:TriggerCondition.Value" Value="false" />
-                                    <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Data.IsRecording, Source={StaticResource Proxy}}" />
-                                    <Setter Property="ca:TriggerCondition.Value" Value="true" />
+                                    <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
+                                    <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding Data.IsRecording, Source={StaticResource Proxy}}" />
+                                    <Setter Property="ca:TriggerCondition.Value2" Value="true" />
+                                    <Setter Property="ca:TriggerCondition.Key2" Value="dt2" />
                                     <Style Selector="^.ca-dt1">
                                         <Setter Property="Source" Value="{StaticResource PlayIcon}" />
                                     </Style>

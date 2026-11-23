@@ -138,8 +138,10 @@
                                         <Setter Property="IsEnabled" Value="False" />
                                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding CurrentOptions.McpEnabled}" />
                                         <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding McpAutoStartEnabled}" />
-                                        <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                                        <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
+                                        <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding McpAutoStartEnabled}" />
+                                        <Setter Property="ca:TriggerCondition.Value2" Value="True" />
+                                        <Setter Property="ca:TriggerCondition.Key2" Value="dt2" />
                                         <Style Selector="^.ca-dt1">
                                             <Setter Property="IsEnabled" Value="True" />
                                         </Style>

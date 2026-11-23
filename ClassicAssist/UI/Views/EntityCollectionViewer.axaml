@@ -90,7 +90,7 @@
                             <Button.Styles>
                                 <Style Selector="Button">
                                     <Setter Property="Margin" Value="0,0,5,0" />
-                                    <Style Selector="Button:disabled">
+                                    <Style Selector="^:disabled">
                                         <Setter Property="Opacity" Value="0.5" />
                                     </Style>
                                 </Style>
@@ -129,6 +129,7 @@
                                 <Setter Property="IsVisible" Value="True" />
                                 <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Status}" />
                                 <Setter Property="ca:TriggerCondition.Value" Value="{x:Static resources:Strings.Cancel}" />
+                                <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
                                 <Style Selector="^.ca-dt2">
                                     <Setter Property="IsVisible" Value="False" />
                                 </Style>

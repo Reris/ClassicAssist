@@ -33,7 +33,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
      * https://stackoverflow.com/questions/8088595/synchronizing-multi-select-listbox-with-mvvm
      */
 
-    public class ListViewMultiSelectionBehaviour : Behavior<ListBox>
+    public class ListViewMultiSelectionBehaviour : Behavior<DataGrid>
     {
         public static readonly Avalonia.StyledProperty<IList> SelectedItemsProperty =
         AvaloniaCompat.RegisterCompat<ListViewMultiSelectionBehaviour, IList>(nameof( SelectedItems ), null, onChanged: SelectedItemsChanged);
@@ -142,7 +142,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
 
         private void ListViewSelectionChanged( object sender, SelectionChangedEventArgs e )
         {
-            if ( e.Source.GetType() != typeof( ListBox ) )
+            if ( e.Source.GetType() != typeof( DataGrid ) )
             {
                 return;
             }

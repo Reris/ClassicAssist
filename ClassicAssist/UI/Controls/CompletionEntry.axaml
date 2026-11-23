@@ -20,6 +20,7 @@
             <Setter Property="IsVisible" Value="False" />
             <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsExpanded}" />
             <Setter Property="ca:TriggerCondition.Value" Value="True" />
+            <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
             <Style Selector="^.ca-dt1">
                 <Setter Property="IsVisible" Value="True" />
             </Style>

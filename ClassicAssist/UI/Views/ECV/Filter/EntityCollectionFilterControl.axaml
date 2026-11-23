@@ -16,6 +16,7 @@
                                 <Setter Property="IsVisible" Value="True" />
                                 <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsFirst}" />
                                 <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                                <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
                                 <Style Selector="^.ca-dt1">
                                     <Setter Property="IsVisible" Value="False" />
                                 </Style>
@@ -41,30 +42,33 @@
                                     <Setter Property="IsVisible" Value="True" />
                                     <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsFirst}" />
                                     <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                                    <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
                                     <Style Selector="^.ca-dt2">
                                         <Setter Property="IsVisible" Value="False" />
                                     </Style>
                                 </Style>
                             </ComboBox.Styles>
                         </ComboBox>
-                        <controls:ImageButton ImageSource="{DynamicResource CirclePlusItem}" Command="{Binding Path=Data.(filter:EntityCollectionFilterViewModel.AddSubGroupCommand), Source={StaticResource DataContextProxy}}" CommandParameter="{Binding}" Margin="5,0,0,0" ToolTip.Tip="{x:Static resources:Strings.New_Group}">
+                        <controls:ImageButton ImageSource="{DynamicResource CirclePlusItem}" Command="{Binding Path=Data.(filter:EntityCollectionFilterViewModel).AddSubGroupCommand, Source={StaticResource DataContextProxy}}" CommandParameter="{Binding}" Margin="5,0,0,0" ToolTip.Tip="{x:Static resources:Strings.New_Group}">
                             <controls:ImageButton.Styles>
                                 <Style Selector="controls|ImageButton">
                                     <Setter Property="IsVisible" Value="False" />
                                     <Setter Property="ca:TriggerCondition.Bind" Value="{Binding HasChildren}" />
                                     <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                                    <Setter Property="ca:TriggerCondition.Key" Value="dt3" />
                                     <Style Selector="^.ca-dt3">
                                         <Setter Property="IsVisible" Value="True" />
                                     </Style>
                                 </Style>
                             </controls:ImageButton.Styles>
                         </controls:ImageButton>
-                        <controls:ImageButton ImageSource="{DynamicResource CircleRemoveIcon}" Command="{Binding Path=Data.(filter:EntityCollectionFilterViewModel.RemoveSubGroupCommand), Source={StaticResource DataContextProxy}}" CommandParameter="{Binding}" Margin="5,0,0,0" ToolTip.Tip="{x:Static resources:Strings.Remove_Group}">
+                        <controls:ImageButton ImageSource="{DynamicResource CircleRemoveIcon}" Command="{Binding Path=Data.(filter:EntityCollectionFilterViewModel).RemoveSubGroupCommand, Source={StaticResource DataContextProxy}}" CommandParameter="{Binding}" Margin="5,0,0,0" ToolTip.Tip="{x:Static resources:Strings.Remove_Group}">
                             <controls:ImageButton.Styles>
                                 <Style Selector="controls|ImageButton">
                                     <Setter Property="IsVisible" Value="False" />
                                     <Setter Property="ca:TriggerCondition.Bind" Value="{Binding HasChildren}" />
                                     <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                                    <Setter Property="ca:TriggerCondition.Key" Value="dt4" />
                                     <Style Selector="^.ca-dt4">
                                         <Setter Property="IsVisible" Value="True" />
                                     </Style>
@@ -78,6 +82,7 @@
                                 <Setter Property="IsVisible" Value="False" />
                                 <Setter Property="ca:TriggerCondition.Bind" Value="{Binding HasChildren}" />
                                 <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                                <Setter Property="ca:TriggerCondition.Key" Value="dt5" />
                                 <Style Selector="^.ca-dt5">
                                     <Setter Property="IsVisible" Value="True" />
                                 </Style>
@@ -90,6 +95,7 @@
                                 <Setter Property="IsVisible" Value="True" />
                                 <Setter Property="ca:TriggerCondition.Bind" Value="{Binding HasChildren}" />
                                 <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                                <Setter Property="ca:TriggerCondition.Key" Value="dt22" />
                                 <Style Selector="^.ca-dt22">
                                     <Setter Property="IsVisible" Value="False" />
                                 </Style>
@@ -107,13 +113,14 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate DataType="models:EntityCollectionFilterItem">
                                         <StackPanel>
-                                            <ComboBox SelectedItem="{Binding Constraint}" Width="200" DisplayMemberBinding="{Binding Name}" ItemsSource="{Binding Path=Data.(filter:EntityCollectionFilterViewModel.Constraints), Source={StaticResource DataContextProxy}}" />
+                                            <ComboBox SelectedItem="{Binding Constraint}" Width="200" DisplayMemberBinding="{Binding Name}" ItemsSource="{Binding Path=Data.(filter:EntityCollectionFilterViewModel).Constraints, Source={StaticResource DataContextProxy}}" />
                                             <ecv:SkillBonusSelector Margin="0,5,0,0" DataContext="{Binding}">
                                                 <ecv:SkillBonusSelector.Styles>
                                                     <Style Selector="ecv|SkillBonusSelector">
                                                         <Setter Property="IsVisible" Value="False" />
                                                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Constraint.AllowedValuesEnum}" />
                                                         <Setter Property="ca:TriggerCondition.Value" Value="{x:Type agents:SkillBonusSkills}" />
+                                                        <Setter Property="ca:TriggerCondition.Key" Value="dt6" />
                                                         <Style Selector="^.ca-dt6">
                                                             <Setter Property="IsVisible" Value="True" />
                                                         </Style>
@@ -151,6 +158,7 @@
                                                         <Setter Property="IsVisible" Value="False" />
                                                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Constraint.AllowedValuesEnum}" />
                                                         <Setter Property="ca:TriggerCondition.Value" Value="{x:Type data:Layer}" />
+                                                        <Setter Property="ca:TriggerCondition.Key" Value="dt7" />
                                                         <Style Selector="^.ca-dt7">
                                                             <Setter Property="IsVisible" Value="True" />
                                                         </Style>
@@ -163,6 +171,7 @@
                                                         <Setter Property="IsVisible" Value="False" />
                                                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Constraint.AllowedValuesEnum}" />
                                                         <Setter Property="ca:TriggerCondition.Value" Value="{x:Type data:TileFlags}" />
+                                                        <Setter Property="ca:TriggerCondition.Key" Value="dt8" />
                                                         <Style Selector="^.ca-dt8">
                                                             <Setter Property="IsVisible" Value="True" />
                                                         </Style>
@@ -175,8 +184,10 @@
                                                         <Setter Property="IsVisible" Value="False" />
                                                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Constraint.UseMultipleValues}" />
                                                         <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                                                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Constraint.Name}" />
-                                                        <Setter Property="ca:TriggerCondition.Value" Value="{x:Static resources:Strings.Cliloc__Multiple_}" />
+                                                        <Setter Property="ca:TriggerCondition.Key" Value="dt9" />
+                                                        <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding Constraint.Name}" />
+                                                        <Setter Property="ca:TriggerCondition.Value2" Value="{x:Static resources:Strings.Cliloc__Multiple_}" />
+                                                        <Setter Property="ca:TriggerCondition.Key2" Value="dt10" />
                                                         <Style Selector="^.ca-dt9">
                                                             <Setter Property="IsVisible" Value="True" />
                                                         </Style>
@@ -192,18 +203,20 @@
                                                         <Setter Property="IsVisible" Value="False" />
                                                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Constraint.Name}" />
                                                         <Setter Property="ca:TriggerCondition.Value" Value="{x:Static resources:Strings.Cliloc__Multiple_}" />
+                                                        <Setter Property="ca:TriggerCondition.Key" Value="dt11" />
                                                         <Style Selector="^.ca-dt11">
                                                             <Setter Property="IsVisible" Value="True" />
                                                         </Style>
                                                     </Style>
                                                 </views:MultiClilocSelector.Styles>
                                             </views:MultiClilocSelector>
-                                            <ComboBox Grid.Column="0" MinWidth="40" SelectedItem="{Binding Additional}" Width="{Binding ActualWidth, Converter={StaticResource CellWidthValueConverter}, ConverterParameter=15, ElementName=GridViewColumn, Mode=OneWay}" ItemsSource="{Binding Path=Data.(filter:EntityCollectionFilterViewModel.AutolootEntryNames), Source={StaticResource DataContextProxy}}">
+                                            <ComboBox Grid.Column="0" MinWidth="40" SelectedItem="{Binding Additional}" Width="{Binding ActualWidth, Converter={StaticResource CellWidthValueConverter}, ConverterParameter=15, ElementName=GridViewColumn, Mode=OneWay}" ItemsSource="{Binding Path=Data.(filter:EntityCollectionFilterViewModel).AutolootEntryNames, Source={StaticResource DataContextProxy}}">
                                                 <ComboBox.Styles>
                                                     <Style Selector="ComboBox">
                                                         <Setter Property="IsVisible" Value="False" />
                                                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Constraint.Name}" />
                                                         <Setter Property="ca:TriggerCondition.Value" Value="{x:Static resources:Strings.Autoloot_Match}" />
+                                                        <Setter Property="ca:TriggerCondition.Key" Value="dt12" />
                                                         <Style Selector="^.ca-dt12">
                                                             <Setter Property="IsVisible" Value="True" />
                                                         </Style>
@@ -216,6 +229,7 @@
                                                         <Setter Property="IsVisible" Value="True" />
                                                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Constraint.Options}" />
                                                         <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
+                                                        <Setter Property="ca:TriggerCondition.Key" Value="dt13" />
                                                         <Style Selector="^.ca-dt13">
                                                             <Setter Property="IsVisible" Value="False" />
                                                         </Style>
@@ -228,18 +242,25 @@
                                                         <Setter Property="IsVisible" Value="False" />
                                                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Constraint.AllowedValuesEnum}" />
                                                         <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
-                                                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Constraint.AllowedValuesEnum}" />
-                                                        <Setter Property="ca:TriggerCondition.Value" Value="{x:Type agents:SkillBonusSkills}" />
-                                                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Constraint.AllowedValuesEnum}" />
-                                                        <Setter Property="ca:TriggerCondition.Value" Value="{x:Type data:TileFlags}" />
-                                                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Constraint.Name}" />
-                                                        <Setter Property="ca:TriggerCondition.Value" Value="{x:Static resources:Strings.Name}" />
-                                                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Constraint.UseMultipleValues}" />
-                                                        <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                                                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Constraint.Name}" />
-                                                        <Setter Property="ca:TriggerCondition.Value" Value="{x:Static resources:Strings.Autoloot_Match}" />
-                                                        <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Constraint.Options, Converter={StaticResource NullToBooleanConverter}}" />
-                                                        <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                                                        <Setter Property="ca:TriggerCondition.Key" Value="dt14" />
+                                                        <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding Constraint.AllowedValuesEnum}" />
+                                                        <Setter Property="ca:TriggerCondition.Value2" Value="{x:Type agents:SkillBonusSkills}" />
+                                                        <Setter Property="ca:TriggerCondition.Key2" Value="dt15" />
+                                                        <Setter Property="ca:TriggerCondition.Bind3" Value="{Binding Constraint.AllowedValuesEnum}" />
+                                                        <Setter Property="ca:TriggerCondition.Value3" Value="{x:Type data:TileFlags}" />
+                                                        <Setter Property="ca:TriggerCondition.Key3" Value="dt16" />
+                                                        <Setter Property="ca:TriggerCondition.Bind4" Value="{Binding Constraint.Name}" />
+                                                        <Setter Property="ca:TriggerCondition.Value4" Value="{x:Static resources:Strings.Name}" />
+                                                        <Setter Property="ca:TriggerCondition.Key4" Value="dt17" />
+                                                        <Setter Property="ca:TriggerCondition.Bind5" Value="{Binding Constraint.UseMultipleValues}" />
+                                                        <Setter Property="ca:TriggerCondition.Value5" Value="True" />
+                                                        <Setter Property="ca:TriggerCondition.Key5" Value="dt18" />
+                                                        <Setter Property="ca:TriggerCondition.Bind6" Value="{Binding Constraint.Name}" />
+                                                        <Setter Property="ca:TriggerCondition.Value6" Value="{x:Static resources:Strings.Autoloot_Match}" />
+                                                        <Setter Property="ca:TriggerCondition.Key6" Value="dt19" />
+                                                        <Setter Property="ca:TriggerCondition.Bind7" Value="{Binding Constraint.Options, Converter={StaticResource NullToBooleanConverter}}" />
+                                                        <Setter Property="ca:TriggerCondition.Value7" Value="True" />
+                                                        <Setter Property="ca:TriggerCondition.Key7" Value="dt20" />
                                                         <Style Selector="^.ca-dt14">
                                                             <Setter Property="IsVisible" Value="True" />
                                                         </Style>
@@ -270,6 +291,7 @@
                                                         <Setter Property="IsVisible" Value="False" />
                                                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Constraint.Name}" />
                                                         <Setter Property="ca:TriggerCondition.Value" Value="{x:Static resources:Strings.Name}" />
+                                                        <Setter Property="ca:TriggerCondition.Key" Value="dt21" />
                                                         <Style Selector="^.ca-dt21">
                                                             <Setter Property="IsVisible" Value="True" />
                                                         </Style>
@@ -289,10 +311,10 @@
                                                     <Setter Property="Padding" Value="5" />
                                                 </Style>
                                             </StackPanel.Styles>
-                                            <Button Command="{Binding Path=Data.(filter:EntityCollectionFilterViewModel.AddCommand), Source={StaticResource DataContextProxy}}" CommandParameter="{Binding Path=ItemsSource, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}">
+                                            <Button Command="{Binding Path=Data.(filter:EntityCollectionFilterViewModel).AddCommand, Source={StaticResource DataContextProxy}}" CommandParameter="{Binding Path=ItemsSource, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}">
                                                 <Image Source="{DynamicResource PlusIcon}" Height="8" />
                                             </Button>
-                                            <Button Command="{Binding Path=Data.(filter:EntityCollectionFilterViewModel.RemoveCommand), Source={StaticResource DataContextProxy}}">
+                                            <Button Command="{Binding Path=Data.(filter:EntityCollectionFilterViewModel).RemoveCommand, Source={StaticResource DataContextProxy}}">
                                                 <Button.CommandParameter>
                                                     <MultiBinding Converter="{StaticResource GroupItemMultiValueConverter}">
                                                         <Binding Path="ItemsSource" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ListBox}}" />
@@ -358,6 +380,7 @@
                         <Setter Property="IsVisible" Value="False" />
                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding HasSubgroups}" />
                         <Setter Property="ca:TriggerCondition.Value" Value="False" />
+                        <Setter Property="ca:TriggerCondition.Key" Value="dt23" />
                         <Style Selector="^.ca-dt23">
                             <Setter Property="IsVisible" Value="True" />
                         </Style>
@@ -370,6 +393,7 @@
                         <Setter Property="IsVisible" Value="False" />
                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding HasSubgroups}" />
                         <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                        <Setter Property="ca:TriggerCondition.Key" Value="dt24" />
                         <Style Selector="^.ca-dt24">
                             <Setter Property="IsVisible" Value="True" />
                         </Style>

@@ -48,8 +48,10 @@
                         <Style Selector="controls|TextBoxKey">
                             <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Path=SelectedItem.IsCategory}" />
                             <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                            <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Path=SelectedItem.(local:HotkeyEntry.Hotkey)}" />
-                            <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
+                            <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
+                            <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding Path=SelectedItem.(local:HotkeyEntry).Hotkey}" />
+                            <Setter Property="ca:TriggerCondition.Value2" Value="{x:Null}" />
+                            <Setter Property="ca:TriggerCondition.Key2" Value="dt2" />
                             <Style Selector="^.ca-dt1">
                                 <Setter Property="IsEnabled" Value="False" />
                             </Style>
@@ -71,14 +73,15 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <CheckBox Content="{x:Static resources:Strings.Pass_to_UO}" Margin="10,0,10,5" IsChecked="{Binding Path=SelectedItem.(local:HotkeyEntry.PassToUO), Mode=TwoWay}" Grid.Row="0" IsEnabled="{Binding IsEnabled, ElementName=textBoxKey}" />
-                    <CheckBox Content="{x:Static resources:Strings.Undisableable}" Margin="10,0,10,5" IsChecked="{Binding Path=SelectedItem.(local:HotkeyEntry.Disableable), Converter={StaticResource InverseBooleanConverter}, Mode=TwoWay}" Grid.Row="1" IsEnabled="{Binding IsEnabled, ElementName=textBoxKey}" />
-                    <CheckBox Content="{x:Static resources:Strings.Global}" Margin="10,0,10,5" IsChecked="{Binding Path=SelectedItem.(local:HotkeyEntry.IsGlobal)}" Grid.Row="2">
+                    <CheckBox Content="{x:Static resources:Strings.Pass_to_UO}" Margin="10,0,10,5" IsChecked="{Binding Path=SelectedItem.(local:HotkeyEntry).PassToUO, Mode=TwoWay}" Grid.Row="0" IsEnabled="{Binding IsEnabled, ElementName=textBoxKey}" />
+                    <CheckBox Content="{x:Static resources:Strings.Undisableable}" Margin="10,0,10,5" IsChecked="{Binding Path=SelectedItem.(local:HotkeyEntry).Disableable, Converter={StaticResource InverseBooleanConverter}, Mode=TwoWay}" Grid.Row="1" IsEnabled="{Binding IsEnabled, ElementName=textBoxKey}" />
+                    <CheckBox Content="{x:Static resources:Strings.Global}" Margin="10,0,10,5" IsChecked="{Binding Path=SelectedItem.(local:HotkeyEntry).IsGlobal}" Grid.Row="2">
                         <CheckBox.Styles>
                             <Style Selector="CheckBox">
                                 <Setter Property="IsEnabled" Value="{Binding IsEnabled, ElementName=textBoxKey}" />
                                 <Setter Property="ca:TriggerCondition.Bind" Value="{Binding SelectedItem.CanGlobal}" />
                                 <Setter Property="ca:TriggerCondition.Value" Value="False" />
+                                <Setter Property="ca:TriggerCondition.Key" Value="dt3" />
                                 <Style Selector="^.ca-dt3">
                                     <Setter Property="IsEnabled" Value="False" />
                                 </Style>

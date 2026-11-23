@@ -52,6 +52,7 @@
                                         <Style Selector="Button">
                                             <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Website}" />
                                             <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
+                                            <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
                                             <Style Selector="^.ca-dt1">
                                                 <Setter Property="IsEnabled" Value="False" />
                                                 <Setter Property="Opacity" Value="0" />

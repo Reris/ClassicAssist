@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:controls1="clr-namespace:ClassicAssist.UI.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:draggableTreeView="clr-namespace:ClassicAssist.Controls.DraggableTreeView;assembly=ClassicAssist.Controls" xmlns:hotkeys="clr-namespace:ClassicAssist.Data.Hotkeys" xmlns:local="clr-namespace:ClassicAssist.Data.Macros" xmlns:macros="clr-namespace:ClassicAssist.UI.Views.Macros" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:misc="clr-namespace:ClassicAssist.UI.Misc" xmlns:misc1="clr-namespace:ClassicAssist.Misc" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.MacrosTabControl" mc:Ignorable="d" d:DesignHeight="500" Padding="5" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:Interaction="using:Avalonia.Xaml.Interactivity" xmlns:behaviours="clr-namespace:ClassicAssist.Shared.UI.Behaviours;assembly=ClassicAssist.Shared" xmlns:controls="clr-namespace:ClassicAssist.Controls;assembly=ClassicAssist.Controls" xmlns:controls1="clr-namespace:ClassicAssist.UI.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:draggableTreeView="clr-namespace:ClassicAssist.Controls.DraggableTreeView;assembly=ClassicAssist.Controls" xmlns:hotkeys="clr-namespace:ClassicAssist.Data.Hotkeys" xmlns:local="clr-namespace:ClassicAssist.Data.Macros" xmlns:macros="clr-namespace:ClassicAssist.UI.Views.Macros" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:misc="clr-namespace:ClassicAssist.UI.Misc" xmlns:misc1="clr-namespace:ClassicAssist.Misc" xmlns:valueConverters="clr-namespace:ClassicAssist.UI.Misc.ValueConverters" xmlns:viewModels="clr-namespace:ClassicAssist.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassicAssist.UI.Views.MacrosTabControl" mc:Ignorable="d" d:DesignHeight="500" Padding="5" xmlns:ca="clr-namespace:ClassicAssist.Shared.UI.Compat;assembly=ClassicAssist.Shared" xmlns:resources="clr-namespace:ClassicAssist.Shared.Resources;assembly=ClassicAssist.Shared" xmlns:shared="clr-namespace:ClassicAssist.Shared.UI;assembly=ClassicAssist.Shared">
     <UserControl.Resources>
         <ResourceDictionary>
             <valueConverters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
@@ -71,6 +71,7 @@
                             <Setter Property="IsVisible" Value="False" />
                             <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsFilterOpen}" />
                             <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                            <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
                             <Style Selector="^.ca-dt2">
                                 <Setter Property="IsVisible" Value="True" />
                             </Style>
@@ -86,13 +87,14 @@
                         </draggableTreeView:DraggableTreeView.KeyBindings>
                         <draggableTreeView:DraggableTreeView.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="{x:Static resources:Strings.New_Group}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:MacrosTabViewModel.NewGroupCommand)}" />
-                                <MenuItem Header="{x:Static resources:Strings.Remove_Group}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:MacrosTabViewModel.RemoveGroupCommand)}" CommandParameter="{Binding SelectedGroup}" />
+                                <MenuItem Header="{x:Static resources:Strings.New_Group}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:MacrosTabViewModel).NewGroupCommand}" />
+                                <MenuItem Header="{x:Static resources:Strings.Remove_Group}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:MacrosTabViewModel).RemoveGroupCommand}" CommandParameter="{Binding SelectedGroup}" />
                                 <Separator>
                                     <Separator.Styles>
                                         <Style Selector="Separator">
                                             <Setter Property="ca:TriggerCondition.Bind" Value="{Binding SelectedItem}" />
                                             <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
+                                            <Setter Property="ca:TriggerCondition.Key" Value="dt3" />
                                             <Style Selector="^.ca-dt3">
                                                 <Setter Property="IsVisible" Value="False" />
                                             </Style>
@@ -104,6 +106,7 @@
                                         <Style Selector="MenuItem">
                                             <Setter Property="ca:TriggerCondition.Bind" Value="{Binding SelectedItem}" />
                                             <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
+                                            <Setter Property="ca:TriggerCondition.Key" Value="dt4" />
                                             <Style Selector="^.ca-dt4">
                                                 <Setter Property="IsVisible" Value="False" />
                                             </Style>
@@ -142,8 +145,10 @@
                                                 <Setter Property="TextTrimming" Value="CharacterEllipsis" />
                                                 <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Global}" />
                                                 <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                                                <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsRunning}" />
-                                                <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                                                <Setter Property="ca:TriggerCondition.Key" Value="dt5" />
+                                                <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding IsRunning}" />
+                                                <Setter Property="ca:TriggerCondition.Value2" Value="True" />
+                                                <Setter Property="ca:TriggerCondition.Key2" Value="dt6" />
                                                 <Style Selector="^.ca-dt5">
                                                     <Setter Property="FontWeight" Value="Bold" />
                                                 </Style>
@@ -160,6 +165,7 @@
                                                 <Setter Property="IsVisible" Value="False" />
                                                 <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsFileBacked}" />
                                                 <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                                                <Setter Property="ca:TriggerCondition.Key" Value="dt7" />
                                                 <Style Selector="^.ca-dt7">
                                                     <Setter Property="IsVisible" Value="True" />
                                                 </Style>
@@ -171,6 +177,7 @@
                                             <Style Selector="TextBlock">
                                                 <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Hotkey}" />
                                                 <Setter Property="ca:TriggerCondition.Value" Value="{x:Static hotkeys:ShortcutKeys.Default}" />
+                                                <Setter Property="ca:TriggerCondition.Key" Value="dt8" />
                                                 <Style Selector="^.ca-dt8">
                                                     <Setter Property="IsVisible" Value="False" />
                                                 </Style>
@@ -203,6 +210,7 @@
                             <Style Selector="Button">
                                 <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Path=SelectedItem}" />
                                 <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
+                                <Setter Property="ca:TriggerCondition.Key" Value="dt9" />
                                 <Style Selector="^.ca-dt9">
                                     <Setter Property="IsEnabled" Value="False" />
                                 </Style>
@@ -228,7 +236,7 @@
                     <Button Content="{x:Static resources:Strings.Play}" Grid.Column="0" Margin="0,0,2.5,0" Command="{Binding ExecuteCommand, Mode=OneWay}" CommandParameter="{Binding SelectedItem}" IsEnabled="{Binding SelectedItem.IsRunning, Converter={StaticResource InverseBooleanConverter}, ElementName=DraggableTreeView}">
                         <Button.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="{x:Static resources:Strings.Reset_import_cache}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:MacrosTabViewModel.ResetImportCacheCommand)}" />
+                                <MenuItem Header="{x:Static resources:Strings.Reset_import_cache}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(viewModels:MacrosTabViewModel).ResetImportCacheCommand}" />
                             </ContextMenu>
                         </Button.ContextMenu>
                     </Button>
@@ -264,6 +272,7 @@
                         <Setter Property="Margin" Value="0,0,10,0" />
                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Path=SelectedItem}" />
                         <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
+                        <Setter Property="ca:TriggerCondition.Key" Value="dt10" />
                         <Style Selector="^.ca-dt10">
                             <Setter Property="IsEnabled" Value="False" />
                         </Style>

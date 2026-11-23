@@ -38,6 +38,7 @@
                         <Style Selector="Button">
                             <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsOrganizing}" />
                             <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                            <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
                             <Style Selector="^.ca-dt1">
                                 <Setter Property="Content" Value="{x:Static resources:Strings.Stop}" />
                             </Style>
@@ -72,6 +73,7 @@
                         <Style Selector="CheckBox">
                             <Setter Property="ca:TriggerCondition.Bind" Value="{Binding SelectedItem.Complete}" />
                             <Setter Property="ca:TriggerCondition.Value" Value="False" />
+                            <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
                             <Style Selector="^.ca-dt2">
                                 <Setter Property="IsEnabled" Value="False" />
                             </Style>

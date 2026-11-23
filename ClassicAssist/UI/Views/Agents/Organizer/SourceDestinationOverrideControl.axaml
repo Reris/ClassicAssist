@@ -19,6 +19,7 @@
                     <Setter Property="IsVisible" Value="False" />
                     <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Serial, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SourceDestinationOverrideControl}}}" />
                     <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
+                    <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
                     <Style Selector="^.ca-dt1">
                         <Setter Property="IsVisible" Value="True" />
                     </Style>
@@ -31,6 +32,7 @@
                     <Setter Property="IsVisible" Value="True" />
                     <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Serial, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SourceDestinationOverrideControl}}}" />
                     <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
+                    <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
                     <Style Selector="^.ca-dt2">
                         <Setter Property="IsVisible" Value="False" />
                     </Style>

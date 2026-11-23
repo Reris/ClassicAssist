@@ -75,8 +75,8 @@
             <Button Content="{x:Static resources:Strings.Set_Container}" Command="{Binding SetContainerCommand}" Grid.Column="0" />
             <Image Source="{DynamicResource configureIcon}" Height="16" Grid.Column="1" Margin="10,0,0,0" behaviours:ClickOpensContextMenuBehaviour.Enabled="True">
                 <Image.ContextMenu>
-                    <ContextMenu IsOpen="False">
-                        <MenuItem Header="{x:Static resources:Strings.Reset_Container}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:VendorSellTabViewModel.ResetContainerCommand)}" />
+                    <ContextMenu>
+                        <MenuItem Header="{x:Static resources:Strings.Reset_Container}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:VendorSellTabViewModel).ResetContainerCommand}" />
                     </ContextMenu>
                 </Image.ContextMenu>
             </Image>
@@ -94,9 +94,9 @@
                         </Style>
                 </Button.Styles>
                 <Button.ContextMenu>
-                    <ContextMenu IsOpen="False">
-                        <MenuItem Header="{x:Static resources:Strings.ID_from_target}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:VendorSellTabViewModel.InsertCommand)}" />
-                        <MenuItem Header="{x:Static resources:Strings.Match_Any_ID}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:VendorSellTabViewModel.InsertMatchAnyCommand)}" />
+                    <ContextMenu>
+                        <MenuItem Header="{x:Static resources:Strings.ID_from_target}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:VendorSellTabViewModel).InsertCommand}" />
+                        <MenuItem Header="{x:Static resources:Strings.Match_Any_ID}" Command="{Binding Source={StaticResource Proxy}, Path=Data.(agents:VendorSellTabViewModel).InsertMatchAnyCommand}" />
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>

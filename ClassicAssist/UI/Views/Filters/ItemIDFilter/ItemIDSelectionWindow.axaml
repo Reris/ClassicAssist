@@ -51,6 +51,7 @@
                     <Setter Property="IsVisible" Value="True" />
                     <Setter Property="ca:TriggerCondition.Bind" Value="{Binding ImagesLoaded}" />
                     <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                    <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
                     <Style Selector="^.ca-dt1">
                         <Setter Property="IsVisible" Value="False" />
                     </Style>

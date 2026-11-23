@@ -11,8 +11,10 @@
                             <Style Selector="Image">
                                 <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}" />
                                 <Setter Property="ca:TriggerCondition.Value" Value="True" />
-                                <Setter Property="ca:TriggerCondition.Bind" Value="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}" />
-                                <Setter Property="ca:TriggerCondition.Value" Value="False" />
+                                <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
+                                <Setter Property="ca:TriggerCondition.Bind2" Value="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="ca:TriggerCondition.Value2" Value="False" />
+                                <Setter Property="ca:TriggerCondition.Key2" Value="dt2" />
                                 <Style Selector="^.ca-dt1">
                                     <Setter Property="Source" Value="{DynamicResource RightChevron}" />
                                     <Setter Property="ToolTip.Tip" Value="{x:Static resources:Strings.Show}" />

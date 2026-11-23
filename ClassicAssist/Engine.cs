@@ -217,7 +217,6 @@ namespace Assistant
         private static void StartUIThread()
         {
             using ManualResetEventSlim uiReady = new( false );
-            System.Diagnostics.Debugger.Launch();
 
             _mainThread = new Thread( () =>
             {
@@ -244,7 +243,14 @@ namespace Assistant
 
                 if ( _uiThreadReady )
                 {
-                    Dispatcher.UIThread.MainLoop( _mainThreadCancellationTokenSource.Token );
+                    try
+                    {
+                        Dispatcher.UIThread.MainLoop( _mainThreadCancellationTokenSource.Token );
+                    }
+                    catch(Exception e)
+                    {
+                        ShowErrorMessageBox( $"Avalonia: {e}" );
+                    }
                 }
             } ) { IsBackground = true };
 
@@ -1347,6 +1353,7 @@ namespace Assistant
 
         #endregion
 
+        [Conditional("DEBUG")]
         public static void ShowErrorMessageBox( string message )
         {
             if ( RuntimeInformation.IsOSPlatform( OSPlatform.Windows ) )

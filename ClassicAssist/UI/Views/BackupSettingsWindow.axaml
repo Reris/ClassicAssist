@@ -5,6 +5,7 @@
             <Setter Property="IsVisible" Value="True" />
             <Setter Property="ca:TriggerCondition.Bind" Value="{Binding BackupOptions.Provider.LoginControl}" />
             <Setter Property="ca:TriggerCondition.Value" Value="{x:Null}" />
+            <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
             <Style Selector="^.ca-dt1">
                 <Setter Property="IsVisible" Value="False" />
             </Style>
@@ -71,6 +72,7 @@
                     <Setter Property="IsEnabled" Value="True" />
                     <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Path=(Validation.HasError), ElementName=TextBox}" />
                     <Setter Property="ca:TriggerCondition.Value" Value="True" />
+                    <Setter Property="ca:TriggerCondition.Key" Value="dt2" />
                     <Style Selector="^.ca-dt2">
                         <Setter Property="IsEnabled" Value="False" />
                     </Style>

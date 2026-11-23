@@ -67,6 +67,7 @@
                         <Setter Property="IsEnabled" Value="False" />
                         <Setter Property="ca:TriggerCondition.Bind" Value="{Binding Path=(DataValidationErrors.HasErrors),ElementName=comboBox, Mode=OneWay}" />
                         <Setter Property="ca:TriggerCondition.Value" Value="False" />
+                        <Setter Property="ca:TriggerCondition.Key" Value="dt1" />
                         <Style Selector="^.ca-dt1">
                             <Setter Property="IsEnabled" Value="True" />
                         </Style>

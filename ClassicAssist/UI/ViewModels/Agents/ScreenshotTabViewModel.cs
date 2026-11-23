@@ -289,8 +289,8 @@ namespace ClassicAssist.UI.ViewModels.Agents
             IncludeInfoBar = json["Screenshot"]["IncludeInfoBar"]?.ToObject<bool>() ?? true;
             Format = json["Screenshot"]["Format"]?.ToObject<string>() ?? "{player} ({shard}) - {date} {time}";
             FontSize = json["Screenshot"]["FontSize"]?.ToObject<int>() ?? 16;
-            BackgroundColor = json["Screenshot"]["BackgroundColor"]?.ToObject<Color>() ?? Colors.Black;
-            FontColor = json["Screenshot"]["FontColor"]?.ToObject<Color>() ?? Colors.White;
+            BackgroundColor = json["Screenshot"]["BackgroundColor"].ToColor( Colors.Black );
+            FontColor = json["Screenshot"]["FontColor"].ToColor( Colors.White );
             AutoScreenshot = json["Screenshot"]["AutoScreenshot"]?.ToObject<bool>() ?? false;
             PlayerDeath = json["Screenshot"]["PlayerDeath"]?.ToObject<bool>() ?? false;
             PlayerDeathDelay = json["Screenshot"]["PlayerDeathDelay"]?.ToObject<int>() ?? 2000;

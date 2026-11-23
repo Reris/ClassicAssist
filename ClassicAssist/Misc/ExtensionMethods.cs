@@ -17,6 +17,7 @@ using Avalonia.Input;
 
 using Avalonia.Media.Imaging;
 using ClassicAssist.UO.Data;
+using Newtonsoft.Json.Linq;
 
 namespace ClassicAssist.Misc
 {
@@ -165,6 +166,29 @@ namespace ClassicAssist.Misc
                 }
             }
             return output.ToString();
+        }
+
+        public static Color ToColor( this JToken token, Color defaultValue )
+        {
+            if ( token == null || token.Type == JTokenType.Null )
+            {
+                return defaultValue;
+            }
+
+            try
+            {
+                // Profiles store colors as strings (e.g. "White" or "#FFRRGGBB") via Color.ToString().
+                if ( token.Type == JTokenType.String )
+                {
+                    return Color.Parse( token.Value<string>() );
+                }
+
+                return token.ToObject<Color>();
+            }
+            catch ( Exception )
+            {
+                return defaultValue;
+            }
         }
     }
 }
