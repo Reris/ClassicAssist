@@ -67,7 +67,7 @@ namespace Assistant
                 // Windows only — the bootstrapper runs without a console on normal launches,
                 // so make the failure visible with a message box. On other platforms the
                 // ClassicUO console is the error surface.
-                MessageBox( IntPtr.Zero, message, "ClassicAssist", MB_ICONERROR );
+                MessageBox( IntPtr.Zero, message, "ClassicAssist (Ctrl+C)", MB_ICONERROR );
             }
         }
 

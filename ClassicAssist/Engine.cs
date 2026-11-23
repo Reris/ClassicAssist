@@ -341,7 +341,7 @@ namespace Assistant
             InitializeExtensions();
         }
 
-        private static void ReportCallbackException( string handlerName, Exception e )
+        public static void ReportCallbackException( string handlerName, Exception e )
         {
             try
             {
@@ -1354,7 +1354,7 @@ namespace Assistant
         #endregion
 
         [Conditional("DEBUG")]
-        public static void ShowErrorMessageBox( string message )
+        private static void ShowErrorMessageBox( string message )
         {
             if ( RuntimeInformation.IsOSPlatform( OSPlatform.Windows ) )
             {
@@ -1362,7 +1362,7 @@ namespace Assistant
                 // Windows only — the bootstrapper runs without a console on normal launches,
                 // so make the failure visible with a message box. On other platforms the
                 // ClassicUO console is the error surface.
-                MessageBox( IntPtr.Zero, message, "ClassicAssist", MB_ICONERROR );
+                MessageBox( IntPtr.Zero, message, "ClassicAssist (Ctrl+C)", MB_ICONERROR );
             }
         }
 

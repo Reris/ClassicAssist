@@ -38,28 +38,7 @@ public static unsafe class EngineCore
         }
         catch ( Exception e )
         {
-            // Never let an exception cross the native thunk into the .NET Framework
-            // bootstrapper — it would fail-fast the whole client.
-            try
-            {
-                SentrySdk.CaptureException( e );
-            }
-            catch
-            {
-                // Sentry must not take the client down either.
-            }
-
-            try
-            {
-                // ReSharper disable once LocalizableElement
-                Console.WriteLine( $"ERROR: {e}" );
-            }
-            catch
-            {
-                // No console attached — ignore.
-            }
-
-            Engine.ShowErrorMessageBox( e.ToString() );
+            Engine.ReportCallbackException( nameof( Install ), e );
 
             return -1;
         }
