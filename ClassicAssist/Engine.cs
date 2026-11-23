@@ -247,9 +247,13 @@ namespace Assistant
                     {
                         Dispatcher.UIThread.MainLoop( _mainThreadCancellationTokenSource.Token );
                     }
-                    catch(Exception e)
+                    catch ( Exception e )
                     {
                         ShowErrorMessageBox( $"Avalonia: {e}" );
+                    }
+                    finally
+                    {
+                        _shutdownTaskCompletionSource.TrySetResult();
                     }
                 }
             } ) { IsBackground = true };
@@ -273,6 +277,10 @@ namespace Assistant
                 splashWindow.Show();
 
                 _window = new MainWindow();
+                _window.Closed += ( _, _ ) =>
+                {
+                    _shutdownTaskCompletionSource.TrySetResult();
+                };
                 _window.Show();
 
                 splashWindow.Close();
@@ -569,12 +577,21 @@ namespace Assistant
 
         public static event dClientClosing ClientClosing;
 
+        private static readonly TaskCompletionSource _shutdownTaskCompletionSource =
+            new( TaskCreationOptions.RunContinuationsAsynchronously );
+
+        /// <summary>
+        /// Completes when the engine has shut down via the client closing callback.
+        /// </summary>
+        public static Task ShutdownTask => _shutdownTaskCompletionSource.Task;
+
         private static void OnClientClosing()
         {
             ClientClosing?.Invoke();
             Options.Save( Options.CurrentOptions );
             AssistantOptions.Save();
             SentrySdk.Close();
+            _shutdownTaskCompletionSource.TrySetResult();
         }
 
         private static void OnPlayerPositionChanged( int x, int y, int z )
