@@ -103,7 +103,6 @@ namespace Assistant
         private static OnSetTitle _setTitle;
         private static MainWindow _window;
         private static Thread _mainThread;
-        private static bool _uiThreadReady;
         private static bool _installAttempted;
         private static readonly CancellationTokenSource _mainThreadCancellationTokenSource = new CancellationTokenSource();
         private static OnClientClose _onClientClosing;
@@ -203,25 +202,28 @@ namespace Assistant
 
             _installAttempted = true;
 
+            TaskCompletionSource loadingTcs = new TaskCompletionSource();
+
             AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
 
-            StartUIThread(); // Start UI Thread first
+            StartUIThread( loadingTcs.Task ); // Start UI Thread first
 
             Initialize();
 
             InitializePlugin( plugin );
-
-            ShowMainWindow();
+            loadingTcs.TrySetResult();
         }
 
-        private static void StartUIThread()
+        private static void StartUIThread( Task loading )
         {
             using ManualResetEventSlim uiReady = new( false );
 
             _mainThread = new Thread( () =>
             {
+                bool uiThreadReady = false;
                 try
                 {
+                    ClassicAssist.UI.App.Configure( () => _shutdownTaskCompletionSource.TrySetResult(), loading );
                     AppBuilder.Configure<ClassicAssist.UI.App>()
                         .UsePlatformDetect()
                         .With( new Win32PlatformOptions() )
@@ -229,7 +231,7 @@ namespace Assistant
                         .With( new AvaloniaNativePlatformOptions() )
                         .SetupWithoutStarting();
 
-                    _uiThreadReady = true;
+                    uiThreadReady = true;
                 }
                 catch ( Exception e )
                 {
@@ -241,7 +243,7 @@ namespace Assistant
                     uiReady.Set();
                 }
 
-                if ( _uiThreadReady )
+                if ( uiThreadReady )
                 {
                     try
                     {
@@ -256,35 +258,12 @@ namespace Assistant
                         _shutdownTaskCompletionSource.TrySetResult();
                     }
                 }
-            } ) { IsBackground = true };
+            } ) { Name = "UI Thread", IsBackground = true };
 
             _mainThread.SetApartmentState( ApartmentState.STA );
             _mainThread.Start();
 
             uiReady.Wait();
-        }
-
-        private static void ShowMainWindow()
-        {
-            if ( !_uiThreadReady )
-            {
-                return;
-            }
-
-            Dispatcher.UIThread.Post( () =>
-            {
-                SplashWindow splashWindow = new SplashWindow();
-                splashWindow.Show();
-
-                _window = new MainWindow();
-                _window.Closed += ( _, _ ) =>
-                {
-                    _shutdownTaskCompletionSource.TrySetResult();
-                };
-                _window.Show();
-
-                splashWindow.Close();
-            } );
         }
 
         internal static unsafe void InitializePlugin( PluginHeader* plugin )

@@ -8,46 +8,42 @@
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY
 
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using ClassicAssist.Misc;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
-using Avalonia.Controls;
-namespace ClassicAssist.UI.Views
+namespace ClassicAssist.UI.Views;
+
+/// <summary>
+///     Interaction logic for SplashWindow.axaml
+/// </summary>
+public partial class SplashWindow : Window
 {
-    /// <summary>
-    ///     Interaction logic for SplashWindow.axaml
-    /// </summary>
-    public partial class SplashWindow : Window, INotifyPropertyChanged
-    {        public IImage Image { get; set; }
+    private readonly Action _mainAction;
+    private readonly Task _loading;
+    public IImage Image { get; }
 
-        public SplashWindow()
+    public SplashWindow( Action mainAction, Task loading )
+    {
+        _mainAction = mainAction;
+        _loading = loading;
+        Image = Properties.Resources.splash_logo.ToImageSource();
+
+        InitializeComponent();
+    }
+
+    [SuppressMessage( "ReSharper", "AsyncVoidEventHandlerMethod" )]
+    protected override async void OnLoaded( RoutedEventArgs e )
+    {
+        await _loading;
+        await Dispatcher.InvokeAsync( () =>
         {
-            InitializeComponent();
-
-            Image = Properties.Resources.splash_logo.ToImageSource();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged( [CallerMemberName] string propertyName = null )
-        {
-            PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
-        }
-
-        protected bool SetField<T>( ref T field, T value, [CallerMemberName] string propertyName = null )
-        {
-            if ( EqualityComparer<T>.Default.Equals( field, value ) )
-            {
-                return false;
-            }
-
-            field = value;
-            OnPropertyChanged( propertyName );
-            return true;
-        }
+            _mainAction?.Invoke();
+            Close();
+        } );
     }
 }
