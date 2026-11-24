@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <Reference Include="cuoapi">
-      <HintPath>cuoapi.dll</HintPath>
+      <HintPath>..\cuoapi.dll</HintPath>
     </Reference>
   </ItemGroup>
 
