@@ -4,8 +4,6 @@
     </UserControl.Styles>
     <Interaction.Behaviors>
         <sharedBehaviours:DoubleClickBehaviour Command="{Binding MaximizeCommand, ElementName=UserControl}" CommandParameter="{Binding ElementName=UserControl, Mode=OneWay}" />
-    </Interaction.Behaviors>
-    <Interaction.Behaviors>
         <behaviours:WindowMouseDownBehaviour />
     </Interaction.Behaviors>
     <Grid Margin="5">

@@ -21,7 +21,6 @@ using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.VisualTree;
 using Avalonia.Xaml.Interactivity;
 
 namespace ClassicAssist.UI.Misc.Behaviours
@@ -68,7 +67,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
                 return;
             }
 
-            Window window = element.GetPresentationSource()?.RootVisual as Window;
+            Window window = TopLevel.GetTopLevel( element ) as Window;
 
             if ( window?.WindowState != WindowState.Maximized )
             {
@@ -90,7 +89,7 @@ namespace ClassicAssist.UI.Misc.Behaviours
                 _lastMouseDown = e.GetPosition( element );
             }
 
-            Window window = element.GetPresentationSource()?.RootVisual as Window;
+            Window window = TopLevel.GetTopLevel( element ) as Window;
 
             if ( window == null || window.WindowState == WindowState.Maximized )
             {

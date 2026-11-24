@@ -95,5 +95,27 @@ namespace ClassicAssist.Tests
                 Assert.IsNull( behavior.AssociatedObject );
             }, CancellationToken.None );
         }
+
+        [TestMethod]
+        public async Task CloseOnClickBehaviourClosesWindowOnClick()
+        {
+            await SESSION.Dispatch( () =>
+            {
+                Window window = new Window();
+                Button button = new Button();
+                CloseOnClickBehaviour behavior = new CloseOnClickBehaviour();
+
+                Interaction.GetBehaviors( button ).Add( behavior );
+                window.Content = button;
+
+                bool closed = false;
+                window.Closed += ( _, _ ) => closed = true;
+
+                window.Show();
+                button.RaiseEvent( new RoutedEventArgs( Button.ClickEvent ) );
+
+                Assert.IsTrue( closed );
+            }, CancellationToken.None );
+        }
     }
 }
